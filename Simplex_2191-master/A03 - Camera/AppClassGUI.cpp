@@ -1,4 +1,4 @@
-#include "AppClass.h"
+#include "pch.h"
 using namespace Simplex;
 ImGuiObject Application::gui;
 void Application::DrawGUI(void)

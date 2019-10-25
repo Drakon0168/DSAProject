@@ -1,4 +1,4 @@
-#include "MyCamera.h"
+#include "pch.h"
 using namespace Simplex;
 
 //Accessors

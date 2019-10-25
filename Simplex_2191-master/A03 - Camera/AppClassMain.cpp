@@ -1,4 +1,4 @@
-#include "AppClass.h"
+#include "pch.h"
 using namespace Simplex;
 sf::Image LoadImageFromResource(const std::string& name)
 {

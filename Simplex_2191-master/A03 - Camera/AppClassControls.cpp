@@ -1,4 +1,4 @@
-#include "AppClass.h"
+#include "pch.h"
 using namespace Simplex;
 //Mouse
 void Application::ProcessMouseMovement(sf::Event a_event)

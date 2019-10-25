@@ -5,9 +5,7 @@ Date: 2017/05
 #ifndef __CONTROLLERCONFIG_H_
 #define __CONTROLLERCONFIG_H_
 
-#include "SFML\Window.hpp"
-#include "SFML\Graphics.hpp"
-#include "SFML\OpenGL.hpp"
+#include "pch.h"
 
 enum ControllerKey_
 {

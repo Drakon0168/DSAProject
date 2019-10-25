@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "MyMeshManager.h"
 using namespace Simplex;
 //  MyMeshManager

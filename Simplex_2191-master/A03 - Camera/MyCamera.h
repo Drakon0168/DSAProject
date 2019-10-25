@@ -5,7 +5,7 @@ Date: 2018/09
 #ifndef __MYCAMERACLASS_H_
 #define __MYCAMERACLASS_H_
 
-#include "Definitions.h"
+#include "pch.h"
 
 namespace Simplex
 {

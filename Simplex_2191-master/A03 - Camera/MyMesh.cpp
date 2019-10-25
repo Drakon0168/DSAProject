@@ -1,4 +1,5 @@
-#include "MyMesh.h"
+#include "pch.h"
+
 using namespace Simplex;
 
 void MyMesh::Init(void)

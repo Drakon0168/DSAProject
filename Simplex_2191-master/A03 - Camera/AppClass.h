@@ -2,10 +2,10 @@
 Programmer: Alberto Bobadilla (labigm@gmail.com)
 Date: 2017/05
 ----------------------------------------------*/
+#include "pch.h"
+
 #ifndef __APPLICATIONCLASS_H_
 #define __APPLICATIONCLASS_H_
-
-#include "Definitions.h"
 
 #include "ControllerConfiguration.h"
 #include "imgui\ImGuiObject.h"

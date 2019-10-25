@@ -1,4 +1,4 @@
-#include "AppClass.h"
+#include "pch.h"
 using namespace Simplex;
 void Application::InitVariables(void)
 {

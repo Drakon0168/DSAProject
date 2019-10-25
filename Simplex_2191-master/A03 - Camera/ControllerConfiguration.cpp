@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "ControllerConfiguration.h"
 ControllerInput::ControllerInput(ControllerInput const& other) {};
 ControllerInput& ControllerInput::operator=(ControllerInput const& input) { return *this; };

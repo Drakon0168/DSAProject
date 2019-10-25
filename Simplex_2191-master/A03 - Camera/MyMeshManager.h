@@ -4,8 +4,7 @@ Date: 2017/06
 ----------------------------------------------*/
 #ifndef __MYMESHMANAGER_H_
 #define __MYMESHMANAGER_H_
-#include "MyMesh.h"
-#include "MyCamera.h"
+#include "pch.h"
 namespace Simplex
 {
 
