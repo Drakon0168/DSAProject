@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assignments", "Assignments", "{EE0E027C-366F-4685-94D5-0EA5F6870B1B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{EE0E027C-366F-4685-94D5-0EA5F6870B1B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other", "Other", "{A586CAA1-C864-488E-8301-D374FFD607C9}"
 EndProject
@@ -20,7 +20,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01_Playgroud", "01_Playgrou
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "00_Sandbox", "00_Sandbox\00_Sandbox.vcxproj", "{BB29A203-127B-46E9-A5B3-925715D5AA34}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "A03 - Camera", "A03 - Camera\A03 - Camera.vcxproj", "{08A11DA8-4582-4AE0-90FE-929F44487E65}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Project", "A03 - Camera\A03 - Camera.vcxproj", "{08A11DA8-4582-4AE0-90FE-929F44487E65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
