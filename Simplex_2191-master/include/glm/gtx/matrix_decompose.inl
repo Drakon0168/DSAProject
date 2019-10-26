@@ -47,7 +47,6 @@ namespace detail
 			PerspectiveMatrix[i][3] = static_cast<T>(0);
 		PerspectiveMatrix[3][3] = static_cast<T>(1);
 
-		/// TODO: Fixme!
 		if(determinant(PerspectiveMatrix) == static_cast<T>(0))
 			return false;
 

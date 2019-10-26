@@ -7,7 +7,6 @@
 //        extract glyph shapes
 //        render glyphs to one-channel bitmaps with antialiasing (box filter)
 //
-//   Todo:
 //        non-MS cmaps
 //        crashproof on bad data
 //        hinting? (no longer patented)

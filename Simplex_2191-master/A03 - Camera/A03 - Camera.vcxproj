@@ -114,6 +114,8 @@ xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y
     <ClCompile Include="AppClassGUI.cpp" />
     <ClCompile Include="AppClassMain.cpp" />
     <ClCompile Include="ControllerConfiguration.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="LivingEntity.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MyCamera.cpp" />
     <ClCompile Include="MyMesh.cpp" />
@@ -121,6 +123,10 @@ xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="CollisionLayers.cpp" />
+    <ClCompile Include="PhysicsObject.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="WorldObject.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -131,11 +137,16 @@ xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y
     <ClInclude Include="..\res\resource.h" />
     <ClInclude Include="AppClass.h" />
     <ClInclude Include="ControllerConfiguration.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="LivingEntity.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="MyCamera.h" />
     <ClInclude Include="MyMesh.h" />
     <ClInclude Include="MyMeshManager.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PhysicsObject.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="WorldObject.h" />
   </ItemGroup>
   <ItemGroup>
