@@ -12,3 +12,4 @@
 
 //Custom classes
 #include "WorldObject.h"
+#include "CollisionLayers.h"

@@ -7,18 +7,18 @@ namespace Simplex {
 	{
 	private:
 		const float gravity = -9.8f; //Acceleration constant due to gravity
+		static PhysicsManager* instance;
 
 		//TODO: Change this to an array of vectors if possible
-		std::vector<std::vector<WorldObject*>> collidables; //All objects that can be collided with separated into layers
+		std::vector<WorldObject*> collidables[5]; //All objects that can be collided with separated into layers
 	public:
 #pragma region Singleton
-		static PhysicsManager* instance;
 		/*
 		USAGE : Returns the instance of the physics manager
 		ARGUMENTS : --
 		OUTPUT : PhysicsManager* -> Instance
 		*/
-		PhysicsManager* GetInstance();
+		static PhysicsManager* GetInstance();
 #pragma endregion
 #pragma region Memory Management
 		/*
