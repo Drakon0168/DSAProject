@@ -327,8 +327,8 @@ void Application::ArcBall(float a_fSensitivity)
 }
 void Application::CameraRotation(float a_fSpeed)
 {
-	if (m_bFPC == false)
-		return;
+	//if (m_bFPC == false)
+		//return;
 
 	UINT	MouseX, MouseY;		// Coordinates for the mouse
 	UINT	CenterX, CenterY;	// Coordinates for the center of the screen.

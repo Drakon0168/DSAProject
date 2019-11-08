@@ -19,6 +19,9 @@ void Application::InitVariables(void)
 	//Get the singleton
 	m_pMyMeshMngr = MyMeshManager::GetInstance();
 	m_pMyMeshMngr->SetCamera(m_pCamera);
+
+	ShowCursor(false);
+	SetCursorPos((m_pSystem->GetWindowX() + m_pSystem->GetWindowWidth() / 2), (m_pSystem->GetWindowY() + m_pSystem->GetWindowHeight() / 2));
 }
 void Application::Update(void)
 {
@@ -33,6 +36,8 @@ void Application::Update(void)
 
 	//Add objects to the Manager
 	m_pMyMeshMngr->AddMeshToRenderList(m_pMyMeshMngr->GenerateCube(vector3(100, 0.2f, 100), vector3(0, 0, 0)),(glm::translate(vector3(0, 0.0f, 0))));
+	m_pMyMeshMngr->AddMeshToRenderList(m_pMyMeshMngr->GenerateCube(vector3(5, 5, 5), vector3(0, 1, 0)), (glm::translate(vector3(0, 0.0f, 0))));
+
 }
 void Application::Display(void)
 {
