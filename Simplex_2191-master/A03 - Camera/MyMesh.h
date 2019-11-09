@@ -90,6 +90,12 @@ public:
 	*/
 	void AddVertexColor(vector3 a_v3Input);
 	/*
+	USAGE: Adds a new color to the vector of vertices
+	ARGUMENTS:
+	OUTPUT: A list of the vertices in the mesh
+	*/
+	std::vector<vector3> GetVertices();
+	/*
 	USAGE: Compiles the MyMesh for OpenGL 3.X use
 	ARGUMENTS: ---
 	OUTPUT: ---

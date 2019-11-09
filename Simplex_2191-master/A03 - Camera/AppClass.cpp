@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "PhysicsManager.h"
 using namespace Simplex;
 void Application::InitVariables(void)
 {
@@ -27,12 +28,17 @@ void Application::Update(void)
 {
 	//Update the system so it knows how much time has passed since the last call
 	m_pSystem->Update();
+	//float currentTime = m_pSystem;
+	//float deltaTime = lastTime - currentTime;
 
 	//Is the arcball active?
 	ArcBall();
 
 	//Is the first person camera active?
 	CameraRotation();
+
+	//Update Physics
+	//PhysicsManager::GetInstance()->Update();
 
 	//Add objects to the Manager
 	m_pMyMeshMngr->AddMeshToRenderList(m_pMyMeshMngr->GenerateCube(vector3(100, 0.2f, 100), vector3(0, 0, 0)),(glm::translate(vector3(0, 0.0f, 0))));
@@ -66,6 +72,7 @@ void Application::Release(void)
 {
 	//release the singleton
 	MyMeshManager::ReleaseInstance();
+	PhysicsManager::ReleaseInstance();
 
 	//release the camera
 	SafeDelete(m_pCamera);

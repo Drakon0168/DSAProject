@@ -6,11 +6,11 @@ namespace Simplex {
 	class PhysicsManager
 	{
 	private:
-		const float gravity = -9.8f; //Acceleration constant due to gravity
+		const float GRAVITY = -9.8f; //Acceleration constant due to gravity
+		const static int LAYER_COUNT = 6;
 		static PhysicsManager* instance;
 
-		//TODO: Change this to an array of vectors if possible
-		std::vector<WorldObject*> collidables[5]; //All objects that can be collided with separated into layers
+		std::vector<WorldObject*> collidables[LAYER_COUNT]; //All objects that can be collided with separated into layers
 	public:
 #pragma region Singleton
 		/*
@@ -19,6 +19,12 @@ namespace Simplex {
 		OUTPUT : PhysicsManager* -> Instance
 		*/
 		static PhysicsManager* GetInstance();
+		/*
+		USAGE: Destroys the singleton
+		ARGUMENTS: ---
+		OUTPUT: ---
+		*/
+		static void ReleaseInstance();
 #pragma endregion
 #pragma region Memory Management
 		/*

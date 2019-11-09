@@ -12,6 +12,17 @@ namespace Simplex {
 		//TODO: Add collider / rigidbody to World Object
 		MyMesh* model; // The model that represents the mesh
 		int layer; //The collision layer of this object
+
+		float radius; //The radius of the object's bounding sphere
+		vector3 globalMin; //The minimum x y and z position of the object in global space
+		vector3 globalMax; //The maximum x y and z position of the object in global space
+		vector3 localMin; //The minimum x y and z position of the object in local space
+		vector3 localMax; //The maximum x y and z positon of the object in local space
+		vector3 halfWidth; //The half width of the object
+
+		const bool showSphere = true;
+		const bool showAABB = true;
+		const bool showARBB = true;
 	public:
 #pragma region Memory Management
 		/*
@@ -53,6 +64,86 @@ namespace Simplex {
 		*/
 		WorldObject& operator=(WorldObject& other);
 #pragma endregion
+#pragma region Accessors
+		/*
+		USAGE: Returns the object's position
+		ARGUMENTS:
+		OUTPUT: The object's current position
+		*/
+		vector3 GetPosition();
+
+		/*
+		USAGE: Returns the object's rotation
+		ARGUMENTS:
+		OUTPUT: The object's current rotation
+		*/
+		quaternion GetRotation();
+
+		/*
+		USAGE: Returns the object's scale
+		ARGUMENTS:
+		OUTPUT: The object's current scale
+		*/
+		vector3 GetScale();
+
+		/*
+		USAGE: Returns the object's scale
+		ARGUMENTS:
+		-	vector3 value -> The value to set scale to
+		OUTPUT: ---
+		*/
+		void SetScale(vector3 value);
+
+		/*
+		USAGE: Returns the object's model
+		ARGUMENTS:
+		OUTPUT: The object's model
+		*/
+		MyMesh* GetModel();
+
+		/*
+		USAGE: Sets the object's model
+		ARGUMENTS:
+		-	MyMesh* mesh -> A reference to the mesh that the object is using
+		OUTPUT:
+		*/
+		void SetModel(MyMesh* mesh);
+
+		/*
+		USAGE: Returns the object's collision layer
+		ARGUMENTS:
+		OUTPUT: The object's current collision layer
+		*/
+		int GetLayer();
+
+		/*
+		USAGE: Returns the vector3 representation of the object's local mins
+		ARGUMENTS:
+		OUTPUT: The object's local min
+		*/
+		vector3 GetLocalMin();
+
+		/*
+		USAGE: Returns the vector3 representation of the object's local maxs
+		ARGUMENTS:
+		OUTPUT: The object's local max
+		*/
+		vector3 GetLocalMax();
+
+		/*
+		USAGE: Returns the vector3 representation of the object's global mins
+		ARGUMENTS:
+		OUTPUT: The object's global min
+		*/
+		vector3 GetGlobalMin();
+
+		/*
+		USAGE: Returns the vector3 representation of the object's global maxs
+		ARGUMENTS:
+		OUTPUT: The object's global max
+		*/
+		vector3 GetGlobalMax();
+#pragma endregion
 #pragma region Rendering
 		/*
 		USAGE: Renders the mesh by the provided camera view and projection
@@ -69,13 +160,19 @@ namespace Simplex {
 		*/
 		void Render(MyCamera* a_pCamera);
 		/*
-		USAGE: Will render this mesh a_ToWorlsList size times
+		USAGE: Will render this mesh a_ToWorldsList size times
 		ARGUMENTS:
 		-	MyCamera* a_pCamera
 		-	std::vector<matrix4> a_ToWorldList
 		OUTPUT: ---
 		*/
 		void Render(MyCamera* a_pCamera, std::vector<matrix4> a_ToWorldList);
+		/*
+		USAGE: Adds the collider of this object to the render list
+		ARGUMENTS: ---
+		OUTPUT: ---
+		*/
+		void RenderCollider();
 #pragma endregion
 #pragma region Transformations
 		/*
@@ -117,6 +214,14 @@ namespace Simplex {
 		OUTPUT: ---
 		*/
 		void Scale(float scaleAmount);
+
+		/*
+		USAGE: Scales the model uniformly in all directions
+		ARGUMENTS:
+		-	vector3 position -> the position to convert
+		OUTPUT: The position in global coordinates
+		*/
+		vector3 ToWorld(vector3 position);
 #pragma endregion
 	};
 }

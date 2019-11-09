@@ -69,9 +69,6 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionLayers.cpp">
-      <Filter>Source Files\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="WorldObject.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>

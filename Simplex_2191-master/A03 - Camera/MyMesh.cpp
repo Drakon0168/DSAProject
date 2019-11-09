@@ -399,7 +399,7 @@ void MyMesh::Render(matrix4 a_mProjection, matrix4 a_mView, matrix4 a_mModel)
 	// Use the buffer and shader
 	GLuint nShader = m_pShaderMngr->GetShaderID("Basic");
 	glUseProgram(nShader);
-
+	
 	//Bind the VAO of this object
 	glBindVertexArray(m_VAO);
 

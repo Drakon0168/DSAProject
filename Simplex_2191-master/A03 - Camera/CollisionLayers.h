@@ -5,5 +5,6 @@ enum CollisionLayers {
 	Player,
 	Enemy,
 	PlayerProjectile,
-	EnemyProjectile
+	EnemyProjectile,
+	NonCollidable
 };
