@@ -11,6 +11,11 @@ void WorldObject::Init(void)
 	layer = CollisionLayers::Terrain;
 }
 
+void WorldObject::Release(void)
+{
+	model->Release();
+}
+
 WorldObject::WorldObject()
 {
 	Init();
@@ -53,7 +58,7 @@ void WorldObject::SetModel(MyMesh* mesh)
 	model = mesh;
 
 	std::vector<vector3> vertices = model->GetVertices();
-	float count = vertices.size();
+	int count = vertices.size();
 
 	localMin = vertices[0];
 	localMax = vertices[0];
@@ -120,6 +125,9 @@ void WorldObject::SetModel(MyMesh* mesh)
 			globalMax.z = corners[i].z;
 		}
 	}
+
+	vector3 globalHalfWidth = (globalMax - globalMin) * 0.5f;
+	radius = glm::sqrt((globalHalfWidth.x * globalHalfWidth.x) + (globalHalfWidth.y * globalHalfWidth.y) + (globalHalfWidth.z * globalHalfWidth.z));
 }
 
 int WorldObject::GetLayer()
@@ -180,19 +188,19 @@ void WorldObject::RenderCollider()
 			0, 0, localMax.z, 0,
 			position.x, position.y, position.x, 1
 		);
-		MeshManager::GetInstance()->AddCubeToRenderList(transformation, C_YELLOW, RENDER_WIRE);
+		MeshManager::GetInstance()->AddWireCubeToRenderList(transformation, C_YELLOW, RENDER_WIRE);
 	}
 	if (showARBB) {
 		matrix4 transformation = IDENTITY_M4 * glm::toMat4(orientation);
 		transformation *= glm::scale(scale);
 		transformation *= glm::translate(position);
-		MeshManager::GetInstance()->AddCubeToRenderList(transformation, C_GREEN, RENDER_WIRE);
+		MeshManager::GetInstance()->AddWireCubeToRenderList(transformation, C_GREEN, RENDER_WIRE);
 	}
 }
 
 vector3 WorldObject::ToWorld(vector3 position)
 {
-	position *= orientation;
+	position = glm::toMat4(orientation) * vector4(position, 0);
 	position *= scale;
 	position += position;
 	return position;

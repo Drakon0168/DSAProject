@@ -84,6 +84,10 @@ void MyMesh::AddVertexColor(vector3 a_v3Input)
 {
 	m_lVertexCol.push_back(a_v3Input);
 }
+std::vector<vector3> Simplex::MyMesh::GetVertices()
+{
+	return m_lVertexPos;
+}
 void MyMesh::CompileOpenGL3X(void)
 {
 	if (m_bBinded)
