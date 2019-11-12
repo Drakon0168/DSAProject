@@ -393,11 +393,11 @@ void Application::ProcessKeyboard(void)
 		m_pCamera->MoveForward(fSpeed);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		m_pCamera->MoveForward(-fSpeed);
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		m_pCamera->MoveLeft(-fSpeed);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		m_pCamera->MoveLeft(fSpeed);
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add))
 		m_pCamera->MoveUp(fSpeed);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract))
 		m_pCamera->MoveUp(-fSpeed);
