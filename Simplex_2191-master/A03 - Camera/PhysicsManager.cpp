@@ -31,6 +31,9 @@ void PhysicsManager::Init(void)
 	
 	//TODO: Setup starting objects in the level
 	collidables[CollisionLayers::Player].push_back(new WorldObject());
+	MyMesh* playerMesh = new MyMesh();
+	playerMesh->GenerateCube(vector3(5, 5, 5), vector3(0, 1, 0)), (glm::translate(vector3(0, 0.0f, 0)));
+	collidables[CollisionLayers::Player][0]->SetModel(playerMesh);
 }
 
 void PhysicsManager::Release(void)
@@ -42,8 +45,6 @@ void PhysicsManager::Release(void)
 			delete collidables[i][j];
 		}
 	}
-
-	delete[] collidables;
 }
 
 PhysicsManager::PhysicsManager()
@@ -56,8 +57,17 @@ PhysicsManager::~PhysicsManager()
 	Release();
 }
 
+void PhysicsManager::SetCamera(MyCamera* value)
+{
+	camera = value;
+}
+
 void PhysicsManager::Update(float deltaTime)
 {
+	vector3 playerPosition = collidables[CollisionLayers::Player][0]->GetPosition();
+	//std::cout << "Player Position: (" << playerPosition.x << ", " << playerPosition.y << ", " << playerPosition.z << "), DeltaTime: " << deltaTime << std::endl;
+	//collidables[CollisionLayers::Player][0]->Translate(vector3(0, 1, 0) * deltaTime);
+
 	float count = 0;
 
 	//Update Physics
@@ -114,6 +124,9 @@ void PhysicsManager::Update(float deltaTime)
 			for (int j = 0; j < count; j++) {
 				//TODO: Draw the object
 				collidables[i][j]->RenderCollider();
+
+				if(camera != nullptr && collidables[i][j]->GetModel() != nullptr)
+					collidables[i][j]->Render(camera);
 			}
 			break;
 		}

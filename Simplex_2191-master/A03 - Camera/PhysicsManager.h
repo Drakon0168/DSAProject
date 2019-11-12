@@ -9,6 +9,7 @@ namespace Simplex {
 		const float GRAVITY = -9.8f; //Acceleration constant due to gravity
 		const static int LAYER_COUNT = 6;
 		static PhysicsManager* instance;
+		MyCamera* camera;
 
 		std::vector<WorldObject*> collidables[LAYER_COUNT]; //All objects that can be collided with separated into layers
 	public:
@@ -51,6 +52,9 @@ namespace Simplex {
 		OUTPUT: ---
 		*/
 		~PhysicsManager();
+#pragma endregion
+#pragma region Accessors
+		void SetCamera(MyCamera* value);
 #pragma endregion
 #pragma region Rule Of Three
 		/*

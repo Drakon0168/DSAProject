@@ -17,6 +17,8 @@ void Application::InitVariables(void)
 			vector3(0.0f, 3.0f, 19.0f), //where what I'm looking at is
 			AXIS_Y);					//what is up
 
+	PhysicsManager::GetInstance()->SetCamera(m_pCamera);
+
 	//Get the singleton
 	m_pMyMeshMngr = MyMeshManager::GetInstance();
 	m_pMyMeshMngr->SetCamera(m_pCamera);
@@ -28,8 +30,8 @@ void Application::Update(void)
 {
 	//Update the system so it knows how much time has passed since the last call
 	m_pSystem->Update();
-	//float currentTime = m_pSystem;
-	//float deltaTime = lastTime - currentTime;
+	//TODO: Get delta time correctly using current and last time variables to avoid spike at launch
+	float deltaTime = 1.0f / m_pSystem->GetFPS();
 
 	//Is the arcball active?
 	ArcBall();
@@ -38,11 +40,11 @@ void Application::Update(void)
 	CameraRotation();
 
 	//Update Physics
-	//PhysicsManager::GetInstance()->Update();
+	PhysicsManager::GetInstance()->Update(deltaTime);
 
 	//Add objects to the Manager
 	m_pMyMeshMngr->AddMeshToRenderList(m_pMyMeshMngr->GenerateCube(vector3(100, 0.2f, 100), vector3(0, 0, 0)),(glm::translate(vector3(0, 0.0f, 0))));
-	m_pMyMeshMngr->AddMeshToRenderList(m_pMyMeshMngr->GenerateCube(vector3(5, 5, 5), vector3(0, 1, 0)), (glm::translate(vector3(0, 0.0f, 0))));
+	//m_pMyMeshMngr->AddMeshToRenderList(m_pMyMeshMngr->GenerateCube(vector3(5, 5, 5), vector3(0, 1, 0)), (glm::translate(vector3(0, 0.0f, 0))));
 
 }
 void Application::Display(void)

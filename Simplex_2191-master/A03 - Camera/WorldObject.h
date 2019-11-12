@@ -152,21 +152,13 @@ namespace Simplex {
 		-	matrix4 a_mView -> View matrix
 		OUTPUT: ---
 		*/
-		void Render(matrix4 a_mProjection, matrix4 a_mView);
+		void Render(matrix4 projection, matrix4 view);
 		/*
 		USAGE: Renders the mesh by the provided camera view and projection
 		ARGUMENTS: MyCamera a_mCamera -> the camera I want to see my scene from
 		OUTPUT: ---
 		*/
-		void Render(MyCamera* a_pCamera);
-		/*
-		USAGE: Will render this mesh a_ToWorldsList size times
-		ARGUMENTS:
-		-	MyCamera* a_pCamera
-		-	std::vector<matrix4> a_ToWorldList
-		OUTPUT: ---
-		*/
-		void Render(MyCamera* a_pCamera, std::vector<matrix4> a_ToWorldList);
+		void Render(MyCamera* camera);
 		/*
 		USAGE: Adds the collider of this object to the render list
 		ARGUMENTS: ---
@@ -214,7 +206,8 @@ namespace Simplex {
 		OUTPUT: ---
 		*/
 		void Scale(float scaleAmount);
-
+#pragma endregion
+#pragma region Helper Functions
 		/*
 		USAGE: Scales the model uniformly in all directions
 		ARGUMENTS:
@@ -222,6 +215,14 @@ namespace Simplex {
 		OUTPUT: The position in global coordinates
 		*/
 		vector3 ToWorld(vector3 position);
+
+		/*
+		USAGE: Re-Calculates the global min and max variables and sets up the global halfwidth and sphere collider radius
+		ARGUMENTS: ---
+		OUTPUT: ---
+		*/
+		void CalculateGlobalMinMax();
+
 #pragma endregion
 	};
 }
