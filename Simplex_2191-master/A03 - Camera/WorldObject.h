@@ -9,7 +9,7 @@ namespace Simplex {
 		vector3 position; //The position of the object
 		quaternion orientation; //The rotation of the object
 		vector3 scale; //The scale of the object
-		//TODO: Add collider / rigidbody to World Object
+		matrix4 transform;
 		Mesh* model; // The model that represents the mesh
 		int layer; //The collision layer of this object
 
@@ -113,6 +113,13 @@ namespace Simplex {
 		void SetScale(vector3 value);
 
 		/*
+		USAGE: Returns the object's transformation matrix
+		ARGUMENTS: ---
+		OUTPUT: ---
+		*/
+		matrix4 GetTransform();
+
+		/*
 		USAGE: Returns the object's model
 		ARGUMENTS:
 		OUTPUT: The object's model
@@ -204,7 +211,7 @@ namespace Simplex {
 		/*
 		USAGE: Changes the orientation by a specified amount
 		ARGUMENTS:
-		-	vector3 rotation -> The amount to rotate by in euler rotations
+		-	vector3 rotation -> The amount to rotate by in euler(radian) rotations
 		OUTPUT: ---
 		*/
 		void Rotate(vector3 rotation);
@@ -232,6 +239,13 @@ namespace Simplex {
 		OUTPUT: ---
 		*/
 		void Scale(float scaleAmount);
+
+		/*
+		USAGE: Updates the transform based on the position orientation and scale
+		ARGUMENTS: ---
+		OUTPUT: ---
+		*/
+		void UpdateTransform();
 #pragma endregion
 #pragma region Helper Functions
 		/*
@@ -248,7 +262,6 @@ namespace Simplex {
 		OUTPUT: ---
 		*/
 		void CalculateGlobalMinMax();
-
 #pragma endregion
 	};
 }

@@ -7,6 +7,7 @@ void WorldObject::Init(void)
 	position = vector3();
 	orientation = IDENTITY_QUAT;
 	scale = vector3(1, 1, 1);
+	UpdateTransform();
 	model = nullptr;
 	layer = CollisionLayers::Terrain;
 }
@@ -27,6 +28,20 @@ WorldObject::~WorldObject()
 	Release();
 }
 
+WorldObject::WorldObject(WorldObject& other)
+{
+	position = other.GetPosition();
+	orientation = other.GetRotation();
+	scale = other.GetScale();
+	UpdateTransform();
+	SetModel(other.GetModel());
+	layer = other.GetLayer();
+}
+
+WorldObject& WorldObject::operator=(WorldObject& other) {
+	return WorldObject(other);
+}
+
 #pragma region Accessors
 
 vector3 WorldObject::GetPosition()
@@ -37,6 +52,8 @@ vector3 WorldObject::GetPosition()
 void WorldObject::SetPosition(vector3 value)
 {
 	position = value;
+
+	UpdateTransform();
 }
 
 quaternion WorldObject::GetRotation()
@@ -47,6 +64,8 @@ quaternion WorldObject::GetRotation()
 void WorldObject::SetRotation(quaternion value)
 {
 	orientation = value;
+
+	UpdateTransform();
 }
 
 vector3 WorldObject::GetScale()
@@ -57,6 +76,13 @@ vector3 WorldObject::GetScale()
 void WorldObject::SetScale(vector3 value)
 {
 	scale = value;
+
+	UpdateTransform();
+}
+
+matrix4 WorldObject::GetTransform()
+{
+	return transform;
 }
 
 Mesh* WorldObject::GetModel()
@@ -102,6 +128,7 @@ void WorldObject::SetModel(Mesh* mesh)
 	//Calculate the global min and max
 	CalculateGlobalMinMax();
 
+	/*
 	std::cout << std::endl << "Position: (" << position.x << ", " << position.y << ", " << position.z << "), Scale: (" << scale.x << ", " << scale.y << ", " << scale.z << ")" << std::endl;
 	std::cout << "Local Min: (" << localMin.x << ", " << localMin.y << ", " << localMin.z << "), Local Max: (" << localMax.x << ", " << localMax.y << ", " << localMax.z << ")" << std::endl;
 	std::cout << "Global Min: (" << globalMin.x << ", " << globalMin.y << ", " << globalMin.z << "), Global Max: (" << globalMax.x << ", " << globalMax.y << ", " << globalMax.z << ")" << std::endl;
@@ -112,16 +139,12 @@ void WorldObject::SetModel(Mesh* mesh)
 	testPosition = ToWorld(testPosition);
 	std::cout << "  After: (" << testPosition.x << ", " << testPosition.y << ", " << testPosition.z << ")" << std::endl;
 
-	matrix4 transformation = IDENTITY_M4;
-	transformation *= glm::toMat4(orientation);
-	transformation *= glm::scale(scale);
-	transformation *= glm::translate(position);
-
-	std::cout << std::endl << "To World Matrix:" << std::endl;
-	std::cout << "  " << transformation[0][0] << ", " << transformation[1][0] << ", " << transformation[2][0] << ", " << transformation[3][0] << std::endl;
-	std::cout << "  " << transformation[0][1] << ", " << transformation[1][1] << ", " << transformation[2][1] << ", " << transformation[3][1] << std::endl;
-	std::cout << "  " << transformation[0][2] << ", " << transformation[1][2] << ", " << transformation[2][2] << ", " << transformation[3][2] << std::endl;
-	std::cout << "  " << transformation[0][3] << ", " << transformation[1][3] << ", " << transformation[2][3] << ", " << transformation[3][3] << std::endl;
+	std::cout << std::endl << "Transform Matrix:" << std::endl;
+	std::cout << "  " << transform[0][0] << ", " << transform[1][0] << ", " << transform[2][0] << ", " << transform[3][0] << std::endl;
+	std::cout << "  " << transform[0][1] << ", " << transform[1][1] << ", " << transform[2][1] << ", " << transform[3][1] << std::endl;
+	std::cout << "  " << transform[0][2] << ", " << transform[1][2] << ", " << transform[2][2] << ", " << transform[3][2] << std::endl;
+	std::cout << "  " << transform[0][3] << ", " << transform[1][3] << ", " << transform[2][3] << ", " << transform[3][3] << std::endl;
+	*/
 }
 
 int WorldObject::GetLayer()
@@ -161,13 +184,8 @@ void WorldObject::SetRenderCollider(bool value)
 
 void WorldObject::Render(matrix4 projection, matrix4 view)
 {
-	matrix4 modelMatrix = IDENTITY_M4;
-	modelMatrix *= glm::toMat4(orientation);
-	modelMatrix *= glm::translate(position);
-	modelMatrix *= glm::scale(scale);
-
 	if (model != nullptr) {
-		MeshManager::GetInstance()->AddMeshToRenderList(model, modelMatrix);
+		MeshManager::GetInstance()->AddMeshToRenderList(model, transform);
 	}
 	
 	if (renderCollider) {
@@ -206,16 +224,56 @@ void WorldObject::Render(MyCamera* camera)
 void WorldObject::Translate(vector3 displacement)
 {
 	position += displacement;
+
+	UpdateTransform();
+}
+
+void WorldObject::Rotate(vector3 rotation)
+{
+	//Find the local axis
+	vector3 localXAxis = AXIS_X * orientation;
+	vector3 localYAxis = AXIS_Y * orientation;
+	vector3 localZAxis = AXIS_Z * orientation;
+
+	//Create rotation quaternion
+	quaternion rotationQuat = glm::angleAxis(rotation.x, localXAxis) * glm::angleAxis(rotation.y, localYAxis) * glm::angleAxis(rotation.z, localZAxis);
+
+	//Rotation orientation
+	Rotate(rotationQuat);
+}
+
+void WorldObject::Rotate(quaternion rotation)
+{
+	orientation *= rotation;
+
+	UpdateTransform();
+}
+
+void WorldObject::Scale(vector3 scaleAmount)
+{
+	scale *= scaleAmount;
+
+	UpdateTransform();
+}
+
+void WorldObject::Scale(float scaleAmount)
+{
+	scale *= scaleAmount;
+
+	UpdateTransform();
+}
+
+void WorldObject::UpdateTransform()
+{
+	transform = IDENTITY_M4;
+	transform *= glm::toMat4(orientation);
+	transform *= glm::translate(position);
+	transform *= glm::scale(scale);
 }
 
 vector3 WorldObject::ToWorld(vector3 point)
 {
-	matrix4 transformation = IDENTITY_M4;
-	transformation *= glm::toMat4(orientation);
-	transformation *= glm::translate(position);
-	transformation *= glm::scale(scale);
-
-	point = transformation * vector4(point, 1);
+	point = transform * vector4(point, 1);
 	return point;
 }
 

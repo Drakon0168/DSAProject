@@ -1,4 +1,6 @@
+#include "pch.h"
 #include "MyRigidBody.h"
+
 using namespace Simplex;
 using namespace std;
 

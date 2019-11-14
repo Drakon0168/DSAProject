@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "FileReference.h"
 
 //Creates a new File Refernce with a filePath and uniqueID

@@ -1,4 +1,6 @@
+#include "pch.h"
 #include "ModelObject.h"
+
 using namespace std;
 using namespace Simplex;
 
