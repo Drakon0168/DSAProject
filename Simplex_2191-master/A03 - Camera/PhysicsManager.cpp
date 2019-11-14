@@ -30,10 +30,15 @@ void PhysicsManager::Init(void)
 	}
 	
 	//TODO: Setup starting objects in the level
-	collidables[CollisionLayers::Player].push_back(new WorldObject());
-	MyMesh* playerMesh = new MyMesh();
-	playerMesh->GenerateCube(vector3(5, 5, 5), vector3(0, 1, 0)), (glm::translate(vector3(0, 0.0f, 0)));
-	collidables[CollisionLayers::Player][0]->SetModel(playerMesh);
+	WorldObject* terrain = CreateObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100));
+	Mesh* terrainMesh = new Mesh();
+	terrainMesh->GenerateCube(1, C_WHITE);
+	terrain->SetModel(terrainMesh);
+
+	WorldObject* player = CreateObject(CollisionLayers::Player);
+	Mesh* playerMesh = new Mesh();
+	playerMesh->GenerateCube(1, C_WHITE);
+	player->SetModel(playerMesh);
 }
 
 void PhysicsManager::Release(void)
@@ -122,13 +127,22 @@ void PhysicsManager::Update(float deltaTime)
 			count = collidables[i].size();
 
 			for (int j = 0; j < count; j++) {
-				//TODO: Draw the object
-				collidables[i][j]->RenderCollider();
-
-				if(camera != nullptr && collidables[i][j]->GetModel() != nullptr)
+				if(camera != nullptr)
 					collidables[i][j]->Render(camera);
 			}
 			break;
 		}
 	}
+}
+
+WorldObject* PhysicsManager::CreateObject(CollisionLayers layer, vector3 position, vector3 scale, quaternion orientation)
+{
+	WorldObject* newObject = new WorldObject;
+
+	newObject->SetPosition(position);
+	newObject->SetScale(scale);
+	newObject->SetRotation(orientation);
+
+	collidables[layer].push_back(newObject);
+	return newObject;
 }

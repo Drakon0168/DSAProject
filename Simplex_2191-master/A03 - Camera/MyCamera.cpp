@@ -2,11 +2,11 @@
 using namespace Simplex;
 
 //Accessors
-void Simplex::MyCamera::SetPosition(vector3 a_v3Position) { m_v3Position = a_v3Position; }
+void Simplex::MyCamera::SetPosition(vector3 a_v3Position) { m_v3Position = a_v3Position; CameraManager::GetInstance()->SetPosition(a_v3Position); }
 vector3 Simplex::MyCamera::GetPosition(void) { return m_v3Position; }
-void Simplex::MyCamera::SetTarget(vector3 a_v3Target) { m_v3Target = a_v3Target; }
+void Simplex::MyCamera::SetTarget(vector3 a_v3Target) { m_v3Target = a_v3Target; CameraManager::GetInstance()->SetPosition(a_v3Target); }
 vector3 Simplex::MyCamera::GetTarget(void) { return m_v3Target; }
-void Simplex::MyCamera::SetAbove(vector3 a_v3Above) { m_v3Above = a_v3Above; }
+void Simplex::MyCamera::SetAbove(vector3 a_v3Above) { m_v3Above = a_v3Above; CameraManager::GetInstance()->SetPosition(a_v3Above); }
 vector3 Simplex::MyCamera::GetAbove(void) { return m_v3Above; }
 void Simplex::MyCamera::SetPerspective(bool a_bPerspective) { m_bPerspective = a_bPerspective; }
 void Simplex::MyCamera::SetFOV(float a_fFOV) { m_fFOV = a_fFOV; }
@@ -120,6 +120,8 @@ void Simplex::MyCamera::ResetCamera(void)
 
 	CalculateProjectionMatrix();
 	CalculateViewMatrix();
+
+	CameraManager::GetInstance()->ResetCamera();
 }
 
 void Simplex::MyCamera::SetPositionTargetAndUpward(vector3 a_v3Position, vector3 a_v3Target, vector3 a_v3Upward)
@@ -129,6 +131,8 @@ void Simplex::MyCamera::SetPositionTargetAndUpward(vector3 a_v3Position, vector3
 
 	m_v3Above = a_v3Position + glm::normalize(a_v3Upward);
 	
+	CameraManager::GetInstance()->SetPositionTargetAndUpward(a_v3Position, a_v3Target, a_v3Upward);
+
 	//Calculate the Matrix
 	CalculateProjectionMatrix();
 }
@@ -156,6 +160,8 @@ void Simplex::MyCamera::CalculateProjectionMatrix(void)
 
 void MyCamera::MoveForward(float a_fDistance)
 {
+	CameraManager::GetInstance()->MoveForward(a_fDistance);
+
 	//Update Vectors
 	UpdateForward();
 
@@ -167,6 +173,8 @@ void MyCamera::MoveForward(float a_fDistance)
 
 void MyCamera::MoveLeft(float a_fDistance)
 {
+	CameraManager::GetInstance()->MoveSideways(-a_fDistance);
+
 	//Update Vectors
 	UpdateForward();
 
@@ -178,6 +186,8 @@ void MyCamera::MoveLeft(float a_fDistance)
 
 void MyCamera::MoveUp(float a_fDistance)
 {
+	CameraManager::GetInstance()->MoveVertical(a_fDistance);
+
 	//Update Vectors
 	UpdateForward();
 
@@ -188,6 +198,8 @@ void MyCamera::MoveUp(float a_fDistance)
 
 void MyCamera::RotateLeft(float a_fDistance)
 {
+	CameraManager::GetInstance()->ChangePitch(-a_fDistance);
+
 	//Update Vectors
 	UpdateForward();
 
@@ -203,6 +215,8 @@ void MyCamera::RotateLeft(float a_fDistance)
 
 void MyCamera::RotateDown(float a_fDistance)
 {
+	CameraManager::GetInstance()->ChangeYaw(a_fDistance);
+
 	//Update Vectors
 	UpdateForward();
 

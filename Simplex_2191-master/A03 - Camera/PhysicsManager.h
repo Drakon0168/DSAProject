@@ -98,7 +98,17 @@ namespace Simplex {
 		ARGUMENTS : --
 		OUTPUT : --
 		*/
-		void DestroyObject(WorldObject* a);
+		void DestroyObject(WorldObject* obj);
+		/*
+		USAGE : Creates a new object
+		ARGUMENTS :
+		-	CollisionLayer layer -> The layer of the object
+		-	Vector3 position -> The position of the object
+		-	Vector3 scale -> The scale of the object
+		-	Quaternion orientation -> The rotation of the object
+		OUTPUT : --
+		*/
+		WorldObject* CreateObject(CollisionLayers layer, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
 #pragma endregion
 	};
 }

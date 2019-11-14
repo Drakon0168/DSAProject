@@ -10,7 +10,7 @@ namespace Simplex {
 		quaternion orientation; //The rotation of the object
 		vector3 scale; //The scale of the object
 		//TODO: Add collider / rigidbody to World Object
-		MyMesh* model; // The model that represents the mesh
+		Mesh* model; // The model that represents the mesh
 		int layer; //The collision layer of this object
 
 		float radius; //The radius of the object's bounding sphere
@@ -18,11 +18,13 @@ namespace Simplex {
 		vector3 globalMax; //The maximum x y and z position of the object in global space
 		vector3 localMin; //The minimum x y and z position of the object in local space
 		vector3 localMax; //The maximum x y and z positon of the object in local space
-		vector3 halfWidth; //The half width of the object
+		vector3 localHalfWidth; //The local half width of the object
+		vector3 globalHalfWidth; //The global half width of the object
 
-		const bool showSphere = true;
-		const bool showAABB = true;
-		const bool showARBB = true;
+		bool renderCollider = true; //Whether or not to draw the collider
+		const bool showSphere = true; //Whether or not to draw the sphere collider
+		const bool showAABB = true; //Whether or not to draw the AABB collider
+		const bool showARBB = true; //Whether or not to draw the ARBB collider
 	public:
 #pragma region Memory Management
 		/*
@@ -73,11 +75,27 @@ namespace Simplex {
 		vector3 GetPosition();
 
 		/*
+		USAGE: Sets the object's position
+		ARGUMENTS:
+		-	Vector3 value -> The position to set
+		OUTPUT: ---
+		*/
+		void SetPosition(vector3 value);
+
+		/*
 		USAGE: Returns the object's rotation
 		ARGUMENTS:
 		OUTPUT: The object's current rotation
 		*/
 		quaternion GetRotation();
+
+		/*
+		USAGE: Sets the object's orientation
+		ARGUMENTS:
+		-	Quaternion value -> The orientation to set
+		OUTPUT: ---
+		*/
+		void SetRotation(quaternion value);
 
 		/*
 		USAGE: Returns the object's scale
@@ -99,7 +117,7 @@ namespace Simplex {
 		ARGUMENTS:
 		OUTPUT: The object's model
 		*/
-		MyMesh* GetModel();
+		Mesh* GetModel();
 
 		/*
 		USAGE: Sets the object's model
@@ -107,7 +125,7 @@ namespace Simplex {
 		-	MyMesh* mesh -> A reference to the mesh that the object is using
 		OUTPUT:
 		*/
-		void SetModel(MyMesh* mesh);
+		void SetModel(Mesh* mesh);
 
 		/*
 		USAGE: Returns the object's collision layer
@@ -143,6 +161,20 @@ namespace Simplex {
 		OUTPUT: The object's global max
 		*/
 		vector3 GetGlobalMax();
+
+		/*
+		USAGE: Returns whether or not the collider is set to draw
+		ARGUMENTS: ---
+		OUTPUT: ---
+		*/
+		bool GetRenderCollider();
+
+		/*
+		USAGE: Sets whether or not to draw the collider
+		ARGUMENTS: ---
+		OUTPUT: ---
+		*/
+		void SetRenderCollider(bool value);
 #pragma endregion
 #pragma region Rendering
 		/*
@@ -159,12 +191,6 @@ namespace Simplex {
 		OUTPUT: ---
 		*/
 		void Render(MyCamera* camera);
-		/*
-		USAGE: Adds the collider of this object to the render list
-		ARGUMENTS: ---
-		OUTPUT: ---
-		*/
-		void RenderCollider();
 #pragma endregion
 #pragma region Transformations
 		/*
@@ -186,7 +212,7 @@ namespace Simplex {
 		/*
 		USAGE: Changes the orientation by a specified amount
 		ARGUMENTS:
-		-	quaternion rotation -> THe amount to rotate by
+		-	quaternion rotation -> The amount to rotate by
 		OUTPUT: ---
 		*/
 		void Rotate(quaternion rotation);

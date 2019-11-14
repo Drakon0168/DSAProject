@@ -13,8 +13,8 @@ void WorldObject::Init(void)
 
 void WorldObject::Release(void)
 {
-	if(model != nullptr)
-		model->Release();
+	if (model != nullptr)
+		delete model;
 }
 
 WorldObject::WorldObject()
@@ -34,9 +34,19 @@ vector3 WorldObject::GetPosition()
 	return position;
 }
 
+void WorldObject::SetPosition(vector3 value)
+{
+	position = value;
+}
+
 quaternion WorldObject::GetRotation()
 {
 	return orientation;
+}
+
+void WorldObject::SetRotation(quaternion value)
+{
+	orientation = value;
 }
 
 vector3 WorldObject::GetScale()
@@ -49,16 +59,16 @@ void WorldObject::SetScale(vector3 value)
 	scale = value;
 }
 
-MyMesh* WorldObject::GetModel()
+Mesh* WorldObject::GetModel()
 {
 	return model;
 }
 
-void WorldObject::SetModel(MyMesh* mesh)
+void WorldObject::SetModel(Mesh* mesh)
 {
 	model = mesh;
 
-	std::vector<vector3> vertices = model->GetVertices();
+	std::vector<vector3> vertices = model->GetVertexList();
 	int count = vertices.size();
 
 	localMin = vertices[0];
@@ -87,16 +97,15 @@ void WorldObject::SetModel(MyMesh* mesh)
 	}
 
 	//Set the halfWidth
-	halfWidth = (localMax - localMin) * 0.5f;
+	localHalfWidth = (localMax - localMin) * 0.5f;
 
 	//Calculate the global min and max
 	CalculateGlobalMinMax();
 
-	/*
 	std::cout << std::endl << "Position: (" << position.x << ", " << position.y << ", " << position.z << "), Scale: (" << scale.x << ", " << scale.y << ", " << scale.z << ")" << std::endl;
 	std::cout << "Local Min: (" << localMin.x << ", " << localMin.y << ", " << localMin.z << "), Local Max: (" << localMax.x << ", " << localMax.y << ", " << localMax.z << ")" << std::endl;
 	std::cout << "Global Min: (" << globalMin.x << ", " << globalMin.y << ", " << globalMin.z << "), Global Max: (" << globalMax.x << ", " << globalMax.y << ", " << globalMax.z << ")" << std::endl;
-	std::cout << "Half Width: (" << halfWidth.x << ", " << halfWidth.y << ", " << halfWidth.z << ")" << std::endl;
+	std::cout << "Local Half Width: (" << localHalfWidth.x << ", " << localHalfWidth.y << ", " << localHalfWidth.z << ")" << "Global Half Width : (" << globalHalfWidth.x << ", " << globalHalfWidth.y << ", " << globalHalfWidth.z << ")" <<std::endl;
 
 	vector3 testPosition(1,1,1);
 	std::cout << std::endl << "Test Position" << std::endl << "  Before: (" << testPosition.x << ", " << testPosition.y << ", " << testPosition.z << ")" << std::endl;
@@ -113,7 +122,6 @@ void WorldObject::SetModel(MyMesh* mesh)
 	std::cout << "  " << transformation[0][1] << ", " << transformation[1][1] << ", " << transformation[2][1] << ", " << transformation[3][1] << std::endl;
 	std::cout << "  " << transformation[0][2] << ", " << transformation[1][2] << ", " << transformation[2][2] << ", " << transformation[3][2] << std::endl;
 	std::cout << "  " << transformation[0][3] << ", " << transformation[1][3] << ", " << transformation[2][3] << ", " << transformation[3][3] << std::endl;
-	*/
 }
 
 int WorldObject::GetLayer()
@@ -141,16 +149,51 @@ vector3 WorldObject::GetGlobalMax()
 	return globalMax;
 }
 
+bool WorldObject::GetRenderCollider()
+{
+	return renderCollider;
+}
+
+void WorldObject::SetRenderCollider(bool value)
+{
+	renderCollider = value;
+}
+
 void WorldObject::Render(matrix4 projection, matrix4 view)
 {
 	matrix4 modelMatrix = IDENTITY_M4;
 	modelMatrix *= glm::toMat4(orientation);
-	modelMatrix *= glm::scale(scale);
 	modelMatrix *= glm::translate(position);
-	model->Render(projection, view, modelMatrix);
-	//MyMeshManager::GetInstance()->AddMeshToRenderList(model, modelMatrix);
+	modelMatrix *= glm::scale(scale);
 
-	//std::cout << "Rendering Mesh" << std::endl;
+	if (model != nullptr) {
+		MeshManager::GetInstance()->AddMeshToRenderList(model, modelMatrix);
+	}
+	
+	if (renderCollider) {
+		if (showSphere) {
+			matrix4 transformation = IDENTITY_M4;
+			transformation *= glm::translate(position);
+			transformation *= glm::scale(vector3(radius));
+
+			MeshManager::GetInstance()->AddWireSphereToRenderList(transformation, C_BLUE);
+		}
+		if (showAABB) {
+			matrix4 transformation = IDENTITY_M4;
+			transformation *= glm::translate(position);
+			transformation *= glm::scale(globalMax - globalMin);
+			
+			MeshManager::GetInstance()->AddWireCubeToRenderList(transformation, C_YELLOW);
+		}
+		if (showARBB) {
+			matrix4 transformation = IDENTITY_M4;
+			transformation *= glm::toMat4(orientation);
+			transformation *= glm::translate(position);
+			transformation *= glm::scale((localMax - localMin) * scale);
+			
+			MeshManager::GetInstance()->AddWireCubeToRenderList(transformation, C_MAGENTA);
+		}
+	}
 }
 
 void WorldObject::Render(MyCamera* camera)
@@ -159,35 +202,6 @@ void WorldObject::Render(MyCamera* camera)
 }
 
 #pragma endregion
-
-void WorldObject::RenderCollider()
-{
-	if (showSphere) {
-		matrix4 transformation = IDENTITY_M4;
-		transformation *= glm::scale(scale);
-		transformation *= glm::translate(position);
-
-		MeshManager::GetInstance()->AddWireSphereToRenderList(transformation, C_WHITE, RENDER_WIRE);
-	}
-	if (showAABB) {
-		matrix4 transformation = matrix4(
-			localMax.x, 0, 0, 0,
-			0, localMax.y, 0, 0,
-			0, 0, localMax.z, 0,
-			position.x, position.y, position.x, 1
-		);
-		MeshManager::GetInstance()->AddWireCubeToRenderList(transformation, C_YELLOW, RENDER_WIRE);
-	}
-	if (showARBB) {
-		matrix4 transformation = IDENTITY_M4 * glm::toMat4(orientation);
-		transformation *= glm::scale(scale);
-		transformation *= glm::translate(position);
-		MeshManager::GetInstance()->AddWireCubeToRenderList(transformation, C_GREEN, RENDER_WIRE);
-
-	}
-
-	//std::cout << "Rendering Collider" << std::endl;
-}
 
 void WorldObject::Translate(vector3 displacement)
 {
@@ -198,8 +212,8 @@ vector3 WorldObject::ToWorld(vector3 point)
 {
 	matrix4 transformation = IDENTITY_M4;
 	transformation *= glm::toMat4(orientation);
-	transformation *= glm::scale(scale);
 	transformation *= glm::translate(position);
+	transformation *= glm::scale(scale);
 
 	point = transformation * vector4(point, 1);
 	return point;
@@ -210,14 +224,14 @@ void WorldObject::CalculateGlobalMinMax()
 	//Find the corners of the bounding box
 	vector3 corners[8];
 
-	corners[0] = ToWorld(vector3(-halfWidth.x, -halfWidth.y, -halfWidth.z));
-	corners[1] = ToWorld(vector3(-halfWidth.x, -halfWidth.y, halfWidth.z));
-	corners[2] = ToWorld(vector3(-halfWidth.x, halfWidth.y, -halfWidth.z));
-	corners[3] = ToWorld(vector3(-halfWidth.x, halfWidth.y, halfWidth.z));
-	corners[4] = ToWorld(vector3(halfWidth.x, -halfWidth.y, -halfWidth.z));
-	corners[5] = ToWorld(vector3(halfWidth.x, -halfWidth.y, halfWidth.z));
-	corners[6] = ToWorld(vector3(halfWidth.x, halfWidth.y, -halfWidth.z));
-	corners[7] = ToWorld(vector3(halfWidth.x, halfWidth.y, halfWidth.z));
+	corners[0] = ToWorld(vector3(-localHalfWidth.x, -localHalfWidth.y, -localHalfWidth.z));
+	corners[1] = ToWorld(vector3(-localHalfWidth.x, -localHalfWidth.y, localHalfWidth.z));
+	corners[2] = ToWorld(vector3(-localHalfWidth.x, localHalfWidth.y, -localHalfWidth.z));
+	corners[3] = ToWorld(vector3(-localHalfWidth.x, localHalfWidth.y, localHalfWidth.z));
+	corners[4] = ToWorld(vector3(localHalfWidth.x, -localHalfWidth.y, -localHalfWidth.z));
+	corners[5] = ToWorld(vector3(localHalfWidth.x, -localHalfWidth.y, localHalfWidth.z));
+	corners[6] = ToWorld(vector3(localHalfWidth.x, localHalfWidth.y, -localHalfWidth.z));
+	corners[7] = ToWorld(vector3(localHalfWidth.x, localHalfWidth.y, localHalfWidth.z));
 
 	//Find the global min and max
 	globalMin = corners[0];
@@ -246,6 +260,6 @@ void WorldObject::CalculateGlobalMinMax()
 	}
 
 	//Recalculate global half width and sphere radius
-	vector3 globalHalfWidth = (globalMax - globalMin) * 0.5f;
+	globalHalfWidth = (globalMax - globalMin) * 0.5f;
 	radius = glm::sqrt((globalHalfWidth.x * globalHalfWidth.x) + (globalHalfWidth.y * globalHalfWidth.y) + (globalHalfWidth.z * globalHalfWidth.z));
 }
