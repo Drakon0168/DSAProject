@@ -115,11 +115,14 @@ xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y
     <ClCompile Include="AppClassMain.cpp" />
     <ClCompile Include="ControllerConfiguration.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="FileReference.cpp" />
     <ClCompile Include="LivingEntity.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ModelObject.cpp" />
     <ClCompile Include="MyCamera.cpp" />
     <ClCompile Include="MyMesh.cpp" />
     <ClCompile Include="MyMeshManager.cpp" />
+    <ClCompile Include="MyRigidBody.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
@@ -139,11 +142,14 @@ xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y
     <ClInclude Include="CollisionLayers.h" />
     <ClInclude Include="ControllerConfiguration.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="FileReference.h" />
     <ClInclude Include="LivingEntity.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="ModelObject.h" />
     <ClInclude Include="MyCamera.h" />
     <ClInclude Include="MyMesh.h" />
     <ClInclude Include="MyMeshManager.h" />
+    <ClInclude Include="MyRigidBody.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="PhysicsObject.h" />
