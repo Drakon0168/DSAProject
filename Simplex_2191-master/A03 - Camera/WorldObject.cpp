@@ -2,6 +2,8 @@
 
 using namespace Simplex;
 
+#pragma region Memory Management
+
 void WorldObject::Init(void)
 {
 	position = vector3();
@@ -41,6 +43,8 @@ WorldObject::WorldObject(WorldObject& other)
 WorldObject& WorldObject::operator=(WorldObject& other) {
 	return WorldObject(other);
 }
+
+#pragma endregion
 
 #pragma region Accessors
 
@@ -182,6 +186,10 @@ void WorldObject::SetRenderCollider(bool value)
 	renderCollider = value;
 }
 
+#pragma endregion
+
+#pragma region Rendering
+
 void WorldObject::Render(matrix4 projection, matrix4 view)
 {
 	if (model != nullptr) {
@@ -220,6 +228,8 @@ void WorldObject::Render(MyCamera* camera)
 }
 
 #pragma endregion
+
+#pragma region Transformations
 
 void WorldObject::Translate(vector3 displacement)
 {
@@ -271,6 +281,10 @@ void WorldObject::UpdateTransform()
 	transform *= glm::scale(scale);
 }
 
+#pragma endregion
+
+#pragma region Helper Methods
+
 vector3 WorldObject::ToWorld(vector3 point)
 {
 	point = transform * vector4(point, 1);
@@ -321,3 +335,5 @@ void WorldObject::CalculateGlobalMinMax()
 	globalHalfWidth = (globalMax - globalMin) * 0.5f;
 	radius = glm::sqrt((globalHalfWidth.x * globalHalfWidth.x) + (globalHalfWidth.y * globalHalfWidth.y) + (globalHalfWidth.z * globalHalfWidth.z));
 }
+
+#pragma endregion
