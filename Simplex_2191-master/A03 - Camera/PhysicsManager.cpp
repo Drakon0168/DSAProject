@@ -32,7 +32,7 @@ void PhysicsManager::Init(void)
 	//TODO: Setup starting objects in the level
 	WorldObject* terrain = CreateObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100), glm::angleAxis((float)PI * 0.25f, AXIS_Y));
 	Mesh* terrainMesh = new Mesh();
-	terrainMesh->GenerateCube(1, C_WHITE);
+	terrainMesh->GenerateCube(1.0f, C_WHITE);
 	terrain->SetModel(terrainMesh);
 
 	WorldObject* player = CreateObject(CollisionLayers::Player);
@@ -83,7 +83,6 @@ void PhysicsManager::Update(float deltaTime)
 
 			for (int j = 0; j < count; j++) {
 				//TODO: Update the objects that can move
-				collidables[i][j]->Rotate(vector3((float)PI * 0.1f, 0, (float)PI * 0.1f));
 			}
 			break;
 		case CollisionLayers::Terrain:

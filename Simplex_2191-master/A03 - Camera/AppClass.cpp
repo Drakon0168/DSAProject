@@ -41,11 +41,6 @@ void Application::Update(void)
 
 	//Update Physics
 	PhysicsManager::GetInstance()->Update(deltaTime);
-
-	//Add objects to the Manager
-	//m_pMyMeshMngr->AddMeshToRenderList(m_pMyMeshMngr->GenerateCube(vector3(100, 0.2f, 100), vector3(0, 0, 0)),(glm::translate(vector3(0, 0.0f, 0))));
-	//m_pMyMeshMngr->AddMeshToRenderList(m_pMyMeshMngr->GenerateCube(vector3(5, 5, 5), vector3(0, 1, 0)), (glm::translate(vector3(0, 0.0f, 0))));
-
 }
 void Application::Display(void)
 {

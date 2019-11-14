@@ -81,6 +81,9 @@ void WorldObject::SetScale(vector3 value)
 {
 	scale = value;
 
+	//Set the radius
+	radius = glm::sqrt(((localHalfWidth.x * scale.x) * (localHalfWidth.x * scale.x)) + ((localHalfWidth.y * scale.y) * (localHalfWidth.y * scale.y)) + ((localHalfWidth.z * scale.z) * (localHalfWidth.z * scale.z)));
+
 	UpdateTransform();
 }
 
@@ -129,26 +132,28 @@ void WorldObject::SetModel(Mesh* mesh)
 	//Set the halfWidth
 	localHalfWidth = (localMax - localMin) * 0.5f;
 
+	//Set the radius
+	radius = glm::sqrt(((localHalfWidth.x * scale.x) * (localHalfWidth.x * scale.x)) + ((localHalfWidth.y * scale.y) * (localHalfWidth.y * scale.y)) + ((localHalfWidth.z * scale.z) * (localHalfWidth.z * scale.z)));
+
 	//Calculate the global min and max
 	CalculateGlobalMinMax();
 
-	/*
 	std::cout << std::endl << "Position: (" << position.x << ", " << position.y << ", " << position.z << "), Scale: (" << scale.x << ", " << scale.y << ", " << scale.z << ")" << std::endl;
 	std::cout << "Local Min: (" << localMin.x << ", " << localMin.y << ", " << localMin.z << "), Local Max: (" << localMax.x << ", " << localMax.y << ", " << localMax.z << ")" << std::endl;
 	std::cout << "Global Min: (" << globalMin.x << ", " << globalMin.y << ", " << globalMin.z << "), Global Max: (" << globalMax.x << ", " << globalMax.y << ", " << globalMax.z << ")" << std::endl;
 	std::cout << "Local Half Width: (" << localHalfWidth.x << ", " << localHalfWidth.y << ", " << localHalfWidth.z << ")" << "Global Half Width : (" << globalHalfWidth.x << ", " << globalHalfWidth.y << ", " << globalHalfWidth.z << ")" <<std::endl;
 
+	/*
 	vector3 testPosition(1,1,1);
 	std::cout << std::endl << "Test Position" << std::endl << "  Before: (" << testPosition.x << ", " << testPosition.y << ", " << testPosition.z << ")" << std::endl;
 	testPosition = ToWorld(testPosition);
 	std::cout << "  After: (" << testPosition.x << ", " << testPosition.y << ", " << testPosition.z << ")" << std::endl;
-
+	*/
 	std::cout << std::endl << "Transform Matrix:" << std::endl;
 	std::cout << "  " << transform[0][0] << ", " << transform[1][0] << ", " << transform[2][0] << ", " << transform[3][0] << std::endl;
 	std::cout << "  " << transform[0][1] << ", " << transform[1][1] << ", " << transform[2][1] << ", " << transform[3][1] << std::endl;
 	std::cout << "  " << transform[0][2] << ", " << transform[1][2] << ", " << transform[2][2] << ", " << transform[3][2] << std::endl;
 	std::cout << "  " << transform[0][3] << ", " << transform[1][3] << ", " << transform[2][3] << ", " << transform[3][3] << std::endl;
-	*/
 }
 
 int WorldObject::GetLayer()
@@ -263,12 +268,18 @@ void WorldObject::Scale(vector3 scaleAmount)
 {
 	scale *= scaleAmount;
 
+	//Set the radius
+	radius = glm::sqrt(((localHalfWidth.x * scale.x) * (localHalfWidth.x * scale.x)) + ((localHalfWidth.y * scale.y) * (localHalfWidth.y * scale.y)) + ((localHalfWidth.z * scale.z) * (localHalfWidth.z * scale.z)));
+
 	UpdateTransform();
 }
 
 void WorldObject::Scale(float scaleAmount)
 {
 	scale *= scaleAmount;
+
+	//Set the radius
+	radius = glm::sqrt(((localHalfWidth.x * scale.x) * (localHalfWidth.x * scale.x)) + ((localHalfWidth.y * scale.y) * (localHalfWidth.y * scale.y)) + ((localHalfWidth.z * scale.z) * (localHalfWidth.z * scale.z)));
 
 	UpdateTransform();
 }
@@ -279,6 +290,8 @@ void WorldObject::UpdateTransform()
 	transform *= glm::toMat4(orientation);
 	transform *= glm::translate(position);
 	transform *= glm::scale(scale);
+
+	CalculateGlobalMinMax();
 }
 
 #pragma endregion
@@ -333,7 +346,6 @@ void WorldObject::CalculateGlobalMinMax()
 
 	//Recalculate global half width and sphere radius
 	globalHalfWidth = (globalMax - globalMin) * 0.5f;
-	radius = glm::sqrt((globalHalfWidth.x * globalHalfWidth.x) + (globalHalfWidth.y * globalHalfWidth.y) + (globalHalfWidth.z * globalHalfWidth.z));
 }
 
 #pragma endregion
