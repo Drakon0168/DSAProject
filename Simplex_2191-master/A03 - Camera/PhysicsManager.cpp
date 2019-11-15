@@ -31,14 +31,18 @@ void PhysicsManager::Init(void)
 	
 	//TODO: Setup starting objects in the level
 	WorldObject* terrain = CreateObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100), glm::angleAxis((float)PI * 0.25f, AXIS_Y));
-	Mesh* terrainMesh = new Mesh();
-	terrainMesh->GenerateCube(1.0f, C_WHITE);
-	terrain->SetModel(terrainMesh);
+
+	FileReference terrainModelReference = FileReference("Minecraft\\Creeper.fbx", "Creeper");
+	Model* terrainModel = new Model();
+	terrainModel->Load(terrainModelReference.GetFilePath());
+	terrain->SetModel(terrainModel);
 
 	WorldObject* player = CreateObject(CollisionLayers::Player);
-	Mesh* playerMesh = new Mesh();
-	playerMesh->GenerateCube(1, C_WHITE);
-	player->SetModel(playerMesh);
+
+	FileReference playerModelReference = FileReference("Minecraft\\Creeper.fbx", "Creeper");
+	Model* playerModel = new Model();
+	playerModel->Load(playerModelReference.GetFilePath());
+	player->SetModel(playerModel);
 }
 
 void PhysicsManager::Release(void)

@@ -19,6 +19,7 @@ void Application::ProcessMousePressed(sf::Event a_event)
 	default: break;
 	case sf::Mouse::Button::Left:
 		gui.m_bMousePressed[0] = true;
+		if (m_paused) { m_paused = false; ShowCursor(false); }
 		break;
 	case sf::Mouse::Button::Middle:
 		gui.m_bMousePressed[1] = true;
@@ -26,7 +27,6 @@ void Application::ProcessMousePressed(sf::Event a_event)
 		break;
 	case sf::Mouse::Button::Right:
 		gui.m_bMousePressed[2] = true;
-		m_bFPC = true;
 		break;
 	}
 
@@ -47,7 +47,6 @@ void Application::ProcessMouseReleased(sf::Event a_event)
 		break;
 	case sf::Mouse::Button::Right:
 		gui.m_bMousePressed[2] = false;
-		m_bFPC = false;
 		break;
 	}
 
@@ -86,7 +85,7 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 	{
 	default: break;
 	case sf::Keyboard::Escape:
-		m_bRunning = false;
+		if(!m_paused) { m_paused = true; ShowCursor(true); }
 		break;
 	case sf::Keyboard::F1:
 		m_pCamera->SetPerspective();

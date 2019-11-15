@@ -37,7 +37,10 @@ void Application::Update(void)
 	ArcBall();
 
 	//Is the first person camera active?
-	CameraRotation();
+	if (!m_paused)
+	{
+		CameraRotation();
+	}
 
 	//Update Physics
 	PhysicsManager::GetInstance()->Update(deltaTime);

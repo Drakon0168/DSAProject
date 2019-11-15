@@ -92,14 +92,15 @@ matrix4 WorldObject::GetTransform()
 	return transform;
 }
 
-Mesh* WorldObject::GetModel()
+Model* WorldObject::GetModel()
 {
 	return model;
 }
 
-void WorldObject::SetModel(Mesh* mesh)
+
+void WorldObject::SetModel(Model* newModel)
 {
-	model = mesh;
+	model = newModel;
 
 	std::vector<vector3> vertices = model->GetVertexList();
 	int count = vertices.size();
@@ -204,7 +205,8 @@ void WorldObject::SetRenderCollider(bool value)
 void WorldObject::Render(matrix4 projection, matrix4 view)
 {
 	if (model != nullptr) {
-		MeshManager::GetInstance()->AddMeshToRenderList(model, transform);
+		model->SetModelMatrix(transform);
+		model->AddToRenderList();
 	}
 	
 	if (renderCollider) {

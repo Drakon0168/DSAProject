@@ -10,7 +10,7 @@ namespace Simplex {
 		quaternion orientation; //The rotation of the object
 		vector3 scale; //The scale of the object
 		matrix4 transform;
-		Mesh* model; // The model that represents the mesh
+		Model* model; // The model that represents the mesh
 		int layer; //The collision layer of this object
 
 		float radius; //The radius of the object's bounding sphere
@@ -124,15 +124,15 @@ namespace Simplex {
 		ARGUMENTS:
 		OUTPUT: The object's model
 		*/
-		Mesh* GetModel();
+		Model* GetModel();
 
 		/*
 		USAGE: Sets the object's model
 		ARGUMENTS:
-		-	MyMesh* mesh -> A reference to the mesh that the object is using
+		-	Model* model -> A reference to the model that the object is using
 		OUTPUT:
 		*/
-		void SetModel(Mesh* mesh);
+		void SetModel(Model* newModel);
 
 		/*
 		USAGE: Returns the object's collision layer
