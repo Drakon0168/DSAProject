@@ -26,7 +26,7 @@ private:
 	uint m_uControllerCount = 0; //count of controllers connected
 
 	vector3 m_v3Mouse = vector3(); //position of the mouse in the window
-	bool m_bFPC = false;// First Person Camera flag
+	bool m_paused = false;// Paused Bool
 	bool m_bArcBall = false;// Arcball flag
 	quaternion m_qArcBall; //ArcBall quaternion
 
