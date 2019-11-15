@@ -82,7 +82,7 @@ void WorldObject::SetScale(vector3 value)
 	scale = value;
 
 	//Set the radius
-	radius = glm::sqrt(((localHalfWidth.x * scale.x) * (localHalfWidth.x * scale.x)) + ((localHalfWidth.y * scale.y) * (localHalfWidth.y * scale.y)) + ((localHalfWidth.z * scale.z) * (localHalfWidth.z * scale.z)));
+	UpdateRadius();
 
 	UpdateTransform();
 }
@@ -133,7 +133,7 @@ void WorldObject::SetModel(Mesh* mesh)
 	localHalfWidth = (localMax - localMin) * 0.5f;
 
 	//Set the radius
-	radius = glm::sqrt(((localHalfWidth.x * scale.x) * (localHalfWidth.x * scale.x)) + ((localHalfWidth.y * scale.y) * (localHalfWidth.y * scale.y)) + ((localHalfWidth.z * scale.z) * (localHalfWidth.z * scale.z)));
+	UpdateRadius();
 
 	//Calculate the global min and max
 	CalculateGlobalMinMax();
@@ -149,6 +149,7 @@ void WorldObject::SetModel(Mesh* mesh)
 	testPosition = ToWorld(testPosition);
 	std::cout << "  After: (" << testPosition.x << ", " << testPosition.y << ", " << testPosition.z << ")" << std::endl;
 	*/
+
 	std::cout << std::endl << "Transform Matrix:" << std::endl;
 	std::cout << "  " << transform[0][0] << ", " << transform[1][0] << ", " << transform[2][0] << ", " << transform[3][0] << std::endl;
 	std::cout << "  " << transform[0][1] << ", " << transform[1][1] << ", " << transform[2][1] << ", " << transform[3][1] << std::endl;
@@ -159,6 +160,11 @@ void WorldObject::SetModel(Mesh* mesh)
 int WorldObject::GetLayer()
 {
 	return layer;
+}
+
+float WorldObject::GetRadius()
+{
+	return radius;
 }
 
 vector3 WorldObject::GetLocalMin()
@@ -268,8 +274,8 @@ void WorldObject::Scale(vector3 scaleAmount)
 {
 	scale *= scaleAmount;
 
-	//Set the radius
-	radius = glm::sqrt(((localHalfWidth.x * scale.x) * (localHalfWidth.x * scale.x)) + ((localHalfWidth.y * scale.y) * (localHalfWidth.y * scale.y)) + ((localHalfWidth.z * scale.z) * (localHalfWidth.z * scale.z)));
+	//Update the radius
+	UpdateRadius();
 
 	UpdateTransform();
 }
@@ -278,10 +284,15 @@ void WorldObject::Scale(float scaleAmount)
 {
 	scale *= scaleAmount;
 
-	//Set the radius
-	radius = glm::sqrt(((localHalfWidth.x * scale.x) * (localHalfWidth.x * scale.x)) + ((localHalfWidth.y * scale.y) * (localHalfWidth.y * scale.y)) + ((localHalfWidth.z * scale.z) * (localHalfWidth.z * scale.z)));
+	//Update the radius
+	UpdateRadius();
 
 	UpdateTransform();
+}
+
+void WorldObject::UpdateRadius()
+{
+	radius = glm::sqrt(((localHalfWidth.x * scale.x) * (localHalfWidth.x * scale.x)) + ((localHalfWidth.y * scale.y) * (localHalfWidth.y * scale.y)) + ((localHalfWidth.z * scale.z) * (localHalfWidth.z * scale.z)));
 }
 
 void WorldObject::UpdateTransform()
@@ -344,7 +355,7 @@ void WorldObject::CalculateGlobalMinMax()
 		}
 	}
 
-	//Recalculate global half width and sphere radius
+	//Recalculate global half width
 	globalHalfWidth = (globalMax - globalMin) * 0.5f;
 }
 

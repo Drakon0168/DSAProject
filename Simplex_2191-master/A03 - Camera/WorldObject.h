@@ -142,6 +142,13 @@ namespace Simplex {
 		int GetLayer();
 
 		/*
+		USAGE: Returns the object's sphere collider radius
+		ARGUMENTS:
+		OUTPUT: The object's spherical radius
+		*/
+		float GetRadius();
+
+		/*
 		USAGE: Returns the vector3 representation of the object's local mins
 		ARGUMENTS:
 		OUTPUT: The object's local min
@@ -239,6 +246,13 @@ namespace Simplex {
 		OUTPUT: ---
 		*/
 		void Scale(float scaleAmount);
+
+		/*
+		USAGE: Updates the transform based on the scale and local min and max
+		ARGUMENTS: ---
+		OUTPUT: ---
+		*/
+		void UpdateRadius();
 
 		/*
 		USAGE: Updates the transform based on the position orientation and scale

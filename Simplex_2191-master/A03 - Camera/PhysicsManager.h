@@ -109,6 +109,36 @@ namespace Simplex {
 		OUTPUT : --
 		*/
 		WorldObject* CreateObject(CollisionLayers layer, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
+
+		/*
+		USAGE : Checks for a collision based on the sphere colliders of the objects
+		ARGUMENTS : --
+		OUTPUT : Whether or not the objects sphere colliders intersect
+		*/
+		bool CheckSphereCollision(WorldObject* a, WorldObject* b);
+
+		/*
+		USAGE : Checks for a collision based on the AABB colliders of the objects
+		ARGUMENTS : --
+		OUTPUT : Whether or not the objects AABB colliders intersect
+		*/
+		bool CheckAABBCollision(WorldObject* a, WorldObject* b);
+
+		/*
+		USAGE : Checks for a collision based on the ARBB colliders of the objects
+		ARGUMENTS : --
+		OUTPUT : Whether or not the objects ARBB colliders intersect
+		*/
+		bool CheckARBBCollision(WorldObject* a, WorldObject* b);
+
+		/*
+		USAGE : Gets the min and max of an object along an axis
+		ARGUMENTS :
+		-	vector3 axis -> The axis to project along
+		-	WorldObject* a -> the object to project onto the axis
+		OUTPUT : Vector2 projection -> x = the minimum of the object along the axis, y = the maximum of the object along the axis
+		*/
+		vector2 CheckSATAxis(vector3 axis, WorldObject* a);
 #pragma endregion
 	};
 }

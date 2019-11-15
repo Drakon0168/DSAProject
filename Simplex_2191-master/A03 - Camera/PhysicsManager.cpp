@@ -131,6 +131,27 @@ void PhysicsManager::Update(float deltaTime)
 	}
 }
 
+bool PhysicsManager::CheckCollision(WorldObject* a, WorldObject* b)
+{
+	//Check for Sphere collision
+	if (!CheckSphereCollision(a, b)) {
+		return false;
+	}
+
+	//Check for AABB collision if there is a Sphere collision
+	if (!CheckAABBCollision(a, b)) {
+		return false;
+	}
+
+	//Check for ARBB collision if there is an AABB collision and a Sphere collision
+	if (!CheckARBBCollision(a, b)) {
+		return false;
+	}
+
+	//Return true only if all other checks are true
+	return true;
+}
+
 WorldObject* PhysicsManager::CreateObject(CollisionLayers layer, vector3 position, vector3 scale, quaternion orientation)
 {
 	WorldObject* newObject = new WorldObject;
@@ -141,4 +162,45 @@ WorldObject* PhysicsManager::CreateObject(CollisionLayers layer, vector3 positio
 
 	collidables[layer].push_back(newObject);
 	return newObject;
+}
+
+bool PhysicsManager::CheckSphereCollision(WorldObject* a, WorldObject* b)
+{
+	vector3 distanceVector = a->GetPosition() - b->GetPosition();
+	float sqrDistance = (distanceVector.x * distanceVector.x) + (distanceVector.y * distanceVector.y) + (distanceVector.z * distanceVector.z);
+	float sqrRadius = a->GetRadius() + b->GetRadius();
+	sqrRadius *= sqrRadius;
+
+	if (sqrDistance <= sqrRadius) {
+		return true;
+	}
+
+	return false;
+}
+
+bool PhysicsManager::CheckAABBCollision(WorldObject* a, WorldObject* b)
+{
+	vector3 aMin = a->GetGlobalMin();
+	vector3 aMax = a->GetGlobalMax();
+	vector3 bMin = b->GetGlobalMin();
+	vector3 bMax = b->GetGlobalMax();
+
+	if (aMin.x > bMax.x || bMin.x > aMax.x) {
+		return false;
+	}
+	if (aMin.y > bMax.y || bMin.y > aMax.y) {
+		return false;
+	}
+	if (aMin.z > bMax.z || bMin.z > aMax.z) {
+		return false;
+	}
+
+	return true;
+}
+
+bool PhysicsManager::CheckARBBCollision(WorldObject* a, WorldObject* b)
+{
+	//TODO: Implement SAT
+
+	return false;
 }
