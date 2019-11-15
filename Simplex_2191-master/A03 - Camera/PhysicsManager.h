@@ -134,11 +134,11 @@ namespace Simplex {
 		/*
 		USAGE : Gets the min and max of an object along an axis
 		ARGUMENTS :
-		-	vector3 axis -> The axis to project along
+		-	vector3 axis -> The axis to project along (Should already be normalized)
 		-	WorldObject* a -> the object to project onto the axis
 		OUTPUT : Vector2 projection -> x = the minimum of the object along the axis, y = the maximum of the object along the axis
 		*/
-		vector2 CheckSATAxis(vector3 axis, WorldObject* a);
+		vector2 ProjectSATAxis(vector3 axis, WorldObject* a);
 #pragma endregion
 	};
 }

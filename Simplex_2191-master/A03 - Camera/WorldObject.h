@@ -177,6 +177,20 @@ namespace Simplex {
 		vector3 GetGlobalMax();
 
 		/*
+		USAGE: Returns the vector3 representation of the object's local half width
+		ARGUMENTS:
+		OUTPUT: The object's local half width
+		*/
+		vector3 GetLocalHalfWidth();
+
+		/*
+		USAGE: Returns the vector3 representation of the object's global half width
+		ARGUMENTS:
+		OUTPUT: The object's global half width
+		*/
+		vector3 GetGlobalHalfWidth();
+
+		/*
 		USAGE: Returns whether or not the collider is set to draw
 		ARGUMENTS: ---
 		OUTPUT: ---

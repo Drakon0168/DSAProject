@@ -137,6 +137,8 @@ void PhysicsManager::Update(float deltaTime)
 
 bool PhysicsManager::CheckCollision(WorldObject* a, WorldObject* b)
 {
+	//TODO: Fully test collision detection once we can move objects
+
 	//Check for Sphere collision
 	if (!CheckSphereCollision(a, b)) {
 		return false;
@@ -175,7 +177,7 @@ bool PhysicsManager::CheckSphereCollision(WorldObject* a, WorldObject* b)
 	float sqrRadius = a->GetRadius() + b->GetRadius();
 	sqrRadius *= sqrRadius;
 
-	if (sqrDistance <= sqrRadius) {
+	if (sqrDistance < sqrRadius) {
 		return true;
 	}
 
@@ -204,7 +206,74 @@ bool PhysicsManager::CheckAABBCollision(WorldObject* a, WorldObject* b)
 
 bool PhysicsManager::CheckARBBCollision(WorldObject* a, WorldObject* b)
 {
-	//TODO: Implement SAT
+	vector3 axis[15];
+	axis[0] = AXIS_X * a->GetRotation();
+	axis[1] = AXIS_Y * a->GetRotation();
+	axis[2] = AXIS_Z * a->GetRotation();
+	axis[3] = AXIS_X * b->GetRotation();
+	axis[4] = AXIS_Y * b->GetRotation();
+	axis[5] = AXIS_Z * b->GetRotation();
 
-	return false;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			axis[6 + (i * 3) + j] = glm::cross(axis[i], axis[j + 3]);
+		}
+	}
+
+	for (int i = 0; i < 15; i++) {
+		//MeshManager::GetInstance()->AddLineToRenderList(IDENTITY_M4, vector3(0), axis[i] * 100, C_BLACK, C_BLACK);
+
+		vector2 aMinMax = ProjectSATAxis(axis[i], a);
+		vector2 bMinMax = ProjectSATAxis(axis[i], b);
+
+		if (aMinMax.x > bMinMax.y || bMinMax.x > aMinMax.y) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+vector2 PhysicsManager::ProjectSATAxis(vector3 axis, WorldObject* a)
+{
+	vector3 corners[8];
+	vector3 halfWidth = a->GetLocalHalfWidth();
+
+	//Find the corners of the box
+	corners[0] = a->ToWorld(vector3(halfWidth.x, halfWidth.y, halfWidth.z));
+	corners[1] = a->ToWorld(vector3(halfWidth.x, halfWidth.y, -halfWidth.z));
+	corners[2] = a->ToWorld(vector3(halfWidth.x, -halfWidth.y, halfWidth.z));
+	corners[3] = a->ToWorld(vector3(halfWidth.x, -halfWidth.y, -halfWidth.z));
+	corners[4] = a->ToWorld(vector3(-halfWidth.x, halfWidth.y, halfWidth.z));
+	corners[5] = a->ToWorld(vector3(-halfWidth.x, halfWidth.y, -halfWidth.z));
+	corners[6] = a->ToWorld(vector3(-halfWidth.x, -halfWidth.y, halfWidth.z));
+	corners[7] = a->ToWorld(vector3(-halfWidth.x, -halfWidth.y, -halfWidth.z));
+
+	//Find min and max values along the axis
+	vector2 minMax = vector2(0, 0);
+	minMax.x = glm::dot(axis, corners[0]);
+	minMax.y = minMax.x;
+
+	//TODO: Get rid of min and max vectors they are only for debug purposes
+	//vector3 min;
+	//vector3 max;
+
+	for (int i = 1; i < 8; i++) {
+		float projectionDistance = glm::dot(axis, corners[i]);
+
+		if (projectionDistance < minMax.x) {
+			minMax.x = projectionDistance;
+			//min = corners[i];
+		}
+
+		if (projectionDistance > minMax.y) {
+			minMax.y = projectionDistance;
+			//max = corners[i];
+		}
+	}
+
+	//MeshManager::GetInstance()->AddLineToRenderList(IDENTITY_M4, min, axis * minMax.x, C_WHITE, C_WHITE);
+	//MeshManager::GetInstance()->AddLineToRenderList(IDENTITY_M4, max, axis * minMax.y, C_WHITE, C_WHITE);
+
+	return minMax;
 }

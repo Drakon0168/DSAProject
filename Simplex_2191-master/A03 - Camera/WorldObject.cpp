@@ -188,6 +188,16 @@ vector3 WorldObject::GetGlobalMax()
 	return globalMax;
 }
 
+vector3 WorldObject::GetLocalHalfWidth()
+{
+	return localHalfWidth;
+}
+
+vector3 WorldObject::GetGlobalHalfWidth()
+{
+	return globalHalfWidth;
+}
+
 bool WorldObject::GetRenderCollider()
 {
 	return renderCollider;
