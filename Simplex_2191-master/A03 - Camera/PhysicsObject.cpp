@@ -32,8 +32,9 @@ void PhysicsObject::Update(float deltaTime)
 	ApplyForce(AXIS_Y * -9.8f);
 
 	if (position.y < 0) {
-		ApplyForce(AXIS_Y * 100);
+		velocity.y = 0;
 		SetPosition(vector3(position.x, 0, position.z));
+		ApplyForce(AXIS_Y * 250);
 	}
 
 	velocity += acceleration * deltaTime;
