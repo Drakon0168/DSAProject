@@ -31,8 +31,6 @@ void PhysicsObject::Update(float deltaTime)
 {
 	ApplyForce(AXIS_Y * -9.8f);
 
-	std::cout << "Position: (" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
-
 	if (position.y < 0) {
 		ApplyForce(AXIS_Y * 100);
 		SetPosition(vector3(position.x, 0, position.z));
