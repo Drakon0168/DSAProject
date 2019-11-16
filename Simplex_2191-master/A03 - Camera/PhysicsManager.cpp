@@ -30,14 +30,14 @@ void PhysicsManager::Init(void)
 	}
 	
 	//TODO: Setup starting objects in the level
-	WorldObject* terrain = CreateObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100), glm::angleAxis((float)PI * 0.25f, AXIS_Y));
+	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100), glm::angleAxis((float)PI * 0.25f, AXIS_Y));
 
 	FileReference terrainModelReference = FileReference("Minecraft\\Creeper.fbx", "Creeper");
 	Model* terrainModel = new Model();
 	terrainModel->Load(terrainModelReference.GetFilePath());
 	terrain->SetModel(terrainModel);
 
-	WorldObject* player = CreateObject(CollisionLayers::Player);
+	PhysicsObject* player = CreatePhysicsObject(CollisionLayers::Player);
 
 	FileReference playerModelReference = FileReference("Minecraft\\Creeper.fbx", "Creeper");
 	Model* playerModel = new Model();
@@ -86,7 +86,11 @@ void PhysicsManager::Update(float deltaTime)
 			count = collidables[i].size();
 
 			for (int j = 0; j < count; j++) {
-				//TODO: Update the objects that can move
+				PhysicsObject* obj = dynamic_cast<PhysicsObject*>(collidables[i][j]);
+
+				if (obj) {
+					obj->Update(deltaTime);
+				}
 			}
 			break;
 		case CollisionLayers::Terrain:
@@ -158,9 +162,21 @@ bool PhysicsManager::CheckCollision(WorldObject* a, WorldObject* b)
 	return true;
 }
 
-WorldObject* PhysicsManager::CreateObject(CollisionLayers layer, vector3 position, vector3 scale, quaternion orientation)
+WorldObject* PhysicsManager::CreateWorldObject(CollisionLayers layer, vector3 position, vector3 scale, quaternion orientation)
 {
-	WorldObject* newObject = new WorldObject;
+	WorldObject* newObject = new WorldObject();
+
+	newObject->SetPosition(position);
+	newObject->SetScale(scale);
+	newObject->SetRotation(orientation);
+
+	collidables[layer].push_back(newObject);
+	return newObject;
+}
+
+PhysicsObject* PhysicsManager::CreatePhysicsObject(CollisionLayers layer, vector3 position, vector3 scale, quaternion orientation)
+{
+	PhysicsObject* newObject = new PhysicsObject();
 
 	newObject->SetPosition(position);
 	newObject->SetScale(scale);

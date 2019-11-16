@@ -25,13 +25,14 @@ void Application::InitVariables(void)
 
 	ShowCursor(false);
 	SetCursorPos((m_pSystem->GetWindowX() + m_pSystem->GetWindowWidth() / 2), (m_pSystem->GetWindowY() + m_pSystem->GetWindowHeight() / 2));
+	
+	clock = m_pSystem->GenClock();
 }
 void Application::Update(void)
 {
 	//Update the system so it knows how much time has passed since the last call
 	m_pSystem->Update();
-	//TODO: Get delta time correctly using current and last time variables to avoid spike at launch
-	float deltaTime = 1.0f / m_pSystem->GetFPS();
+	float deltaTime = m_pSystem->GetDeltaTime(clock);
 
 	//Is the arcball active?
 	ArcBall();

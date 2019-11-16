@@ -6,11 +6,10 @@ namespace Simplex {
 	class PhysicsManager
 	{
 	private:
-		const float GRAVITY = -9.8f; //Acceleration constant due to gravity
 		const static int LAYER_COUNT = 6;
 		static PhysicsManager* instance;
 		MyCamera* camera;
-
+		
 		std::vector<WorldObject*> collidables[LAYER_COUNT]; //All objects that can be collided with separated into layers
 	public:
 #pragma region Singleton
@@ -100,7 +99,7 @@ namespace Simplex {
 		*/
 		void DestroyObject(WorldObject* obj);
 		/*
-		USAGE : Creates a new object
+		USAGE : Creates a new WorldObject
 		ARGUMENTS :
 		-	CollisionLayer layer -> The layer of the object
 		-	Vector3 position -> The position of the object
@@ -108,7 +107,17 @@ namespace Simplex {
 		-	Quaternion orientation -> The rotation of the object
 		OUTPUT : --
 		*/
-		WorldObject* CreateObject(CollisionLayers layer, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
+		WorldObject* CreateWorldObject(CollisionLayers layer, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
+		/*
+		USAGE : Creates a new PhysicsObject
+		ARGUMENTS :
+		-	CollisionLayer layer -> The layer of the object
+		-	Vector3 position -> The position of the object
+		-	Vector3 scale -> The scale of the object
+		-	Quaternion orientation -> The rotation of the object
+		OUTPUT : --
+		*/
+		PhysicsObject* CreatePhysicsObject(CollisionLayers layer, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
 
 		/*
 		USAGE : Checks for a collision based on the sphere colliders of the objects
