@@ -10,7 +10,7 @@ void WorldObject::Init(void)
 	orientation = IDENTITY_QUAT;
 	scale = vector3(1, 1, 1);
 	UpdateTransform();
-	model = nullptr;
+	model = new Model();
 	layer = CollisionLayers::Terrain;
 }
 
