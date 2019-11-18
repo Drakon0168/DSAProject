@@ -11,7 +11,7 @@ void WorldObject::Init(void)
 	scale = vector3(1);
 	center = vector3(0);
 	UpdateTransform();
-	model = nullptr;
+	model = new Model();
 	layer = CollisionLayers::Terrain;
 }
 

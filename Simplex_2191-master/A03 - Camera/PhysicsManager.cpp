@@ -30,20 +30,16 @@ void PhysicsManager::Init(void)
 	}
 	
 	//TODO: Setup starting objects in the level
-	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0), vector3(100, 0.2, 100), glm::angleAxis((float)PI * 0.25f, AXIS_Y));
+	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100), glm::angleAxis((float)PI * 0.25f, AXIS_Y));
 
 	FileReference terrainModelReference = FileReference("Minecraft\\Creeper.fbx", "Creeper");
-	Model* terrainModel = new Model();
-	terrainModel->Load(terrainModelReference.GetFilePath());
-	terrain->SetModel(terrainModel);
-	terrain->SetPosition(vector3(0, -1 * terrain->GetGlobalHalfWidth().y, 0));
+	terrain->GetModel()->Load(terrainModelReference.GetFilePath());
+	terrain->SetModel(terrain->GetModel());
 
-	PhysicsObject* player = CreatePhysicsObject(CollisionLayers::Player, vector3(0, 5, 0));
-
+	PhysicsObject* player = CreatePhysicsObject(CollisionLayers::Player);
 	FileReference playerModelReference = FileReference("Minecraft\\Creeper.fbx", "Creeper");
-	Model* playerModel = new Model();
-	playerModel->Load(playerModelReference.GetFilePath());
-	player->SetModel(playerModel);
+	player->GetModel()->Load(playerModelReference.GetFilePath());
+	player->SetModel(player->GetModel());
 }
 
 void PhysicsManager::Release(void)
