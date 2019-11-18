@@ -31,13 +31,16 @@ void PhysicsObject::Update(float deltaTime)
 {
 	ApplyForce(AXIS_Y * -9.8f);
 
-	if (position.y < 0) {
+	velocity += acceleration * deltaTime;
+
+	//TODO: Change this to use collisions not just on update
+	//Prevent falling through the ground
+	if (position.y + velocity.y * deltaTime < 0) {
 		velocity.y = 0;
+		
 		SetPosition(vector3(position.x, 0, position.z));
-		ApplyForce(AXIS_Y * 250);
 	}
 
-	velocity += acceleration * deltaTime;
 	Translate(velocity * deltaTime);
 	acceleration = vector3(0);
 }
