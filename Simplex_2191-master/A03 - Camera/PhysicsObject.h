@@ -50,6 +50,25 @@ namespace Simplex {
 		*/
 		PhysicsObject& operator=(PhysicsObject& other);
 #pragma endregion
+
+#pragma region Accessors
+		/*
+		USAGE: Returns the mass of the object
+		ARGUMENTS: ---
+		OUTPUT: The object's mass
+		*/
+		float GetMass();
+
+		/*
+		USAGE: Sets the mass of the object to the specified value
+		ARGUMENTS: 
+		-	float value -> The value to set the mass equal to
+		OUTPUT: ---
+		*/
+		void SetMass(float value);
+
+#pragma endregion
+
 #pragma region Update
 		/*
 		USAGE: Updates the object.

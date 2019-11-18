@@ -8,8 +8,9 @@ namespace Simplex {
 	{
 	protected:
 		float moveSpeed; //The maximum move speed of the entity used when calculating movement forces
-		int health; //The current health of the entity
-		int maxHealth; //The maximum health of the entity
+		float moveForce; //The amount of force to apply for movement
+		float health; //The current health of the entity
+		float maxHealth; //The maximum health of the entity
 	public:
 #pragma region Memory Management
 		/*
@@ -51,6 +52,61 @@ namespace Simplex {
 		*/
 		LivingEntity& operator=(LivingEntity& other);
 #pragma endregion
+#pragma region Accessors
+		/*
+		USAGE: Returns the move speed of the object
+		ARGUMENTS: ---
+		OUTPUT: The object's move speed
+		*/
+		virtual float GetMoveSpeed();
+		/*
+		USAGE: Returns the move speed of the object
+		ARGUMENTS: ---
+		OUTPUT: The object's move speed
+		*/
+		float GetMoveForce();
+		/*
+		USAGE: Returns the current health of the object
+		ARGUMENTS: ---
+		OUTPUT: The object's current health
+		*/
+		float GetHealth();
+		/*
+		USAGE: Returns the maximum health of the object
+		ARGUMENTS: ---
+		OUTPUT: The object's maximum health
+		*/
+		float GetMaxHealth();
+
+		/*
+		USAGE: Sets the move speed of the object to the specified value
+		ARGUMENTS:
+		-	float value -> The value to set the move speed equal to
+		OUTPUT: ---
+		*/
+		void SetMoveSpeed(float value);
+		/*
+		USAGE: Sets the move force of the object to the specified value
+		ARGUMENTS:
+		-	float value -> The value to set the move force equal to
+		OUTPUT: ---
+		*/
+		void SetMoveForce(float value);
+		/*
+		USAGE: Sets the current health of the object to the specified value
+		ARGUMENTS:
+		-	float value -> The value to set the current health equal to
+		OUTPUT: ---
+		*/
+		void SetHealth(float value);
+		/*
+		USAGE: Sets the maximum health of the object to the specified value
+		ARGUMENTS:
+		-	float value -> The value to set the maximum health equal to
+		OUTPUT: ---
+		*/
+		void SetMaxHealth(float value);
+#pragma endregion
 #pragma region Entity
 		/*
 		USAGE: Decrements the Entity's health based on the damage dealt
@@ -59,15 +115,15 @@ namespace Simplex {
 		-	int damage -> The amount of damage to be taken
 		OUTPUT: ---
 		*/
-		virtual void TakeDamage(int damage);
+		void TakeDamage(int damage);
 
 		/*
 		USAGE: Applies a movement force to the entity towards the target position
 		ARGUMENTS:
-		-	vector3 target -> The position to move towards
+		-	vector3 moveDirection -> The direction to move in
 		OUTPUT: ---
 		*/
-		virtual void Move(vector3 target);
+		virtual void Move(vector3 moveDirection);
 
 		/*
 		USAGE: Kills the entity applying any on death effects
@@ -77,7 +133,7 @@ namespace Simplex {
 		virtual void Die() = 0;
 
 		/*
-		USAGE: Launches an Attack, should be overriden by child classes
+		USAGE: Launches an Attack
 		ARGUMENTS: --
 		OUTPUT: ---
 		*/

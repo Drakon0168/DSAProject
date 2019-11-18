@@ -13,5 +13,6 @@
 //Custom classes
 #include "WorldObject.h"
 #include "PhysicsObject.h"
+#include "LivingEntity.h"
 #include "CollisionLayers.h"
 #include "FileReference.h"

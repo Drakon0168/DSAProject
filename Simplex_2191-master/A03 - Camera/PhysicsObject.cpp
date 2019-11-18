@@ -27,6 +27,16 @@ PhysicsObject::~PhysicsObject()
 	Release();
 }
 
+float PhysicsObject::GetMass()
+{
+	return mass;
+}
+
+void PhysicsObject::SetMass(float value)
+{
+	mass = value;
+}
+
 void PhysicsObject::Update(float deltaTime)
 {
 	ApplyForce(AXIS_Y * -9.8f);
