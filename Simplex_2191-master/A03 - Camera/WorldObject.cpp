@@ -8,7 +8,8 @@ void WorldObject::Init(void)
 {
 	position = vector3();
 	orientation = IDENTITY_QUAT;
-	scale = vector3(1, 1, 1);
+	scale = vector3(1);
+	center = vector3(0);
 	UpdateTransform();
 	model = nullptr;
 	layer = CollisionLayers::Terrain;
@@ -105,6 +106,10 @@ void WorldObject::SetModel(Model* newModel)
 	std::vector<vector3> vertices = model->GetVertexList();
 	int count = vertices.size();
 
+	for (int i = 0; i < count; i++) {
+		vertices[i] += center;
+	}
+
 	localMin = vertices[0];
 	localMax = vertices[0];
 
@@ -132,6 +137,7 @@ void WorldObject::SetModel(Model* newModel)
 
 	//Set the halfWidth
 	localHalfWidth = (localMax - localMin) * 0.5f;
+	center = (localMin + localMax) * 0.5f;
 
 	//Set the radius
 	UpdateRadius();
@@ -139,8 +145,7 @@ void WorldObject::SetModel(Model* newModel)
 	//Calculate the global min and max
 	CalculateGlobalMinMax();
 
-	/*
-	std::cout << std::endl << "Position: (" << position.x << ", " << position.y << ", " << position.z << "), Scale: (" << scale.x << ", " << scale.y << ", " << scale.z << ")" << std::endl;
+	/*std::cout << std::endl << "Position: (" << position.x << ", " << position.y << ", " << position.z << "), Scale: (" << scale.x << ", " << scale.y << ", " << scale.z << ")" << std::endl;
 	std::cout << "Local Min: (" << localMin.x << ", " << localMin.y << ", " << localMin.z << "), Local Max: (" << localMax.x << ", " << localMax.y << ", " << localMax.z << ")" << std::endl;
 	std::cout << "Global Min: (" << globalMin.x << ", " << globalMin.y << ", " << globalMin.z << "), Global Max: (" << globalMax.x << ", " << globalMax.y << ", " << globalMax.z << ")" << std::endl;
 	std::cout << "Local Half Width: (" << localHalfWidth.x << ", " << localHalfWidth.y << ", " << localHalfWidth.z << ")" << "Global Half Width : (" << globalHalfWidth.x << ", " << globalHalfWidth.y << ", " << globalHalfWidth.z << ")" <<std::endl;
@@ -154,8 +159,7 @@ void WorldObject::SetModel(Model* newModel)
 	std::cout << "  " << transform[0][0] << ", " << transform[1][0] << ", " << transform[2][0] << ", " << transform[3][0] << std::endl;
 	std::cout << "  " << transform[0][1] << ", " << transform[1][1] << ", " << transform[2][1] << ", " << transform[3][1] << std::endl;
 	std::cout << "  " << transform[0][2] << ", " << transform[1][2] << ", " << transform[2][2] << ", " << transform[3][2] << std::endl;
-	std::cout << "  " << transform[0][3] << ", " << transform[1][3] << ", " << transform[2][3] << ", " << transform[3][3] << std::endl;
-	*/
+	std::cout << "  " << transform[0][3] << ", " << transform[1][3] << ", " << transform[2][3] << ", " << transform[3][3] << std::endl;*/
 }
 
 int WorldObject::GetLayer()
@@ -220,16 +224,18 @@ void WorldObject::Render(matrix4 projection, matrix4 view)
 	}
 	
 	if (renderCollider) {
+		vector3 globalCenter = ToWorld(center);
+
 		if (showSphere) {
 			matrix4 transformation = IDENTITY_M4;
-			transformation *= glm::translate(position);
+			transformation *= glm::translate(globalCenter);
 			transformation *= glm::scale(vector3(radius));
 
 			MeshManager::GetInstance()->AddWireSphereToRenderList(transformation, C_BLUE);
 		}
 		if (showAABB) {
 			matrix4 transformation = IDENTITY_M4;
-			transformation *= glm::translate(position);
+			transformation *= glm::translate(globalCenter);
 			transformation *= glm::scale(globalMax - globalMin);
 			
 			MeshManager::GetInstance()->AddWireCubeToRenderList(transformation, C_YELLOW);
@@ -237,7 +243,7 @@ void WorldObject::Render(matrix4 projection, matrix4 view)
 		if (showARBB) {
 			matrix4 transformation = IDENTITY_M4;
 			transformation *= glm::toMat4(orientation);
-			transformation *= glm::translate(position);
+			transformation *= glm::translate(globalCenter);
 			transformation *= glm::scale((localMax - localMin) * scale);
 			
 			MeshManager::GetInstance()->AddWireCubeToRenderList(transformation, C_MAGENTA);
@@ -332,14 +338,14 @@ void WorldObject::CalculateGlobalMinMax()
 	//Find the corners of the bounding box
 	vector3 corners[8];
 
-	corners[0] = ToWorld(vector3(-localHalfWidth.x, -localHalfWidth.y, -localHalfWidth.z));
-	corners[1] = ToWorld(vector3(-localHalfWidth.x, -localHalfWidth.y, localHalfWidth.z));
-	corners[2] = ToWorld(vector3(-localHalfWidth.x, localHalfWidth.y, -localHalfWidth.z));
-	corners[3] = ToWorld(vector3(-localHalfWidth.x, localHalfWidth.y, localHalfWidth.z));
-	corners[4] = ToWorld(vector3(localHalfWidth.x, -localHalfWidth.y, -localHalfWidth.z));
-	corners[5] = ToWorld(vector3(localHalfWidth.x, -localHalfWidth.y, localHalfWidth.z));
-	corners[6] = ToWorld(vector3(localHalfWidth.x, localHalfWidth.y, -localHalfWidth.z));
-	corners[7] = ToWorld(vector3(localHalfWidth.x, localHalfWidth.y, localHalfWidth.z));
+	corners[0] = ToWorld(center + vector3(-localHalfWidth.x, -localHalfWidth.y, -localHalfWidth.z));
+	corners[1] = ToWorld(center + vector3(-localHalfWidth.x, -localHalfWidth.y, localHalfWidth.z));
+	corners[2] = ToWorld(center + vector3(-localHalfWidth.x, localHalfWidth.y, -localHalfWidth.z));
+	corners[3] = ToWorld(center + vector3(-localHalfWidth.x, localHalfWidth.y, localHalfWidth.z));
+	corners[4] = ToWorld(center + vector3(localHalfWidth.x, -localHalfWidth.y, -localHalfWidth.z));
+	corners[5] = ToWorld(center + vector3(localHalfWidth.x, -localHalfWidth.y, localHalfWidth.z));
+	corners[6] = ToWorld(center + vector3(localHalfWidth.x, localHalfWidth.y, -localHalfWidth.z));
+	corners[7] = ToWorld(center + vector3(localHalfWidth.x, localHalfWidth.y, localHalfWidth.z));
 
 	//Find the global min and max
 	globalMin = corners[0];

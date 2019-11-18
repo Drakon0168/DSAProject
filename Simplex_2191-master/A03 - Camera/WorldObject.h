@@ -9,6 +9,7 @@ namespace Simplex {
 		vector3 position; //The position of the object
 		quaternion orientation; //The rotation of the object
 		vector3 scale; //The scale of the object
+		vector3 center; //The local center of the mesh
 		matrix4 transform;
 		Model* model; // The model that represents the mesh
 		int layer; //The collision layer of this object
