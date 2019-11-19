@@ -329,8 +329,7 @@ void WorldObject::UpdateTransform()
 
 vector3 WorldObject::ToWorld(vector3 point)
 {
-	point = transform * vector4(point, 1);
-	return point;
+	return transform * vector4(point, 1);
 }
 
 void WorldObject::CalculateGlobalMinMax()

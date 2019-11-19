@@ -36,7 +36,9 @@ void PhysicsManager::Init(void)
 	terrain->GetModel()->Load(terrainModelReference.GetFilePath());
 	terrain->SetModel(terrain->GetModel());
 
-	PhysicsObject* player = CreatePhysicsObject(CollisionLayers::Player);
+	terrain->SetPosition(vector3(0, -1 * terrain->GetGlobalHalfWidth().y, 0));
+
+	PhysicsObject* player = CreatePhysicsObject(CollisionLayers::Player, vector3(0, 5, 0));
 	FileReference playerModelReference = FileReference("Minecraft\\Creeper.fbx", "Creeper");
 	player->GetModel()->Load(playerModelReference.GetFilePath());
 	player->SetModel(player->GetModel());
@@ -134,6 +136,12 @@ void PhysicsManager::Update(float deltaTime)
 			break;
 		}
 	}
+
+	matrix4 transform = IDENTITY_M4;
+	transform *= glm::translate(vector3(0));
+	transform *= glm::scale(vector3(0.1f));
+
+	MeshManager::GetInstance()->AddSphereToRenderList(transform, C_BLACK);
 }
 
 bool PhysicsManager::CheckCollision(WorldObject* a, WorldObject* b)
