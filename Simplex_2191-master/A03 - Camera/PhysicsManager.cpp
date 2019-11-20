@@ -39,7 +39,7 @@ void PhysicsManager::Init(void)
 	terrain->SetPosition(vector3(0, -1 * terrain->GetGlobalHalfWidth().y, 0));
 
 	PhysicsObject* player = CreatePhysicsObject(CollisionLayers::Player, vector3(0, 5, 0));
-	FileReference playerModelReference = FileReference("Minecraft\\Creeper.fbx", "Creeper");
+	FileReference playerModelReference = FileReference("Sunshine\\TeddyBear.fbx", "TeddyBear");
 	player->GetModel()->Load(playerModelReference.GetFilePath());
 	player->SetModel(player->GetModel());
 }

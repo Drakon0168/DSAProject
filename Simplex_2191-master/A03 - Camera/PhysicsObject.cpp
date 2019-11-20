@@ -46,7 +46,7 @@ void PhysicsObject::Update(float deltaTime)
 	}
 	else {
 		velocity.y = 0;
-		SetPosition(vector3(position.x, -globalMin.y, position.z));
+		SetPosition(vector3(position.x, -1 * globalMin.y, position.z));
 	}
 
 	velocity += acceleration * deltaTime;
