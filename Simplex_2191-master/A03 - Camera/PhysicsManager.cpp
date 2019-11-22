@@ -32,14 +32,14 @@ void PhysicsManager::Init(void)
 	//TODO: Setup starting objects in the level
 	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100), glm::angleAxis((float)PI * 0.25f, AXIS_Y));
 
-	FileReference terrainModelReference = FileReference("Minecraft\\Creeper.fbx", "Creeper");
+	FileReference terrainModelReference = FileReference("Minecraft\\Cube.fbx", "Cube");
 	terrain->GetModel()->Load(terrainModelReference.GetFilePath());
 	terrain->SetModel(terrain->GetModel());
 
 	terrain->SetPosition(vector3(0, -1 * terrain->GetGlobalHalfWidth().y, 0));
 
 	PhysicsObject* player = CreatePhysicsObject(CollisionLayers::Player, vector3(0, 5, 0));
-	FileReference playerModelReference = FileReference("Sunshine\\TeddyBear.fbx", "TeddyBear");
+	FileReference playerModelReference = FileReference("Portal\\Wheatley.fbx", "Wheately");
 	player->GetModel()->Load(playerModelReference.GetFilePath());
 	player->SetModel(player->GetModel());
 }
@@ -137,11 +137,11 @@ void PhysicsManager::Update(float deltaTime)
 		}
 	}
 
-	matrix4 transform = IDENTITY_M4;
+	/*matrix4 transform = IDENTITY_M4;
 	transform *= glm::translate(vector3(0));
 	transform *= glm::scale(vector3(0.1f));
 
-	MeshManager::GetInstance()->AddSphereToRenderList(transform, C_BLACK);
+	MeshManager::GetInstance()->AddSphereToRenderList(transform, C_BLACK);*/
 }
 
 bool PhysicsManager::CheckCollision(WorldObject* a, WorldObject* b)

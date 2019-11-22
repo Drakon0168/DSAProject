@@ -317,7 +317,7 @@ void WorldObject::UpdateTransform()
 {
 	transform = IDENTITY_M4;
 	transform *= glm::toMat4(orientation);
-	transform *= glm::translate(position);
+	transform *= glm::translate(position - (center * scale));
 	transform *= glm::scale(scale);
 
 	CalculateGlobalMinMax();
