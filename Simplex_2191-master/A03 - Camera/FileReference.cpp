@@ -1,6 +1,12 @@
 #include "pch.h"
 #include "FileReference.h"
 
+FileReference::FileReference()
+{
+	filePath = "DefaultPath";
+	uniqueID = "DefaultID";
+}
+
 //Creates a new File Refernce with a filePath and uniqueID
 FileReference::FileReference(string path, string ID)
 {
