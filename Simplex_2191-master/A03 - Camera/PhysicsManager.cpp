@@ -30,18 +30,12 @@ void PhysicsManager::Init(void)
 	}
 	
 	//TODO: Setup starting objects in the level
-	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100));
-
-	FileReference terrainModelReference = FileReference("Minecraft\\Cube.fbx", "Cube");
-	terrain->GetModel()->Load(terrainModelReference.GetFilePath());
-	terrain->SetModel(terrain->GetModel());
-	//Move the terrain so that its top is at ground level
+	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100), glm::angleAxis((float)PI * 0.25f, AXIS_Y));
+	terrain->LoadModel("Minecraft\\Cube.fbx", "Cube");
 	terrain->SetPosition(vector3(0, -1 * terrain->GetGlobalHalfWidth().y, 0));
 
 	Player* player = CreatePlayer(vector3(0, 5, 0));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
-	FileReference playerModelReference = FileReference("Portal\\Wheatley.fbx", "Wheately");
-	player->GetModel()->Load(playerModelReference.GetFilePath());
-	player->SetModel(player->GetModel());
+	player->LoadModel("Portal\\Wheatley.fbx", "Wheately");
 }
 
 void PhysicsManager::Release(void)

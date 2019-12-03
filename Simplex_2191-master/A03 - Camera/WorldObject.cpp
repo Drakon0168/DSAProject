@@ -98,6 +98,12 @@ Model* WorldObject::GetModel()
 	return model;
 }
 
+void WorldObject::LoadModel(string modelFilePath, string identifier)
+{
+	FileReference modelReference = FileReference(modelFilePath, identifier);
+	GetModel()->Load(modelReference.GetFilePath());
+	SetModel(GetModel());
+}
 
 void WorldObject::SetModel(Model* newModel)
 {
