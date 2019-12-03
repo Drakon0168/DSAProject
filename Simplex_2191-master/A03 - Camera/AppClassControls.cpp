@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "PhysicsManager.h"
 using namespace Simplex;
 //Mouse
 void Application::ProcessMouseMovement(sf::Event a_event)
@@ -70,6 +71,7 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 	{
 	default: break;
 	case sf::Keyboard::Space:
+		PhysicsManager::GetInstance()->GetPlayer()->Jump();
 		break;
 	}
 	//gui
@@ -379,6 +381,38 @@ void Application::ProcessKeyboard(void)
 	This is used for things that are continuously happening,
 	for discreet on/off use ProcessKeyboardPressed/Released
 	*/
+#pragma region PlayerControls
+	Player* player = PhysicsManager::GetInstance()->GetPlayer();
+	vector3 direction;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+		direction += vector3(0, 0, 1);
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+		direction += vector3(0, 0, -1);
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+		direction += vector3(1, 0, 0);
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+		direction += vector3(-1, 0, 0);
+	}
+
+	//Cancel out the y direction
+	direction = direction * player->GetRotation();
+    direction.y = 0;
+
+	//Normalize the direction
+	float magnitude = glm::sqrt((direction.x * direction.x) + (direction.y * direction.y) + (direction.z * direction.z));
+	if (magnitude != 0) {
+		direction /= magnitude;
+	}
+
+	player->Move(direction);
+#pragma endregion
 #pragma region Camera Position
 	float fSpeed = 0.1f;
 	float constantRotationValue = 1.0f;
@@ -388,7 +422,7 @@ void Application::ProcessKeyboard(void)
 	if (fMultiplier)
 		fSpeed *= 5.0f;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		m_pCamera->MoveForward(fSpeed);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		m_pCamera->MoveForward(-fSpeed);
@@ -399,7 +433,7 @@ void Application::ProcessKeyboard(void)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add))
 		m_pCamera->MoveUp(fSpeed);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract))
-		m_pCamera->MoveUp(-fSpeed);
+		m_pCamera->MoveUp(-fSpeed);*/
 #pragma endregion
 }
 //Joystick

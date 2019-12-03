@@ -7,9 +7,17 @@ namespace Simplex {
 	class Player : public LivingEntity
 	{
 	protected:
+		const int PISTOL_AMMO = 6;
+		const float PISTOL_FIRE_RATE = 0.2f;
+		const float PISTOL_RELOAD_TIME = 0.5f;
+
 		//TODO: Store the players current weapon
 		int currentAmmo; //The amount of ammo left in the player's clip
+		float currentFireRate;
+		float currentReloadTime;
 		int maxAmmo; //The total amount of ammo in a clip
+
+		float jumpForce;
 	public:
 #pragma region Memory Management
 		/*
@@ -59,21 +67,23 @@ namespace Simplex {
 		OUTPUT: ---
 		*/
 		virtual void Update(float deltaTime) override;
-
+#pragma endregion
+#pragma region Entity
 		/*
-		USAGE: Takes in player input and performs the corresponding actions
+		USAGE: Kills the player and resets the game
 		ARGUMENTS: --
 		OUTPUT: ---
 		*/
-		void ProcessInput();
-#pragma endregion
-#pragma region Enemy
+		virtual void Die() override;
 		/*
 		USAGE : Shoots the players weapon in the direction they are facing
 		ARGUMENTS : --
 		OUTPUT : -- -
 		*/
 		virtual void Attack() override;
+#pragma endregion
+#pragma region Player
+		void Jump();
 #pragma endregion
 	};
 }

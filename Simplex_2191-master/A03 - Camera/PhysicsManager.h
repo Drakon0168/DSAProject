@@ -54,6 +54,12 @@ namespace Simplex {
 #pragma endregion
 #pragma region Accessors
 		void SetCamera(MyCamera* value);
+		/*
+		USAGE: Returns a pointer to the player
+		ARGUMENTS: ---
+		OUTPUT: Player* player -> The current player
+		*/
+		Player* GetPlayer();
 #pragma endregion
 #pragma region Rule Of Three
 		/*
@@ -107,7 +113,7 @@ namespace Simplex {
 		-	Quaternion orientation -> The rotation of the object
 		OUTPUT : --
 		*/
-		WorldObject* CreateWorldObject(CollisionLayers layer, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
+		WorldObject* CreateWorldObject(int layer, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
 		/*
 		USAGE : Creates a new PhysicsObject
 		ARGUMENTS :
@@ -117,8 +123,27 @@ namespace Simplex {
 		-	Quaternion orientation -> The rotation of the object
 		OUTPUT : --
 		*/
-		PhysicsObject* CreatePhysicsObject(CollisionLayers layer, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
-
+		PhysicsObject* CreatePhysicsObject(int layer, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
+		/*
+		USAGE : Creates a new Player
+		ARGUMENTS :
+		-	CollisionLayer layer -> The layer of the player
+		-	Vector3 position -> The position of the player
+		-	Vector3 scale -> The scale of the player
+		-	Quaternion orientation -> The rotation of the player
+		OUTPUT : --
+		*/
+		Player* CreatePlayer(vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
+		/*
+		USAGE : Creates a new Enemy
+		ARGUMENTS :
+		-	CollisionLayer layer -> The layer of the enemy
+		-	Vector3 position -> The position of the enemy
+		-	Vector3 scale -> The scale of the enemy
+		-	Quaternion orientation -> The rotation of the enemy
+		OUTPUT : --
+		*/
+		Enemy* CreateEnemy(vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
 		/*
 		USAGE : Checks for a collision based on the sphere colliders of the objects
 		ARGUMENTS : --

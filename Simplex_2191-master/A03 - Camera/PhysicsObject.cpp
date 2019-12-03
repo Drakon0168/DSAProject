@@ -45,8 +45,14 @@ void PhysicsObject::Update(float deltaTime)
 		ApplyForce(AXIS_Y * -9.8f);
 	}
 	else {
-		velocity.y = 0;
-		acceleration.y = 0;
+		if (velocity.y < 0) {
+			velocity.y = 0;
+		}
+		
+		if (acceleration.y < 0) {
+			acceleration.y = 0;
+		}
+
 		//ApplyForce(AXIS_Y * 500);
 		SetPosition(vector3(position.x, globalHalfWidth.y, position.z));
 	}
