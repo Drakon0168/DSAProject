@@ -31,17 +31,11 @@ void PhysicsManager::Init(void)
 	
 	//TODO: Setup starting objects in the level
 	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100), glm::angleAxis((float)PI * 0.25f, AXIS_Y));
-
-	FileReference terrainModelReference = FileReference("Minecraft\\Creeper.fbx", "Creeper");
-	terrain->GetModel()->Load(terrainModelReference.GetFilePath());
-	terrain->SetModel(terrain->GetModel());
-
+	terrain->LoadModel("Minecraft\\Cube.fbx", "Cube");
 	terrain->SetPosition(vector3(0, -1 * terrain->GetGlobalHalfWidth().y, 0));
 
-	PhysicsObject* player = CreatePhysicsObject(CollisionLayers::Player, vector3(0, 5, 0));
-	FileReference playerModelReference = FileReference("Sunshine\\TeddyBear.fbx", "TeddyBear");
-	player->GetModel()->Load(playerModelReference.GetFilePath());
-	player->SetModel(player->GetModel());
+	Player* player = CreatePlayer(vector3(0, 5, 0));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
+	player->LoadModel("Portal\\Wheatley.fbx", "Wheately");
 }
 
 void PhysicsManager::Release(void)
@@ -68,6 +62,11 @@ PhysicsManager::~PhysicsManager()
 void PhysicsManager::SetCamera(MyCamera* value)
 {
 	camera = value;
+}
+
+Player* Simplex::PhysicsManager::GetPlayer()
+{
+	return dynamic_cast<Player*>(collidables[CollisionLayers::Player][0]);
 }
 
 void PhysicsManager::Update(float deltaTime)
@@ -102,9 +101,13 @@ void PhysicsManager::Update(float deltaTime)
 	for (int i = 0; i < LAYER_COUNT; i++) {
 		switch (i) {
 		case CollisionLayers::Enemy:
+			//Check enemies against other enemies and terrain
 		case CollisionLayers::EnemyProjectile:
+			//Check enemy projectiles against the player
 		case CollisionLayers::Player:
+			//Check the player against enemies, and terrain
 		case CollisionLayers::PlayerProjectile:
+			//Check player projectiles against the enemies
 		case CollisionLayers::Terrain:
 			count = collidables[i].size();
 
@@ -118,7 +121,7 @@ void PhysicsManager::Update(float deltaTime)
 		}
 	}
 
-	//DrawObjects
+	//Draw All Objects
 	for (int i = 0; i < LAYER_COUNT; i++) {
 		switch (i) {
 		case CollisionLayers::Enemy:
@@ -130,18 +133,19 @@ void PhysicsManager::Update(float deltaTime)
 			count = collidables[i].size();
 
 			for (int j = 0; j < count; j++) {
-				if(camera != nullptr)
+				if (camera != nullptr) {
 					collidables[i][j]->Render(camera);
+				}
 			}
 			break;
 		}
 	}
 
-	matrix4 transform = IDENTITY_M4;
+	/*matrix4 transform = IDENTITY_M4;
 	transform *= glm::translate(vector3(0));
 	transform *= glm::scale(vector3(0.1f));
 
-	MeshManager::GetInstance()->AddSphereToRenderList(transform, C_BLACK);
+	MeshManager::GetInstance()->AddSphereToRenderList(transform, C_BLACK);*/
 }
 
 bool PhysicsManager::CheckCollision(WorldObject* a, WorldObject* b)
@@ -167,7 +171,7 @@ bool PhysicsManager::CheckCollision(WorldObject* a, WorldObject* b)
 	return true;
 }
 
-WorldObject* PhysicsManager::CreateWorldObject(CollisionLayers layer, vector3 position, vector3 scale, quaternion orientation)
+WorldObject* PhysicsManager::CreateWorldObject(int layer, vector3 position, vector3 scale, quaternion orientation)
 {
 	WorldObject* newObject = new WorldObject();
 
@@ -179,7 +183,7 @@ WorldObject* PhysicsManager::CreateWorldObject(CollisionLayers layer, vector3 po
 	return newObject;
 }
 
-PhysicsObject* PhysicsManager::CreatePhysicsObject(CollisionLayers layer, vector3 position, vector3 scale, quaternion orientation)
+PhysicsObject* PhysicsManager::CreatePhysicsObject(int layer, vector3 position, vector3 scale, quaternion orientation)
 {
 	PhysicsObject* newObject = new PhysicsObject();
 
@@ -190,6 +194,31 @@ PhysicsObject* PhysicsManager::CreatePhysicsObject(CollisionLayers layer, vector
 	collidables[layer].push_back(newObject);
 	return newObject;
 }
+
+Player* PhysicsManager::CreatePlayer(vector3 position, vector3 scale, quaternion orientation)
+{
+	Player* newPlayer = new Player();
+
+	newPlayer->SetPosition(position);
+	newPlayer->SetScale(scale);
+	newPlayer->SetRotation(orientation);
+
+	collidables[CollisionLayers::Player].push_back(newPlayer);
+	return newPlayer;
+}
+
+/*Simplex::Enemy* PhysicsManager::CreateEnemy(vector3 position, vector3 scale, quaternion orientation)
+{
+	Enemy* enemy = new Enemy();
+
+	enemy->SetPosition(position);
+	enemy->SetScale(scale);
+	enemy->SetRotation(orientation);
+
+	collidables[CollisionLayers::Enemy].push_back(enemy);
+
+	return enemy;
+}*/
 
 bool PhysicsManager::CheckSphereCollision(WorldObject* a, WorldObject* b)
 {

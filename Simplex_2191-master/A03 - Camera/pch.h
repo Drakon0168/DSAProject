@@ -14,5 +14,7 @@
 #include "WorldObject.h"
 #include "PhysicsObject.h"
 #include "LivingEntity.h"
+#include "Player.h"
+#include "Enemy.h"
 #include "CollisionLayers.h"
 #include "FileReference.h"

@@ -9,6 +9,7 @@ class FileReference
 		string uniqueID;
 
 	public:
+		FileReference();
 		FileReference(string path, string ID);
 		string GetFilePath();
 		string GetUniqueID();

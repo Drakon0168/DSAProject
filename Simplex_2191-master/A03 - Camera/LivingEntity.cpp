@@ -7,8 +7,8 @@ void LivingEntity::Init(void)
 {
 	PhysicsObject::Init();
 
-	moveSpeed = 0;
-	moveForce = 1; //Prevent NaN issues when trying to move with no move force
+	moveSpeed = 5;
+	moveForce = 250; //Prevent NaN issues when trying to move with no move force
 	health = 1;
 	maxHealth = 1;
 }
@@ -93,6 +93,7 @@ void LivingEntity::Move(vector3 moveDirection)
 {
 	//Find the target velocity to achieve
 	vector3 targetVelocity = moveDirection * moveSpeed;
+	targetVelocity.y = velocity.y;
 
 	//Find the force direction and magnitude to apply to reach the target velocity
 	vector3 forceDirection = targetVelocity - velocity;
@@ -107,7 +108,7 @@ void LivingEntity::Move(vector3 moveDirection)
 	}
 	
 	//Scale the force to the movement force
-	vector3 force = forceDirection * (forceLength / (moveForce * 2)) * moveForce;
+	vector3 force = forceDirection * (forceLength / (moveSpeed * 2)) * moveForce;
 
 	//Apply the movement force
 	ApplyForce(force);

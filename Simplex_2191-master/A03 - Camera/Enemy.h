@@ -7,7 +7,7 @@ namespace Simplex {
 	class Enemy : public LivingEntity
 	{
 	protected:
-	private:
+	public:
 #pragma region Memory Management
 		/*
 		USAGE: Initialize the object's fields
@@ -58,6 +58,12 @@ namespace Simplex {
 		virtual void Update(float deltaTime) override;
 #pragma endregion
 #pragma region Enemy
+		/*
+		USAGE: Kills the entity applying any on death effects
+		ARGUMENTS: --
+		OUTPUT: ---
+		*/
+		virtual void Die() override;
 		/*
 		USAGE: Launches an Attack, should be overriden by child classes
 		ARGUMENTS: --

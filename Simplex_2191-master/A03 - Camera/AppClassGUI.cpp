@@ -5,7 +5,7 @@ void Application::DrawGUI(void)
 {
 #pragma region Debugging Information
 	//Print info on the screen
-	if (m_pCameraMngr->drawDebugUI == true)
+	if (m_pCamera->drawDebugUI == true)
 	{
 		uint nEmptyLines = 19;
 		for (uint i = 0; i < nEmptyLines; ++i)

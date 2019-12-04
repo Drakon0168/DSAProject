@@ -29,6 +29,7 @@ class MyCamera
 	matrix4 m_m4View; //View matrix
 	matrix4 m_m4Projection; //Projection Matrix
 public:
+	bool drawDebugUI;
 	/*
 	USAGE: Constructor
 	ARGUMENTS: ---

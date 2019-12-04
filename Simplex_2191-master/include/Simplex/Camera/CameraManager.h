@@ -19,7 +19,6 @@ class SimplexDLL CameraManager
 	uint m_uActiveCamera = 0; //number of the active camera
 	uint m_uCameraCount = 0; //number of cameras in the camera manager
 public:
-	bool drawDebugUI;
 	/*
 	USAGE: Gets/Constructs the singleton pointer
 	ARGUMENTS:

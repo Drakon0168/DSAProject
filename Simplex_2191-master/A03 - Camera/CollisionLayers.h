@@ -1,10 +1,12 @@
 #pragma once
 
-enum CollisionLayers {
-	Terrain,
-	Player,
-	Enemy,
-	PlayerProjectile,
-	EnemyProjectile,
-	NonCollidable
-};
+namespace CollisionLayers {
+	enum CollisionLayers {
+		Terrain,
+		Player,
+		Enemy,
+		PlayerProjectile,
+		EnemyProjectile,
+		NonCollidable
+	};
+}

@@ -6,8 +6,6 @@ void Application::InitVariables(void)
 	//Change this to your name and email
 	m_sProgrammer = "Andrew Brook, Justin Dennis, Kent Reese, and Nicholas Zehl";
 
-	m_pCameraMngr->drawDebugUI = false;
-
 	//Set the position and target of the camera
 	//(I'm at [0,0,10], looking at [0,0,0] and up is the positive Y axis)
 	m_pCameraMngr->SetPositionTargetAndUpward(AXIS_Z * 10.0f, ZERO_V3, AXIS_Y);
@@ -18,6 +16,9 @@ void Application::InitVariables(void)
 			vector3(0.0f, 3.0f, 20.0f), //Where my eyes are
 			vector3(0.0f, 3.0f, 19.0f), //where what I'm looking at is
 			AXIS_Y);					//what is up
+
+
+	m_pCamera->drawDebugUI = false;
 
 	PhysicsManager::GetInstance()->SetCamera(m_pCamera);
 

@@ -128,6 +128,13 @@ namespace Simplex {
 		Model* GetModel();
 
 		/*
+		USAGE: Sets up the object's model
+		ARGUMENTS: modelPath
+		OUTPUT: ---
+		*/
+		void LoadModel(std::string modelFilePath, std::string identifier);
+
+		/*
 		USAGE: Sets the object's model
 		ARGUMENTS:
 		-	Model* model -> A reference to the model that the object is using

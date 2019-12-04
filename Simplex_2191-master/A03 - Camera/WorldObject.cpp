@@ -98,6 +98,12 @@ Model* WorldObject::GetModel()
 	return model;
 }
 
+void WorldObject::LoadModel(string modelFilePath, string identifier)
+{
+	FileReference modelReference = FileReference(modelFilePath, identifier);
+	GetModel()->Load(modelReference.GetFilePath());
+	SetModel(GetModel());
+}
 
 void WorldObject::SetModel(Model* newModel)
 {
@@ -145,7 +151,7 @@ void WorldObject::SetModel(Model* newModel)
 	//Calculate the global min and max
 	CalculateGlobalMinMax();
 
-	/*std::cout << std::endl << "Position: (" << position.x << ", " << position.y << ", " << position.z << "), Scale: (" << scale.x << ", " << scale.y << ", " << scale.z << ")" << std::endl;
+	std::cout << std::endl << "Position: (" << position.x << ", " << position.y << ", " << position.z << "), Scale: (" << scale.x << ", " << scale.y << ", " << scale.z << ")" << std::endl;
 	std::cout << "Local Min: (" << localMin.x << ", " << localMin.y << ", " << localMin.z << "), Local Max: (" << localMax.x << ", " << localMax.y << ", " << localMax.z << ")" << std::endl;
 	std::cout << "Global Min: (" << globalMin.x << ", " << globalMin.y << ", " << globalMin.z << "), Global Max: (" << globalMax.x << ", " << globalMax.y << ", " << globalMax.z << ")" << std::endl;
 	std::cout << "Local Half Width: (" << localHalfWidth.x << ", " << localHalfWidth.y << ", " << localHalfWidth.z << ")" << "Global Half Width : (" << globalHalfWidth.x << ", " << globalHalfWidth.y << ", " << globalHalfWidth.z << ")" <<std::endl;
@@ -159,7 +165,7 @@ void WorldObject::SetModel(Model* newModel)
 	std::cout << "  " << transform[0][0] << ", " << transform[1][0] << ", " << transform[2][0] << ", " << transform[3][0] << std::endl;
 	std::cout << "  " << transform[0][1] << ", " << transform[1][1] << ", " << transform[2][1] << ", " << transform[3][1] << std::endl;
 	std::cout << "  " << transform[0][2] << ", " << transform[1][2] << ", " << transform[2][2] << ", " << transform[3][2] << std::endl;
-	std::cout << "  " << transform[0][3] << ", " << transform[1][3] << ", " << transform[2][3] << ", " << transform[3][3] << std::endl;*/
+	std::cout << "  " << transform[0][3] << ", " << transform[1][3] << ", " << transform[2][3] << ", " << transform[3][3] << std::endl;
 }
 
 int WorldObject::GetLayer()
@@ -317,7 +323,7 @@ void WorldObject::UpdateTransform()
 {
 	transform = IDENTITY_M4;
 	transform *= glm::toMat4(orientation);
-	transform *= glm::translate(position);
+	transform *= glm::translate(position - (center * scale));
 	transform *= glm::scale(scale);
 
 	CalculateGlobalMinMax();
