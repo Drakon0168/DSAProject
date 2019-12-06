@@ -34,8 +34,11 @@ void PhysicsManager::Init(void)
 	terrain->LoadModel("Minecraft\\Cube.fbx", "Cube");
 	terrain->SetPosition(vector3(0, -1 * terrain->GetGlobalHalfWidth().y, 0));
 
-	Player* player = CreatePlayer(vector3(0, 5, 0));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
-	player->LoadModel("Portal\\Wheatley.fbx", "Wheately");
+	Player* player = CreatePlayer(vector3(0, 5, 0), vector3(1.8, 1.8, 1.8));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
+	player->LoadModel("Minecraft\\Steve.fbx", "Steve");
+
+	WorldObject* playerArms = CreateWorldObject(CollisionLayers::NonCollidable, GetPlayer()->GetPosition() + vector3(0, 0, 0), vector3(0.02, 0.02, 0.02), glm::angleAxis((float)PI * 0.25f, AXIS_Y));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
+	playerArms->LoadModel("Sunshine\\FPS_Arms\\source\\arms@throwing.fbx", "PlayerArms");
 }
 
 void PhysicsManager::Release(void)
