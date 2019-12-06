@@ -18,6 +18,9 @@ namespace Simplex {
 		int maxAmmo; //The total amount of ammo in a clip
 
 		float jumpForce;
+
+		WorldObject* playerArms;
+		vector3 playerArmsOffset;
 	public:
 #pragma region Memory Management
 		/*
@@ -59,6 +62,11 @@ namespace Simplex {
 		*/
 		Player& operator=(Player& other);
 #pragma endregion
+
+		void SetPlayerArms(WorldObject* armsPointer, vector3 offset);
+		vector3 GetPlayerArmsOffset();
+		WorldObject* GetPlayerArms();
+
 #pragma region Update
 		/*
 		USAGE: Updates the object.

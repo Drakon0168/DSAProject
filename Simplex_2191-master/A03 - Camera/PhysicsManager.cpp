@@ -37,8 +37,9 @@ void PhysicsManager::Init(void)
 	Player* player = CreatePlayer(vector3(0, 5, 0), vector3(1.8, 1.8, 1.8));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
 	player->LoadModel("Minecraft\\Steve.fbx", "Steve");
 
-	WorldObject* playerArms = CreateWorldObject(CollisionLayers::NonCollidable, GetPlayer()->GetPosition() + vector3(0, 0, 0), vector3(0.02, 0.02, 0.02), glm::angleAxis((float)PI * 0.25f, AXIS_Y));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
+	WorldObject* playerArms = CreateWorldObject(CollisionLayers::NonCollidable, GetPlayer()->GetPosition(), vector3(0.02, 0.02, 0.02), glm::angleAxis((float)PI * 0.0f, AXIS_Y));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
 	playerArms->LoadModel("Sunshine\\FPS_Arms\\source\\arms@throwing.fbx", "PlayerArms");
+	player->SetPlayerArms(playerArms, vector3(0, 0.8, 0.2));
 }
 
 void PhysicsManager::Release(void)
@@ -100,8 +101,6 @@ void PhysicsManager::Update(float deltaTime)
 		}
 	}
 
-	//Attatch the camera to the player
-	camera->SetPosition(collidables[CollisionLayers::Player][0]->GetPosition() + cameraOffset);
 
 	//Resolve Collisions
 	for (int i = 0; i < LAYER_COUNT; i++) {
@@ -126,6 +125,11 @@ void PhysicsManager::Update(float deltaTime)
 			break;
 		}
 	}
+
+	//Attatch the camera to the player
+	camera->SetPosition(collidables[CollisionLayers::Player][0]->GetPosition() + cameraOffset);
+
+	GetPlayer()->GetPlayerArms()->SetPosition(GetPlayer()->GetPosition() + GetPlayer()->GetPlayerArmsOffset());
 
 	//Draw All Objects
 	for (int i = 0; i < LAYER_COUNT; i++) {
