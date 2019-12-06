@@ -7,6 +7,7 @@ namespace Simplex {
 	{
 	private:
 		const static int LAYER_COUNT = 6;
+		const vector3 cameraOffset = vector3(0, 1, 0);
 		static PhysicsManager* instance;
 		MyCamera* camera;
 		
