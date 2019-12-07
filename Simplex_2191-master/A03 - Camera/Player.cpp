@@ -17,6 +17,8 @@ void Player::Init(void)
 	currentAmmo = maxAmmo;
 	currentFireRate = PISTOL_FIRE_RATE;
 	currentReloadTime = PISTOL_RELOAD_TIME;
+	playerArms = NULL;
+	playerArmsOffset = vector3(0, 0, 0);
 }
 
 void Player::Release(void)
@@ -45,6 +47,23 @@ Player::Player(Player& other)
 void Player::Update(float deltaTime)
 {
 	PhysicsObject::Update(deltaTime);
+}
+
+//Sets the players arms
+void Player::SetPlayerArms(WorldObject* armsPointer, vector3 offset)
+{
+	playerArms = armsPointer;
+	playerArmsOffset = offset;
+}
+
+WorldObject* Player::GetPlayerArms()
+{
+	return playerArms;
+}
+
+vector3 Player::GetPlayerArmsOffset()
+{
+	return playerArmsOffset;
 }
 
 void Player::Die()

@@ -34,8 +34,12 @@ void PhysicsManager::Init(void)
 	terrain->LoadModel("Minecraft\\Cube.fbx", "Cube");
 	terrain->SetPosition(vector3(0, -1 * terrain->GetGlobalHalfWidth().y, 0));
 
-	Player* player = CreatePlayer(vector3(0, 5, 0));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
-	player->LoadModel("Portal\\Wheatley.fbx", "Wheately");
+	Player* player = CreatePlayer(vector3(0, 5, 0), vector3(1.8, 1.8, 1.8));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
+	player->LoadModel("Minecraft\\Steve.fbx", "Steve");
+
+	WorldObject* playerArms = CreateWorldObject(CollisionLayers::NonCollidable, GetPlayer()->GetPosition(), vector3(0.006, 0.006, 0.006), glm::angleAxis((float)PI * 0.0f, AXIS_Y));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
+	playerArms->LoadModel("Sunshine\\FPS_Arms\\source\\arms@throwing.fbx", "PlayerArms");
+	player->SetPlayerArms(playerArms, vector3(0, 0.9, 0.15));
 }
 
 void PhysicsManager::Release(void)
@@ -98,7 +102,7 @@ void PhysicsManager::Update(float deltaTime)
 	}
 
 	//Attatch the camera to the player
-	camera->SetPosition(GetPlayer()->GetPosition() + cameraOffset);
+	camera->SetPosition(collidables[CollisionLayers::Player][0]->GetPosition() + cameraOffset);
 
 	//Resolve Collisions
 	for (int i = 0; i < LAYER_COUNT; i++) {
@@ -124,6 +128,11 @@ void PhysicsManager::Update(float deltaTime)
 		}
 	}
 
+	//Attatch the camera to the player
+	camera->SetPosition(collidables[CollisionLayers::Player][0]->GetPosition() + cameraOffset);
+
+	GetPlayer()->GetPlayerArms()->SetPosition(GetPlayer()->GetPosition() + GetPlayer()->GetPlayerArmsOffset());
+
 	//Draw All Objects
 	for (int i = 0; i < LAYER_COUNT; i++) {
 		switch (i) {
@@ -136,8 +145,12 @@ void PhysicsManager::Update(float deltaTime)
 			count = collidables[i].size();
 
 			for (int j = 0; j < count; j++) {
-				if (camera != nullptr) {
-					collidables[i][j]->Render(camera);
+				if (camera != nullptr) 
+				{
+					if (collidables[i][j] != GetPlayer())
+					{
+						collidables[i][j]->Render(camera);
+					}
 				}
 			}
 			break;
