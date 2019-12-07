@@ -73,7 +73,7 @@ void Player::Update(float deltaTime)
 		angle += PI;
 	}
 
-	std::cout << "Direction: (" << targetDirection.x << ", " << targetDirection.z << "), Angle: " << angle << std::endl;
+	//std::cout << "Direction: (" << targetDirection.x << ", " << targetDirection.z << "), Angle: " << angle << std::endl;
 	SetRotation(glm::angleAxis(angle, AXIS_Y));
 
 	//Match arms to player
