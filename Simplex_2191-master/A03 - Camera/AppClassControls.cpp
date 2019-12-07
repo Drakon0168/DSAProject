@@ -402,7 +402,7 @@ void Application::ProcessKeyboard(void)
 	}
 
 	//Cancel out the y direction
-	direction = direction * player->GetRotation();
+	direction = glm::toMat4(player->GetRotation()) * vector4(direction, 1);
     direction.y = 0;
 
 	//Normalize the direction

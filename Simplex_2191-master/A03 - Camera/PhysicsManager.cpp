@@ -98,7 +98,7 @@ void PhysicsManager::Update(float deltaTime)
 	}
 
 	//Attatch the camera to the player
-	camera->SetPosition(collidables[CollisionLayers::Player][0]->GetPosition() + cameraOffset);
+	camera->SetPosition(GetPlayer()->GetPosition() + cameraOffset);
 
 	//Resolve Collisions
 	for (int i = 0; i < LAYER_COUNT; i++) {
