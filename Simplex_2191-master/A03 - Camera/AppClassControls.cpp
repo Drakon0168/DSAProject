@@ -71,7 +71,9 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 	{
 	default: break;
 	case sf::Keyboard::Space:
-		PhysicsManager::GetInstance()->GetPlayer()->Jump();
+		if (PhysicsManager::GetInstance()->GetPlayer()->GetGrounded()) {
+			PhysicsManager::GetInstance()->GetPlayer()->Jump();
+		}
 		break;
 	}
 	//gui

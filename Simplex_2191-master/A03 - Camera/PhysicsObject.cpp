@@ -37,12 +37,18 @@ void PhysicsObject::SetMass(float value)
 	mass = value;
 }
 
+bool PhysicsObject::GetGrounded()
+{
+	return grounded;
+}
+
 void PhysicsObject::Update(float deltaTime)
 {
 	//TODO: Change this to use collisions not just position
 	//Only apply gravity when above the ground
 	if (globalMin.y + (velocity.y * deltaTime) > 0) {
 		ApplyForce(AXIS_Y * -9.8f);
+		grounded = false;
 	}
 	else {
 		if (velocity.y < 0) {
@@ -53,8 +59,8 @@ void PhysicsObject::Update(float deltaTime)
 			acceleration.y = 0;
 		}
 
-		//ApplyForce(AXIS_Y * 500);
 		SetPosition(vector3(position.x, globalHalfWidth.y, position.z));
+		grounded = true;
 	}
 
 	velocity += acceleration * deltaTime;
