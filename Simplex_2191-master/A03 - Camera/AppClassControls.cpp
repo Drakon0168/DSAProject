@@ -401,6 +401,13 @@ void Application::ProcessKeyboard(void)
 		direction += vector3(-1, 0, 0);
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) {
+		player->SetSprinting(true);
+	}
+	else {
+		player->SetSprinting(false);
+	}
+
 	//Cancel out the y direction
 	direction = glm::toMat4(player->GetRotation()) * vector4(direction, 1);
     direction.y = 0;

@@ -220,7 +220,7 @@ namespace Simplex {
 		-	matrix4 a_mView -> View matrix
 		OUTPUT: ---
 		*/
-		void Render(matrix4 projection, matrix4 view);
+		virtual void Render(matrix4 projection, matrix4 view);
 		/*
 		USAGE: Renders the mesh by the provided camera view and projection
 		ARGUMENTS: MyCamera a_mCamera -> the camera I want to see my scene from

@@ -10,6 +10,7 @@ namespace Simplex {
 		const int PISTOL_AMMO = 6;
 		const float PISTOL_FIRE_RATE = 0.2f;
 		const float PISTOL_RELOAD_TIME = 0.5f;
+		const vector3 playerArmsOffset = vector3(0, 0.9f, 0.15f);
 
 		//TODO: Store the players current weapon
 		int currentAmmo; //The amount of ammo left in the player's clip
@@ -20,7 +21,8 @@ namespace Simplex {
 		float jumpForce;
 
 		WorldObject* playerArms;
-		vector3 playerArmsOffset;
+
+		MyCamera* camera;
 	public:
 #pragma region Memory Management
 		/*
@@ -62,11 +64,15 @@ namespace Simplex {
 		*/
 		Player& operator=(Player& other);
 #pragma endregion
-
-		void SetPlayerArms(WorldObject* armsPointer, vector3 offset);
+#pragma region Accessors
+		void SetPlayerArms(WorldObject* armsPointer);
 		vector3 GetPlayerArmsOffset();
 		WorldObject* GetPlayerArms();
-
+		void SetCamera(MyCamera* value);
+#pragma endregion
+#pragma region Render
+		void Render(matrix4 projection, matrix4 view) override;
+#pragma endregion
 #pragma region Update
 		/*
 		USAGE: Updates the object.

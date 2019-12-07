@@ -30,16 +30,12 @@ void PhysicsManager::Init(void)
 	}
 	
 	//TODO: Setup starting objects in the level
-	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100), glm::angleAxis((float)PI * 0.25f, AXIS_Y));
+	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100));
 	terrain->LoadModel("Minecraft\\Cube.fbx", "Cube");
 	terrain->SetPosition(vector3(0, -1 * terrain->GetGlobalHalfWidth().y, 0));
 
 	Player* player = CreatePlayer(vector3(0, 5, 0), vector3(1.8, 1.8, 1.8));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
 	player->LoadModel("Minecraft\\Steve.fbx", "Steve");
-
-	WorldObject* playerArms = CreateWorldObject(CollisionLayers::NonCollidable, GetPlayer()->GetPosition(), vector3(0.006, 0.006, 0.006), glm::angleAxis((float)PI * 0.0f, AXIS_Y));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
-	playerArms->LoadModel("Sunshine\\FPS_Arms\\source\\arms@throwing.fbx", "PlayerArms");
-	player->SetPlayerArms(playerArms, vector3(0, 0.9, 0.15));
 }
 
 void PhysicsManager::Release(void)
@@ -66,6 +62,7 @@ PhysicsManager::~PhysicsManager()
 void PhysicsManager::SetCamera(MyCamera* value)
 {
 	camera = value;
+	GetPlayer()->SetCamera(value);
 }
 
 Player* Simplex::PhysicsManager::GetPlayer()
@@ -101,9 +98,6 @@ void PhysicsManager::Update(float deltaTime)
 		}
 	}
 
-	//Attatch the camera to the player
-	camera->SetPosition(collidables[CollisionLayers::Player][0]->GetPosition() + cameraOffset);
-
 	//Resolve Collisions
 	for (int i = 0; i < LAYER_COUNT; i++) {
 		switch (i) {
@@ -129,9 +123,7 @@ void PhysicsManager::Update(float deltaTime)
 	}
 
 	//Attatch the camera to the player
-	camera->SetPosition(collidables[CollisionLayers::Player][0]->GetPosition() + cameraOffset);
-
-	GetPlayer()->GetPlayerArms()->SetPosition(GetPlayer()->GetPosition() + GetPlayer()->GetPlayerArmsOffset());
+	camera->SetPosition(GetPlayer()->GetPosition() + cameraOffset);
 
 	//Draw All Objects
 	for (int i = 0; i < LAYER_COUNT; i++) {
@@ -147,10 +139,7 @@ void PhysicsManager::Update(float deltaTime)
 			for (int j = 0; j < count; j++) {
 				if (camera != nullptr) 
 				{
-					if (collidables[i][j] != GetPlayer())
-					{
-						collidables[i][j]->Render(camera);
-					}
+					collidables[i][j]->Render(camera);
 				}
 			}
 			break;

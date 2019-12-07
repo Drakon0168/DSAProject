@@ -8,9 +8,12 @@ namespace Simplex {
 	{
 	protected:
 		float moveSpeed; //The maximum move speed of the entity used when calculating movement forces
+		float sprintSpeed; //The maximum move speed of the entity when sprinting
 		float moveForce; //The amount of force to apply for movement
 		float health; //The current health of the entity
 		float maxHealth; //The maximum health of the entity
+
+		bool sprinting = false;
 	public:
 #pragma region Memory Management
 		/*
@@ -92,6 +95,13 @@ namespace Simplex {
 		OUTPUT: ---
 		*/
 		void SetMoveForce(float value);
+		/*
+		USAGE: Sets the sprint bool of the object to the specified value
+		ARGUMENTS:
+		-	bool value -> The value to set the sprint bool equal to
+		OUTPUT: ---
+		*/
+		void SetSprinting(bool value);
 		/*
 		USAGE: Sets the current health of the object to the specified value
 		ARGUMENTS:
