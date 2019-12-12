@@ -36,6 +36,9 @@ void PhysicsManager::Init(void)
 
 	Player* player = CreatePlayer(vector3(0, 5, 0), vector3(1.8, 1.8, 1.8));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
 	player->LoadModel("Minecraft\\Steve.fbx", "Steve");
+
+	PhysicsObject* teddy = CreatePhysicsObject(CollisionLayers::Enemy, vector3(10, 5, 0));
+	teddy->LoadModel("Sunshine\\TeddyBear.fbx", "TeddyBear");
 }
 
 void PhysicsManager::Release(void)
@@ -121,10 +124,7 @@ void PhysicsManager::Update(float deltaTime)
 			break;
 		}
 	}
-
-	//Attatch the camera to the player
-	camera->SetPosition(GetPlayer()->GetPosition() + cameraOffset);
-
+	
 	//Draw All Objects
 	for (int i = 0; i < LAYER_COUNT; i++) {
 		switch (i) {

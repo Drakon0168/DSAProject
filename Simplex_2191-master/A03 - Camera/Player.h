@@ -11,6 +11,7 @@ namespace Simplex {
 		const float PISTOL_FIRE_RATE = 0.2f;
 		const float PISTOL_RELOAD_TIME = 0.5f;
 		const vector3 playerArmsOffset = vector3(0, 0.9f, 0.2f);
+		const vector3 cameraOffset = vector3(0, 1.05f, 0);
 
 		//TODO: Store the players current weapon
 		int currentAmmo; //The amount of ammo left in the player's clip

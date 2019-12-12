@@ -58,6 +58,8 @@ void Player::Update(float deltaTime)
 {
 	PhysicsObject::Update(deltaTime);
 
+	camera->SetPosition(position + cameraOffset);
+
 	//Face camera target
 	//	Get Direction
 	vector3 targetDirection = camera->GetTarget() - position;
@@ -66,7 +68,6 @@ void Player::Update(float deltaTime)
 	float length = (targetDirection.x * targetDirection.x) + (targetDirection.z * targetDirection.z);
 	targetDirection /= length;
 	//	Set rotation
-	//float angle = glm::atan2(targetDirection.z, targetDirection.x);
 	float angle = (-1 * glm::atan(targetDirection.z / targetDirection.x)) + (PI / 2);
 
 	if (targetDirection.x < 0) {
