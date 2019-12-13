@@ -22,7 +22,7 @@ namespace Simplex {
 		vector3 localHalfWidth; //The local half width of the object
 		vector3 globalHalfWidth; //The global half width of the object
 
-		bool renderCollider = true; //Whether or not to draw the collider
+		bool renderCollider = false; //Whether or not to draw the collider
 		const bool showSphere = true; //Whether or not to draw the sphere collider
 		const bool showAABB = true; //Whether or not to draw the AABB collider
 		const bool showARBB = true; //Whether or not to draw the ARBB collider
@@ -220,7 +220,7 @@ namespace Simplex {
 		-	matrix4 a_mView -> View matrix
 		OUTPUT: ---
 		*/
-		void Render(matrix4 projection, matrix4 view);
+		virtual void Render(matrix4 projection, matrix4 view);
 		/*
 		USAGE: Renders the mesh by the provided camera view and projection
 		ARGUMENTS: MyCamera a_mCamera -> the camera I want to see my scene from

@@ -58,6 +58,11 @@ void LivingEntity::SetMoveForce(float value)
 	moveForce = value;
 }
 
+void LivingEntity::SetSprinting(bool value)
+{
+	sprinting = value;
+}
+
 void LivingEntity::SetHealth(float value)
 {
 	health = value;
@@ -92,7 +97,15 @@ void LivingEntity::TakeDamage(int damage)
 void LivingEntity::Move(vector3 moveDirection)
 {
 	//Find the target velocity to achieve
-	vector3 targetVelocity = moveDirection * moveSpeed;
+	vector3 targetVelocity = moveDirection;
+
+	if (sprinting) {
+		targetVelocity *= sprintSpeed;
+	}
+	else {
+		targetVelocity *= moveSpeed;
+	}
+
 	targetVelocity.y = velocity.y;
 
 	//Find the force direction and magnitude to apply to reach the target velocity

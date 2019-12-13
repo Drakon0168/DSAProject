@@ -248,9 +248,9 @@ void WorldObject::Render(matrix4 projection, matrix4 view)
 		}
 		if (showARBB) {
 			matrix4 transformation = IDENTITY_M4;
-			transformation *= glm::toMat4(orientation);
 			transformation *= glm::translate(globalCenter);
 			transformation *= glm::scale((localMax - localMin) * scale);
+			transformation *= glm::toMat4(orientation);
 			
 			MeshManager::GetInstance()->AddWireCubeToRenderList(transformation, C_MAGENTA);
 		}
@@ -322,9 +322,9 @@ void WorldObject::UpdateRadius()
 void WorldObject::UpdateTransform()
 {
 	transform = IDENTITY_M4;
-	transform *= glm::toMat4(orientation);
 	transform *= glm::translate(position - (center * scale));
 	transform *= glm::scale(scale);
+	transform *= glm::toMat4(orientation);
 
 	CalculateGlobalMinMax();
 }

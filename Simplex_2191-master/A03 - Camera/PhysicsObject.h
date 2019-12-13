@@ -9,6 +9,7 @@ namespace Simplex {
 		vector3 velocity; //The current velocity of the object
 		vector3 acceleration; //The current acceleration of the object
 		float mass; //The mass of the object used when calculating forces
+		bool grounded = false; //Whether or not the object is on the ground
 	public:
 #pragma region Memory Management
 		/*
@@ -67,6 +68,12 @@ namespace Simplex {
 		*/
 		void SetMass(float value);
 
+		/*
+		USAGE: Returns whether or not the object is on the ground
+		ARGUMENTS:
+		OUTPUT: Whether or not the object is on the ground
+		*/
+		bool GetGrounded();
 #pragma endregion
 
 #pragma region Update

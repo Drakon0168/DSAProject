@@ -30,12 +30,15 @@ void PhysicsManager::Init(void)
 	}
 	
 	//TODO: Setup starting objects in the level
-	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100), glm::angleAxis((float)PI * 0.25f, AXIS_Y));
+	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100));
 	terrain->LoadModel("Minecraft\\Cube.fbx", "Cube");
 	terrain->SetPosition(vector3(0, -1 * terrain->GetGlobalHalfWidth().y, 0));
 
-	Player* player = CreatePlayer(vector3(0, 5, 0));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
-	player->LoadModel("Portal\\Wheatley.fbx", "Wheately");
+	Player* player = CreatePlayer(vector3(0, 5, 0), vector3(1.8, 1.8, 1.8));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
+	player->LoadModel("Minecraft\\Steve.fbx", "Steve");
+
+	PhysicsObject* teddy = CreatePhysicsObject(CollisionLayers::Enemy, vector3(10, 5, 0));
+	teddy->LoadModel("Sunshine\\TeddyBear.fbx", "TeddyBear");
 }
 
 void PhysicsManager::Release(void)
@@ -62,6 +65,7 @@ PhysicsManager::~PhysicsManager()
 void PhysicsManager::SetCamera(MyCamera* value)
 {
 	camera = value;
+	GetPlayer()->SetCamera(value);
 }
 
 Player* Simplex::PhysicsManager::GetPlayer()
@@ -120,7 +124,7 @@ void PhysicsManager::Update(float deltaTime)
 			break;
 		}
 	}
-
+	
 	//Draw All Objects
 	for (int i = 0; i < LAYER_COUNT; i++) {
 		switch (i) {
@@ -133,7 +137,8 @@ void PhysicsManager::Update(float deltaTime)
 			count = collidables[i].size();
 
 			for (int j = 0; j < count; j++) {
-				if (camera != nullptr) {
+				if (camera != nullptr) 
+				{
 					collidables[i][j]->Render(camera);
 				}
 			}
