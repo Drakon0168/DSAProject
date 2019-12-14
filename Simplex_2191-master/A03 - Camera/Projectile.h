@@ -8,6 +8,8 @@ namespace Simplex {
 	{
 	protected:
 		int damage; //The amount of damage the projectile will deal when it collides with something
+		float speed;
+		vector3 direction;
 	public:
 #pragma region Memory Management
 		/*
@@ -56,7 +58,7 @@ namespace Simplex {
 		-	float deltaTime -> The amount of time that has passed since the last update
 		OUTPUT: ---
 		*/
-		virtual void Update(float deltaTime) override;
+		void Update(float deltaTime, float speed, vector3 direction);
 #pragma endregion
 #pragma region Physics
 		/*
