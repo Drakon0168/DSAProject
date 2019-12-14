@@ -6,6 +6,7 @@ namespace Simplex {
 	{
 	private:
 		int ammo;
+		int currentammo;
 		float firerate;
 		float reloadTime;
 		float shotTimer;
