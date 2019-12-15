@@ -143,7 +143,7 @@ namespace Simplex {
 		-	Quaternion orientation -> The rotation of the enemy
 		OUTPUT : --
 		*/
-		Enemy* CreateEnemy(float maxSpeed, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
+		Enemy* CreateEnemy(float maxSpeed, int damage, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
 		/*
 		USAGE : Checks for a collision based on the sphere colliders of the objects
 		ARGUMENTS : --
@@ -175,4 +175,5 @@ namespace Simplex {
 		vector2 ProjectSATAxis(vector3 axis, WorldObject* a);
 #pragma endregion
 	};
+
 }

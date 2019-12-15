@@ -18,7 +18,11 @@ void WorldObject::Init(void)
 void WorldObject::Release(void)
 {
 	if (model != nullptr)
+	{
 		delete model;
+		model = nullptr;
+	}
+		
 }
 
 WorldObject::WorldObject()
@@ -171,6 +175,21 @@ void WorldObject::SetModel(Model* newModel)
 int WorldObject::GetLayer()
 {
 	return layer;
+}
+
+void WorldObject::SetLayer(int value)
+{
+	layer = value;
+}
+
+int WorldObject::GetIndex()
+{
+	return index;
+}
+
+void WorldObject::SetIndex(int value)
+{
+	index = value;
 }
 
 float WorldObject::GetRadius()

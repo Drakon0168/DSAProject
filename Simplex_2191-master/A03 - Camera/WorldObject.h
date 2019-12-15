@@ -13,6 +13,7 @@ namespace Simplex {
 		matrix4 transform; //The ToWorld matrix of the object
 		Model* model; // The model that represents the mesh
 		int layer; //The collision layer of this object
+		int index; // Index within collidables
 
 		float radius; //The radius of the object's bounding sphere
 		vector3 globalMin; //The minimum x y and z position of the object in global space
@@ -98,6 +99,10 @@ namespace Simplex {
 		*/
 		void SetRotation(quaternion value);
 
+
+		int GetIndex();
+
+		void SetIndex(int value);
 		/*
 		USAGE: Returns the object's scale
 		ARGUMENTS:
@@ -148,6 +153,8 @@ namespace Simplex {
 		OUTPUT: The object's current collision layer
 		*/
 		int GetLayer();
+
+		void SetLayer(int value);
 
 		/*
 		USAGE: Returns the object's sphere collider radius

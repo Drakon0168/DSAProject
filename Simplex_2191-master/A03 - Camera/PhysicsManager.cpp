@@ -37,7 +37,7 @@ void PhysicsManager::Init(void)
 	Player* player = CreatePlayer(vector3(0, 5, 0), vector3(1.8, 1.8, 1.8));
 	player->LoadModel("Minecraft\\Steve.fbx", "Steve");
 
-	Enemy* teddy = CreateEnemy(1.1f, vector3(10, 5, 10), vector3(1.5, 1.5, 1.5));
+	Enemy* teddy = CreateEnemy(1.1f, 10, vector3(10, 0, 10), vector3(1.5, 1.5, 1.5));
 	teddy->LoadModel("Sunshine\\TeddyBear.fbx", "TeddyBear");
 	teddy->SetUsesGravity(false);
 }
@@ -110,12 +110,18 @@ void PhysicsManager::Update(float deltaTime)
 			for (int i = 0; i < collidables[CollisionLayers::Enemy].size(); i++) {
 				bool grounded = false;
 
+				// Check enemies against player
+				for (int k = 0; k < collidables[CollisionLayers::Player].size(); k++)
+				{
+					bool collided = CheckCollision(collidables[CollisionLayers::Enemy][i], collidables[CollisionLayers::Player][k]);
+				}
 				for (int j = 0; j < collidables[CollisionLayers::Terrain].size(); j++) {
 					if (CheckCollision(collidables[CollisionLayers::Enemy][i], collidables[CollisionLayers::Terrain][j])) {
 						grounded = true;
 					}
 				}
 
+			
 				collidables[CollisionLayers::Enemy][i]->Rotate(vector3(0, 15 * deltaTime, 0));
 
 				dynamic_cast<PhysicsObject*>(collidables[CollisionLayers::Player][i])->SetGrounded(grounded);
@@ -223,12 +229,12 @@ Player* PhysicsManager::CreatePlayer(vector3 position, vector3 scale, quaternion
 	newPlayer->SetPosition(position);
 	newPlayer->SetScale(scale);
 	newPlayer->SetRotation(orientation);
-
+	newPlayer->SetLayer(CollisionLayers::Player);
 	collidables[CollisionLayers::Player].push_back(newPlayer);
 	return newPlayer;
 }
 
-Simplex::Enemy* PhysicsManager::CreateEnemy(float moveSpeed, vector3 position, vector3 scale, quaternion orientation)
+Simplex::Enemy* PhysicsManager::CreateEnemy(float moveSpeed, int damage, vector3 position, vector3 scale, quaternion orientation)
 {
 	Enemy* enemy = new Enemy();
 
@@ -236,7 +242,8 @@ Simplex::Enemy* PhysicsManager::CreateEnemy(float moveSpeed, vector3 position, v
 	enemy->SetScale(scale);
 	enemy->SetRotation(orientation);
 	enemy->SetMoveSpeed(moveSpeed);
-
+	enemy->SetDamage(damage);
+	enemy->SetLayer(CollisionLayers::Enemy);
 	collidables[CollisionLayers::Enemy].push_back(enemy);
 
 	return enemy;
@@ -350,4 +357,15 @@ vector2 PhysicsManager::ProjectSATAxis(vector3 axis, WorldObject* a)
 	//MeshManager::GetInstance()->AddLineToRenderList(IDENTITY_M4, max, axis * minMax.y, C_WHITE, C_WHITE);
 
 	return minMax;
+}
+
+void PhysicsManager::DestroyObject(WorldObject* object)
+{
+	/*
+	for (int i = 0; i < collidables[object->GetLayer()].size())
+	{
+
+	}
+	collidables[object->GetLayer()]
+	*/
 }
