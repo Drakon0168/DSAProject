@@ -13,6 +13,7 @@ namespace Simplex {
 		float reloadTimer;
 		float projectileSpeed;
 		Projectile* projectile;
+		vector3 position;
 
 	public:
 		Weapon(int am, float firer, float reload, float projSpeed, Projectile* proj);

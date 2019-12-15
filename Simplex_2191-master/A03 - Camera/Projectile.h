@@ -11,6 +11,7 @@ namespace Simplex {
 		float speed;
 		vector3 direction;
 		vector3 position;
+		WorldObject* projBody;
 	public:
 #pragma region Memory Management
 		/*
@@ -44,7 +45,7 @@ namespace Simplex {
 		ARGUMENTS: class object (to copy)
 		OUTPUT: class object
 		*/
-		Projectile(int dam, float sped);
+		Projectile(int dam, float sped, WorldObject* obj);
 
 		Projectile(Projectile& other);
 		/*

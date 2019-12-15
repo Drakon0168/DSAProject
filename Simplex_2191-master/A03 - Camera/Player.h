@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include "Weapon.h"
 #include "LivingEntity.h"
 
 namespace Simplex {
@@ -24,7 +25,14 @@ namespace Simplex {
 		WorldObject* playerArms;
 
 		MyCamera* camera;
+
+		
+
+
 	public:
+		WorldObject* pistolBulletObj;
+		Projectile* pistolBullet;
+		Weapon* pistol;
 #pragma region Memory Management
 		/*
 		USAGE: Initialize the object's fields

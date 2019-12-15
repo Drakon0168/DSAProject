@@ -23,11 +23,21 @@ void Player::Init(void)
 	currentFireRate = PISTOL_FIRE_RATE;
 	currentReloadTime = PISTOL_RELOAD_TIME;
 
+	pistolBulletObj = new WorldObject();
+	pistolBulletObj->SetScale(vector3(1.0f));
+	pistolBulletObj->LoadModel("Minecraft\\Cube.fbx", "Cube");
+	pistolBullet = new Projectile(1.0f, 1.0f, pistolBulletObj);
+
+	pistol = new Weapon(maxAmmo, currentFireRate, currentReloadTime, 1.0f, pistolBullet);
+
+
 	//Setup arms
 	playerArms = new WorldObject();
 	playerArms->SetScale(vector3(0.006f));
 	playerArms->LoadModel("Sunshine\\FPS_Arms\\source\\arms@throwing.fbx", "PlayerArms");
 	playerArms->SetRenderCollider(false);
+
+	
 }
 
 void Player::Release(void)
@@ -57,7 +67,7 @@ Player::Player(Player& other)
 void Player::Update(float deltaTime)
 {
 	PhysicsObject::Update(deltaTime);
-
+	pistol->Update(deltaTime);
 	camera->SetPosition(position + cameraOffset);
 
 	//Face camera target

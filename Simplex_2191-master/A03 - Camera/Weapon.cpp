@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Weapon.h"
+#include "PhysicsManager.h"
 
 Simplex::Weapon::Weapon(int am, float firer, float reload, float projSpeed, Projectile* proj)
 {
@@ -48,8 +49,9 @@ void Simplex::Weapon::Shoot(vector3 direction)
 {
 	if (shotTimer >= firerate && currentammo > 0)
 	{
-		Projectile newProj = Projectile(*projectile);
-		newProj.SetDirection(direction);
+		Projectile* newProj = new Projectile(*projectile);
+		newProj->SetPosition(position);
+		newProj->SetDirection(direction);
 		shotTimer = 0;
 		currentammo -= 1;
 	}
@@ -70,4 +72,6 @@ void Simplex::Weapon::Update(float dt)
 {
 	reloadTimer += dt;
 	shotTimer += dt;
+	Player* player = Simplex::PhysicsManager::GetInstance()->GetPlayer();
+	position = player->GetPosition();
 }
