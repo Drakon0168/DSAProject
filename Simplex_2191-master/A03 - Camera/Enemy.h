@@ -70,6 +70,9 @@ namespace Simplex {
 		OUTPUT: ---
 		*/
 		virtual void Attack() override;
+
+		virtual vector3 Seek(vector3 targetPosition);
+
 #pragma endregion
 	};
 }

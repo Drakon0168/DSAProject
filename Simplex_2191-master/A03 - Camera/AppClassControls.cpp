@@ -15,12 +15,14 @@ void Application::ProcessMouseMovement(sf::Event a_event)
 }
 void Application::ProcessMousePressed(sf::Event a_event)
 {
+	Player* player = PhysicsManager::GetInstance()->GetPlayer();
 	switch (a_event.mouseButton.button)
 	{
 	default: break;
 	case sf::Mouse::Button::Left:
 		gui.m_bMousePressed[0] = true;
 		if (m_paused) { m_paused = false; ShowCursor(false); }
+		player->pistol->Shoot(m_pCamera->GetTarget());
 		break;
 	case sf::Mouse::Button::Middle:
 		gui.m_bMousePressed[1] = true;

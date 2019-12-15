@@ -37,7 +37,7 @@ void PhysicsManager::Init(void)
 	Player* player = CreatePlayer(vector3(0, 5, 0), vector3(1.8, 1.8, 1.8));
 	player->LoadModel("Minecraft\\Steve.fbx", "Steve");
 
-	PhysicsObject* teddy = CreatePhysicsObject(CollisionLayers::Enemy, vector3(10, 5, 0));
+	Enemy* teddy = CreateEnemy(1.1f, vector3(10, 5, 10), vector3(1.5, 1.5, 1.5));
 	teddy->LoadModel("Sunshine\\TeddyBear.fbx", "TeddyBear");
 	teddy->SetUsesGravity(false);
 }
@@ -228,18 +228,19 @@ Player* PhysicsManager::CreatePlayer(vector3 position, vector3 scale, quaternion
 	return newPlayer;
 }
 
-/*Simplex::Enemy* PhysicsManager::CreateEnemy(vector3 position, vector3 scale, quaternion orientation)
+Simplex::Enemy* PhysicsManager::CreateEnemy(float moveSpeed, vector3 position, vector3 scale, quaternion orientation)
 {
 	Enemy* enemy = new Enemy();
 
 	enemy->SetPosition(position);
 	enemy->SetScale(scale);
 	enemy->SetRotation(orientation);
+	enemy->SetMoveSpeed(moveSpeed);
 
 	collidables[CollisionLayers::Enemy].push_back(enemy);
 
 	return enemy;
-}*/
+}
 
 bool PhysicsManager::CheckSphereCollision(WorldObject* a, WorldObject* b)
 {

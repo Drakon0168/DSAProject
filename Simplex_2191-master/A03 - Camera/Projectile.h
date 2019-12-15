@@ -8,6 +8,10 @@ namespace Simplex {
 	{
 	protected:
 		int damage; //The amount of damage the projectile will deal when it collides with something
+		float speed;
+		vector3 direction;
+		vector3 position;
+		WorldObject* projBody;
 	public:
 #pragma region Memory Management
 		/*
@@ -41,6 +45,8 @@ namespace Simplex {
 		ARGUMENTS: class object (to copy)
 		OUTPUT: class object
 		*/
+		Projectile(int dam, float sped, WorldObject* obj);
+
 		Projectile(Projectile& other);
 		/*
 		USAGE: Copy Assignment Operator
@@ -56,7 +62,9 @@ namespace Simplex {
 		-	float deltaTime -> The amount of time that has passed since the last update
 		OUTPUT: ---
 		*/
-		virtual void Update(float deltaTime) override;
+		void Update(float deltaTime, float speed, vector3 direction);
+
+		void SetDirection(vector3 dir);
 #pragma endregion
 #pragma region Physics
 		/*
