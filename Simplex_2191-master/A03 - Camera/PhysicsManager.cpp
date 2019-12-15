@@ -30,14 +30,14 @@ void PhysicsManager::Init(void)
 	}
 	
 	//TODO: Setup starting objects in the level
-	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 1, 100), glm::angleAxis((float)PI * 0.1f, AXIS_Y));
+	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(250, 1, 250), glm::angleAxis((float)PI * 0.1f, AXIS_Y));
 	terrain->LoadModel("Minecraft\\Cube.fbx", "Cube");
 	terrain->SetPosition(vector3(0, -1 * terrain->GetGlobalHalfWidth().y, 0));
 
 	Player* player = CreatePlayer(vector3(0, 5, 0), vector3(1.8, 1.8, 1.8));
 	player->LoadModel("Minecraft\\Steve.fbx", "Steve");
 
-	Enemy* teddy = CreateEnemy(1.1f, vector3(10, 5, 10), vector3(1.5, 1.5, 1.5));
+	Enemy* teddy = CreateEnemy(1.1f, 10, vector3(10, 0, 10), vector3(1.5, 1.5, 1.5));
 	teddy->LoadModel("Sunshine\\TeddyBear.fbx", "TeddyBear");
 	teddy->SetUsesGravity(false);
 }
@@ -113,13 +113,16 @@ void PhysicsManager::Update(float deltaTime)
 			for (int i = 0; i < collidables[CollisionLayers::Enemy].size(); i++) {
 				bool grounded = false;
 
+				// Check enemies against player
+				for (int k = 0; k < collidables[CollisionLayers::Player].size(); k++)
+				{
+					bool collided = CheckCollision(collidables[CollisionLayers::Enemy][i], collidables[CollisionLayers::Player][k]);
+				}
 				for (int j = 0; j < collidables[CollisionLayers::Terrain].size(); j++) {
 					if (CheckCollision(collidables[CollisionLayers::Enemy][i], collidables[CollisionLayers::Terrain][j])) {
 						grounded = true;
 					}
 				}
-
-				collidables[CollisionLayers::Enemy][i]->Rotate(vector3(0, 15 * deltaTime, 0));
 
 				dynamic_cast<PhysicsObject*>(collidables[CollisionLayers::Player][i])->SetGrounded(grounded);
 			}
@@ -184,7 +187,7 @@ bool PhysicsManager::CheckCollision(WorldObject* a, WorldObject* b)
 
 	//Check for ARBB collision if there is an AABB collision and a Sphere collision
 	if (!CheckARBBCollision(a, b)) {
-		//return false;
+		return false;
 	}
 
 	//Resolve the collisions
@@ -226,12 +229,12 @@ Player* PhysicsManager::CreatePlayer(vector3 position, vector3 scale, quaternion
 	newPlayer->SetPosition(position);
 	newPlayer->SetScale(scale);
 	newPlayer->SetRotation(orientation);
-
+	newPlayer->SetLayer(CollisionLayers::Player);
 	collidables[CollisionLayers::Player].push_back(newPlayer);
 	return newPlayer;
 }
 
-Simplex::Enemy* PhysicsManager::CreateEnemy(float moveSpeed, vector3 position, vector3 scale, quaternion orientation)
+Simplex::Enemy* PhysicsManager::CreateEnemy(float moveSpeed, int damage, vector3 position, vector3 scale, quaternion orientation)
 {
 	Enemy* enemy = new Enemy();
 
@@ -239,7 +242,8 @@ Simplex::Enemy* PhysicsManager::CreateEnemy(float moveSpeed, vector3 position, v
 	enemy->SetScale(scale);
 	enemy->SetRotation(orientation);
 	enemy->SetMoveSpeed(moveSpeed);
-
+	enemy->SetDamage(damage);
+	enemy->SetLayer(CollisionLayers::Enemy);
 	collidables[CollisionLayers::Enemy].push_back(enemy);
 
 	return enemy;
@@ -333,17 +337,18 @@ bool PhysicsManager::CheckARBBCollision(WorldObject* a, WorldObject* b)
 vector2 PhysicsManager::ProjectSATAxis(vector3 axis, WorldObject* a)
 {
 	vector3 corners[8];
-	vector3 halfWidth = a->GetLocalHalfWidth();
+	vector3 min = a->GetLocalMin();
+	vector3 max = a->GetLocalMax();
 
 	//Find the corners of the box
-	corners[0] = a->ToWorld(vector3(halfWidth.x, halfWidth.y, halfWidth.z));
-	corners[1] = a->ToWorld(vector3(halfWidth.x, halfWidth.y, -halfWidth.z));
-	corners[2] = a->ToWorld(vector3(halfWidth.x, -halfWidth.y, halfWidth.z));
-	corners[3] = a->ToWorld(vector3(halfWidth.x, -halfWidth.y, -halfWidth.z));
-	corners[4] = a->ToWorld(vector3(-halfWidth.x, halfWidth.y, halfWidth.z));
-	corners[5] = a->ToWorld(vector3(-halfWidth.x, halfWidth.y, -halfWidth.z));
-	corners[6] = a->ToWorld(vector3(-halfWidth.x, -halfWidth.y, halfWidth.z));
-	corners[7] = a->ToWorld(vector3(-halfWidth.x, -halfWidth.y, -halfWidth.z));
+	corners[0] = a->ToWorld(vector3(min.x, min.y, min.z));
+	corners[1] = a->ToWorld(vector3(min.x, min.y, max.z));
+	corners[2] = a->ToWorld(vector3(min.x, max.y, min.z));
+	corners[3] = a->ToWorld(vector3(min.x, max.y, max.z));
+	corners[4] = a->ToWorld(vector3(max.x, min.y, min.z));
+	corners[5] = a->ToWorld(vector3(max.x, min.y, max.z));
+	corners[6] = a->ToWorld(vector3(max.x, max.y, min.z));
+	corners[7] = a->ToWorld(vector3(max.x, max.y, max.z));
 
 	//Find min and max values along the axis
 	vector2 minMax = vector2(0, 0); //Vector representing the minimum and maximum values of the projection with x as a min and y as a max
@@ -372,4 +377,15 @@ vector2 PhysicsManager::ProjectSATAxis(vector3 axis, WorldObject* a)
 	//MeshManager::GetInstance()->AddLineToRenderList(IDENTITY_M4, max, axis * minMax.y, C_WHITE, C_WHITE);
 
 	return minMax;
+}
+
+void PhysicsManager::DestroyObject(WorldObject* object)
+{
+	for (int i = object->GetIndex(); i < collidables[object->GetLayer()].size(); i++)
+	{
+		collidables[object->GetLayer()][i]->SetIndex(i - 1);
+	}
+
+	collidables[object->GetLayer()].erase(collidables[object->GetLayer()].begin() + object->GetIndex());
+	delete object;
 }

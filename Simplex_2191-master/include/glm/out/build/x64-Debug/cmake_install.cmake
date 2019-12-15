@@ -1,8 +1,8 @@
-# Install script for directory: D:/Profiles/njz2587/source/repos/IGME-309-04/Simplex_2191-master/include/glm
+# Install script for directory: C:/Users/Justin/source/repos/DSAProject/Simplex_2191-master/include/glm
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "d:/profiles/njz2587/source/repos/igme-309-04/simplex_2191-master/include/glm/out/install/x64-Debug")
+  set(CMAKE_INSTALL_PREFIX "C:/Users/Justin/Source/Repos/DSAProject/Simplex_2191-master/include/glm/out/install/x64-Debug")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "D:/Profiles/njz2587/source/repos/IGME-309-04/Simplex_2191-master/include/glm/out/build/x64-Debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/Justin/source/repos/DSAProject/Simplex_2191-master/include/glm/out/build/x64-Debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
