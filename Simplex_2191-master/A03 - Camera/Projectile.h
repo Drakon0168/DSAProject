@@ -11,7 +11,6 @@ namespace Simplex {
 		float speed;
 		vector3 direction;
 		vector3 position;
-		WorldObject* projBody;
 	public:
 #pragma region Memory Management
 		/*
@@ -62,9 +61,10 @@ namespace Simplex {
 		-	float deltaTime -> The amount of time that has passed since the last update
 		OUTPUT: ---
 		*/
-		void Update(float deltaTime, float speed, vector3 direction);
+		void Update(float deltaTime, vector3 direction);
 
 		void SetDirection(vector3 dir);
+		vector3 GetDirection();
 #pragma endregion
 #pragma region Physics
 		/*
@@ -74,7 +74,7 @@ namespace Simplex {
 		-	WorldObject other -> The object that has been collided with
 		OUTPUT: ---
 		*/
-		void OnCollision(WorldObject* other) override;
+		//void OnCollision(WorldObject* other) override;
 #pragma endregion
 	};
 }

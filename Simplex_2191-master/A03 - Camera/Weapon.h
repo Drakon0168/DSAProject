@@ -13,6 +13,7 @@ namespace Simplex {
 		float reloadTimer;
 		float projectileSpeed;
 		Projectile* projectile;
+		Projectile* activeProjectile;
 		vector3 position;
 
 	public:

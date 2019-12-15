@@ -22,7 +22,7 @@ void Application::ProcessMousePressed(sf::Event a_event)
 	case sf::Mouse::Button::Left:
 		gui.m_bMousePressed[0] = true;
 		if (m_paused) { m_paused = false; ShowCursor(false); }
-		player->pistol->Shoot(m_pCamera->GetTarget());
+		player->Attack();
 		break;
 	case sf::Mouse::Button::Middle:
 		gui.m_bMousePressed[1] = true;

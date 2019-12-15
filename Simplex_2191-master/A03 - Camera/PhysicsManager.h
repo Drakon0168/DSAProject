@@ -145,6 +145,24 @@ namespace Simplex {
 		*/
 		Enemy* CreateEnemy(float maxSpeed, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
 		/*
+		USAGE : Creates a new Projectile
+		ARGUMENTS :
+		-	CollisionLayer layer -> The layer of the projectile
+		-	Vector3 position -> The position of the projectile
+		-	Vector3 scale -> The scale of the projectile
+		-	Quaternion orientation -> The rotation of the projectile
+		OUTPUT : --
+		*/
+		Projectile* CreateProjectile(float maxSpeed, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
+		/*
+		USAGE : Pushes a world object to the colliables list
+		ARGUMENTS :
+		-	CollisionLayer layer -> The layer of the object
+		-	WorldObject wo the defined object
+		OUTPUT : --
+		*/
+		void PushBackToCollidables(int layer, WorldObject* wo);
+		/*
 		USAGE : Checks for a collision based on the sphere colliders of the objects
 		ARGUMENTS : --
 		OUTPUT : Whether or not the objects sphere colliders intersect

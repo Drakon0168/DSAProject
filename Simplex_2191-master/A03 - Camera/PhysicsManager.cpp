@@ -55,7 +55,10 @@ void PhysicsManager::Release(void)
 
 PhysicsManager::PhysicsManager()
 {
+	if(instance == nullptr)
 	Init();
+
+
 }
 
 PhysicsManager::~PhysicsManager()
@@ -240,6 +243,25 @@ Simplex::Enemy* PhysicsManager::CreateEnemy(float moveSpeed, vector3 position, v
 	collidables[CollisionLayers::Enemy].push_back(enemy);
 
 	return enemy;
+}
+
+Simplex::Projectile* PhysicsManager::CreateProjectile(float moveSpeed, vector3 position, vector3 scale, quaternion orientation)
+{
+	Projectile* proj = new Projectile();
+
+	proj->SetPosition(position);
+	proj->SetScale(scale);
+	proj->SetRotation(orientation);
+
+	collidables[CollisionLayers::PlayerProjectile].push_back(proj);
+
+	return proj;
+}
+
+
+void PhysicsManager::PushBackToCollidables(int layer, WorldObject* wo)
+{
+	collidables[layer].push_back(wo);
 }
 
 bool PhysicsManager::CheckSphereCollision(WorldObject* a, WorldObject* b)

@@ -30,7 +30,6 @@ namespace Simplex {
 
 
 	public:
-		WorldObject* pistolBulletObj;
 		Projectile* pistolBullet;
 		Weapon* pistol;
 #pragma region Memory Management
