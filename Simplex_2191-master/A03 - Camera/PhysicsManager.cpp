@@ -366,6 +366,6 @@ void PhysicsManager::DestroyObject(WorldObject* object)
 		collidables[object->GetLayer()][i]->SetIndex(i - 1);
 	}
 
-	collidables[object->GetLayer()].erase(collidables[object->GetLayer()].begin + object->GetIndex());
+	collidables[object->GetLayer()].erase(collidables[object->GetLayer()].begin() + object->GetIndex());
 	delete object;
 }
