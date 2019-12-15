@@ -10,7 +10,7 @@ namespace Simplex {
 		quaternion orientation; //The rotation of the object
 		vector3 scale; //The scale of the object
 		vector3 center; //The local center of the mesh
-		matrix4 transform;
+		matrix4 transform; //The ToWorld matrix of the object
 		Model* model; // The model that represents the mesh
 		int layer; //The collision layer of this object
 
@@ -22,7 +22,7 @@ namespace Simplex {
 		vector3 localHalfWidth; //The local half width of the object
 		vector3 globalHalfWidth; //The global half width of the object
 
-		bool renderCollider = false; //Whether or not to draw the collider
+		bool renderCollider = true; //Whether or not to draw the collider
 		const bool showSphere = true; //Whether or not to draw the sphere collider
 		const bool showAABB = true; //Whether or not to draw the AABB collider
 		const bool showARBB = true; //Whether or not to draw the ARBB collider
@@ -283,7 +283,16 @@ namespace Simplex {
 		*/
 		void UpdateTransform();
 #pragma endregion
-#pragma region Helper Functions
+#pragma region World Object
+		/*
+		USAGE: Applies logic based changes when this object collides with another object actual
+			forces and collision resolution are handled by the physics manager
+		ARGUMENTS:
+		-	WorldObject other -> The object that has been collided with
+		OUTPUT: ---
+		*/
+		virtual void OnCollision(WorldObject* other);
+
 		/*
 		USAGE: Scales the model uniformly in all directions
 		ARGUMENTS:

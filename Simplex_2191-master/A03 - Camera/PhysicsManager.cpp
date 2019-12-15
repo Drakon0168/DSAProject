@@ -30,15 +30,16 @@ void PhysicsManager::Init(void)
 	}
 	
 	//TODO: Setup starting objects in the level
-	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 0.2, 100));
+	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 1, 100), glm::angleAxis((float)PI * 0.1f, AXIS_Y));
 	terrain->LoadModel("Minecraft\\Cube.fbx", "Cube");
 	terrain->SetPosition(vector3(0, -1 * terrain->GetGlobalHalfWidth().y, 0));
 
-	Player* player = CreatePlayer(vector3(0, 5, 0), vector3(1.8, 1.8, 1.8));// , vector3(1), glm::angleAxis((float)PI * 0.5f, AXIS_Y));
+	Player* player = CreatePlayer(vector3(0, 5, 0), vector3(1.8, 1.8, 1.8));
 	player->LoadModel("Minecraft\\Steve.fbx", "Steve");
 
 	PhysicsObject* teddy = CreatePhysicsObject(CollisionLayers::Enemy, vector3(10, 5, 0));
 	teddy->LoadModel("Sunshine\\TeddyBear.fbx", "TeddyBear");
+	teddy->SetUsesGravity(false);
 }
 
 void PhysicsManager::Release(void)
@@ -106,18 +107,37 @@ void PhysicsManager::Update(float deltaTime)
 		switch (i) {
 		case CollisionLayers::Enemy:
 			//Check enemies against other enemies and terrain
+			for (int i = 0; i < collidables[CollisionLayers::Enemy].size(); i++) {
+				bool grounded = false;
+
+				for (int j = 0; j < collidables[CollisionLayers::Terrain].size(); j++) {
+					if (CheckCollision(collidables[CollisionLayers::Enemy][i], collidables[CollisionLayers::Terrain][j])) {
+						grounded = true;
+					}
+				}
+
+				collidables[CollisionLayers::Enemy][i]->Rotate(vector3(0, 15 * deltaTime, 0));
+
+				dynamic_cast<PhysicsObject*>(collidables[CollisionLayers::Player][i])->SetGrounded(grounded);
+			}
 		case CollisionLayers::EnemyProjectile:
 			//Check enemy projectiles against the player
 		case CollisionLayers::Player:
-			//Check the player against enemies, and terrain
+			//Check against enemies and terrain
+			for (int i = 0; i < collidables[CollisionLayers::Player].size(); i++) {
+				bool grounded = false;
+
+				for (int j = 0; j < collidables[CollisionLayers::Terrain].size(); j++) {
+					if (CheckCollision(collidables[CollisionLayers::Player][i], collidables[CollisionLayers::Terrain][j])) {
+						grounded = true;
+					}
+				}
+
+				dynamic_cast<PhysicsObject*>(collidables[CollisionLayers::Player][i])->SetGrounded(grounded);
+			}
 		case CollisionLayers::PlayerProjectile:
 			//Check player projectiles against the enemies
 		case CollisionLayers::Terrain:
-			count = collidables[i].size();
-
-			for (int j = 0; j < count; j++) {
-				//TODO: Check the objects collisions with only the other layers that it can collide with
-			}
 			break;
 		case CollisionLayers::NonCollidable:
 			//Don't need to check non-collidable objects
@@ -145,32 +165,28 @@ void PhysicsManager::Update(float deltaTime)
 			break;
 		}
 	}
-
-	/*matrix4 transform = IDENTITY_M4;
-	transform *= glm::translate(vector3(0));
-	transform *= glm::scale(vector3(0.1f));
-
-	MeshManager::GetInstance()->AddSphereToRenderList(transform, C_BLACK);*/
 }
 
 bool PhysicsManager::CheckCollision(WorldObject* a, WorldObject* b)
 {
-	//TODO: Fully test collision detection once we can move objects
-
 	//Check for Sphere collision
 	if (!CheckSphereCollision(a, b)) {
 		return false;
 	}
 
-	//Check for AABB collision if there is a Sphere collision
+	////Check for AABB collision if there is a Sphere collision
 	if (!CheckAABBCollision(a, b)) {
 		return false;
 	}
 
 	//Check for ARBB collision if there is an AABB collision and a Sphere collision
 	if (!CheckARBBCollision(a, b)) {
-		return false;
+		//return false;
 	}
+
+	//Resolve the collisions
+	a->OnCollision(b);
+	b->OnCollision(a);
 
 	//Return true only if all other checks are true
 	return true;
@@ -262,21 +278,23 @@ bool PhysicsManager::CheckAABBCollision(WorldObject* a, WorldObject* b)
 bool PhysicsManager::CheckARBBCollision(WorldObject* a, WorldObject* b)
 {
 	vector3 axis[15];
-	axis[0] = AXIS_X * a->GetRotation();
-	axis[1] = AXIS_Y * a->GetRotation();
-	axis[2] = AXIS_Z * a->GetRotation();
-	axis[3] = AXIS_X * b->GetRotation();
-	axis[4] = AXIS_Y * b->GetRotation();
-	axis[5] = AXIS_Z * b->GetRotation();
+	axis[0] = (vector3)(glm::toMat4(a->GetRotation()) * vector4(AXIS_X, 1));
+	axis[1] = (vector3)(glm::toMat4(a->GetRotation()) * vector4(AXIS_Y, 1));
+	axis[2] = (vector3)(glm::toMat4(a->GetRotation()) * vector4(AXIS_Z, 1));
+	axis[3] = (vector3)(glm::toMat4(b->GetRotation()) * vector4(AXIS_X, 1));
+	axis[4] = (vector3)(glm::toMat4(b->GetRotation()) * vector4(AXIS_Y, 1));
+	axis[5] = (vector3)(glm::toMat4(b->GetRotation()) * vector4(AXIS_Z, 1));
 
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			axis[6 + (i * 3) + j] = glm::cross(axis[i], axis[j + 3]);
+			int index = 6 + (i * 3) + j;
+			//Find the cross product axis
+			axis[index] = glm::normalize(glm::cross(axis[i], axis[j + 3]));
 		}
 	}
 
 	for (int i = 0; i < 15; i++) {
-		//MeshManager::GetInstance()->AddLineToRenderList(IDENTITY_M4, vector3(0), axis[i] * 100, C_BLACK, C_BLACK);
+		//MeshManager::GetInstance()->AddLineToRenderList(IDENTITY_M4, vector3(0, 1, 0), axis[i] * 100, C_MAGENTA, C_MAGENTA);
 
 		vector2 aMinMax = ProjectSATAxis(axis[i], a);
 		vector2 bMinMax = ProjectSATAxis(axis[i], b);
@@ -305,7 +323,7 @@ vector2 PhysicsManager::ProjectSATAxis(vector3 axis, WorldObject* a)
 	corners[7] = a->ToWorld(vector3(-halfWidth.x, -halfWidth.y, -halfWidth.z));
 
 	//Find min and max values along the axis
-	vector2 minMax = vector2(0, 0);
+	vector2 minMax = vector2(0, 0); //Vector representing the minimum and maximum values of the projection with x as a min and y as a max
 	minMax.x = glm::dot(axis, corners[0]);
 	minMax.y = minMax.x;
 

@@ -151,7 +151,7 @@ void WorldObject::SetModel(Model* newModel)
 	//Calculate the global min and max
 	CalculateGlobalMinMax();
 
-	std::cout << std::endl << "Position: (" << position.x << ", " << position.y << ", " << position.z << "), Scale: (" << scale.x << ", " << scale.y << ", " << scale.z << ")" << std::endl;
+	/*std::cout << std::endl << "Position: (" << position.x << ", " << position.y << ", " << position.z << "), Scale: (" << scale.x << ", " << scale.y << ", " << scale.z << ")" << std::endl;
 	std::cout << "Local Min: (" << localMin.x << ", " << localMin.y << ", " << localMin.z << "), Local Max: (" << localMax.x << ", " << localMax.y << ", " << localMax.z << ")" << std::endl;
 	std::cout << "Global Min: (" << globalMin.x << ", " << globalMin.y << ", " << globalMin.z << "), Global Max: (" << globalMax.x << ", " << globalMax.y << ", " << globalMax.z << ")" << std::endl;
 	std::cout << "Local Half Width: (" << localHalfWidth.x << ", " << localHalfWidth.y << ", " << localHalfWidth.z << ")" << "Global Half Width : (" << globalHalfWidth.x << ", " << globalHalfWidth.y << ", " << globalHalfWidth.z << ")" <<std::endl;
@@ -165,7 +165,7 @@ void WorldObject::SetModel(Model* newModel)
 	std::cout << "  " << transform[0][0] << ", " << transform[1][0] << ", " << transform[2][0] << ", " << transform[3][0] << std::endl;
 	std::cout << "  " << transform[0][1] << ", " << transform[1][1] << ", " << transform[2][1] << ", " << transform[3][1] << std::endl;
 	std::cout << "  " << transform[0][2] << ", " << transform[1][2] << ", " << transform[2][2] << ", " << transform[3][2] << std::endl;
-	std::cout << "  " << transform[0][3] << ", " << transform[1][3] << ", " << transform[2][3] << ", " << transform[3][3] << std::endl;
+	std::cout << "  " << transform[0][3] << ", " << transform[1][3] << ", " << transform[2][3] << ", " << transform[3][3] << std::endl;*/
 }
 
 int WorldObject::GetLayer()
@@ -230,7 +230,7 @@ void WorldObject::Render(matrix4 projection, matrix4 view)
 	}
 	
 	if (renderCollider) {
-		vector3 globalCenter = ToWorld(center);
+		vector3 globalCenter = (globalMin + globalMax) * 0.5f;
 
 		if (showSphere) {
 			matrix4 transformation = IDENTITY_M4;
@@ -248,10 +248,16 @@ void WorldObject::Render(matrix4 projection, matrix4 view)
 		}
 		if (showARBB) {
 			matrix4 transformation = IDENTITY_M4;
-			transformation *= glm::translate(globalCenter);
-			transformation *= glm::scale((localMax - localMin) * scale);
-			transformation *= glm::toMat4(orientation);
+			vector3 ARBBScale = (localMax - localMin) * scale;
+
+			if (layer == CollisionLayers::Player) {
+				std::cout << "ARBB Scale: (" << ARBBScale.x << ", " << ARBBScale.y << ", " << ARBBScale.z << ")" << std::endl;
+			}
 			
+			transformation *= glm::translate(globalCenter);
+			transformation *= glm::toMat4(orientation);
+			transformation *= glm::scale(ARBBScale);
+
 			MeshManager::GetInstance()->AddWireCubeToRenderList(transformation, C_MAGENTA);
 		}
 	}
@@ -276,9 +282,11 @@ void WorldObject::Translate(vector3 displacement)
 void WorldObject::Rotate(vector3 rotation)
 {
 	//Find the local axis
-	vector3 localXAxis = AXIS_X * orientation;
-	vector3 localYAxis = AXIS_Y * orientation;
-	vector3 localZAxis = AXIS_Z * orientation;
+	vector3 localXAxis = (vector3)(glm::toMat4(orientation) * vector4(AXIS_X, 1));
+	vector3 localYAxis = (vector3)(glm::toMat4(orientation) * vector4(AXIS_Y, 1));
+	vector3 localZAxis = (vector3)(glm::toMat4(orientation) * vector4(AXIS_Z, 1));
+
+	rotation *= (float)PI / 180;
 
 	//Create rotation quaternion
 	quaternion rotationQuat = glm::angleAxis(rotation.x, localXAxis) * glm::angleAxis(rotation.y, localYAxis) * glm::angleAxis(rotation.z, localZAxis);
@@ -323,15 +331,19 @@ void WorldObject::UpdateTransform()
 {
 	transform = IDENTITY_M4;
 	transform *= glm::translate(position - (center * scale));
-	transform *= glm::scale(scale);
 	transform *= glm::toMat4(orientation);
-
+	transform *= glm::scale(scale);
+	
 	CalculateGlobalMinMax();
 }
 
 #pragma endregion
 
 #pragma region Helper Methods
+
+void WorldObject::OnCollision(WorldObject* other)
+{
+}
 
 vector3 WorldObject::ToWorld(vector3 point)
 {

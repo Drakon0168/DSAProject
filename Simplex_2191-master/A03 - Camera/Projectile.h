@@ -66,7 +66,7 @@ namespace Simplex {
 		-	WorldObject other -> The object that has been collided with
 		OUTPUT: ---
 		*/
-		void OnCollision(WorldObject other) override;
+		void OnCollision(WorldObject* other) override;
 #pragma endregion
 	};
 }

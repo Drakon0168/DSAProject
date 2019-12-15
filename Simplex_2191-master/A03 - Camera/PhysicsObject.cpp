@@ -42,25 +42,32 @@ bool PhysicsObject::GetGrounded()
 	return grounded;
 }
 
+void PhysicsObject::SetGrounded(bool value)
+{
+	grounded = value;
+}
+
+void PhysicsObject::SetUsesGravity(bool value)
+{
+	usesGravity = value;
+}
+
 void PhysicsObject::Update(float deltaTime)
 {
-	//TODO: Change this to use collisions not just position
 	//Only apply gravity when above the ground
-	if (globalMin.y + (velocity.y * deltaTime) > 0) {
-		ApplyForce(AXIS_Y * -9.8f);
-		grounded = false;
+	if (usesGravity && !grounded) {
+		ApplyForce(gravity);
 	}
-	else {
+
+	if (grounded) {
+		//Stop downwards velocity and acceleration
 		if (velocity.y < 0) {
 			velocity.y = 0;
 		}
-		
+
 		if (acceleration.y < 0) {
 			acceleration.y = 0;
 		}
-
-		SetPosition(vector3(position.x, globalHalfWidth.y, position.z));
-		grounded = true;
 	}
 
 	velocity += acceleration * deltaTime;
@@ -68,9 +75,19 @@ void PhysicsObject::Update(float deltaTime)
 	acceleration = vector3(0);
 }
 
-void PhysicsObject::OnCollision(WorldObject other)
+void PhysicsObject::OnCollision(WorldObject* other)
 {
-	return;
+	WorldObject::OnCollision(other);
+
+	switch (other->GetLayer()) {
+		case CollisionLayers::Terrain:
+			//Move on top of the terrain;
+			SetPosition(vector3(position.x, other->GetGlobalMax().y + (position.y - globalMin.y), position.z));
+			break;
+		default:
+			//Move half of the distance away from the collision
+			break;
+	}
 }
 
 void PhysicsObject::ApplyForce(vector3 force)

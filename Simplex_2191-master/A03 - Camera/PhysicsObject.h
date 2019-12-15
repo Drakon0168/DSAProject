@@ -6,10 +6,13 @@ namespace Simplex {
 	class PhysicsObject : public WorldObject
 	{
 	protected:
+		const vector3 gravity = AXIS_Y * -9.8f; //The force to apply fue to gravity
+
 		vector3 velocity; //The current velocity of the object
 		vector3 acceleration; //The current acceleration of the object
 		float mass; //The mass of the object used when calculating forces
 		bool grounded = false; //Whether or not the object is on the ground
+		bool usesGravity = true;
 	public:
 #pragma region Memory Management
 		/*
@@ -59,7 +62,6 @@ namespace Simplex {
 		OUTPUT: The object's mass
 		*/
 		float GetMass();
-
 		/*
 		USAGE: Sets the mass of the object to the specified value
 		ARGUMENTS: 
@@ -67,13 +69,26 @@ namespace Simplex {
 		OUTPUT: ---
 		*/
 		void SetMass(float value);
-
 		/*
 		USAGE: Returns whether or not the object is on the ground
 		ARGUMENTS:
 		OUTPUT: Whether or not the object is on the ground
 		*/
 		bool GetGrounded();
+		/*
+		USAGE: Sets whether or not the object is on the ground
+		ARGUMENTS:
+		-	bool value -> Whether or not the object is grounded
+		OUTPUT: ---
+		*/
+		void SetGrounded(bool value);
+		/*
+		USAGE: Sets whether or not the object is affected by gravity
+		ARGUMENTS:
+		-	bool value -> Whether or not the object is affected by gravity
+		OUTPUT: ---
+		*/
+		void SetUsesGravity(bool value);
 #pragma endregion
 
 #pragma region Update
@@ -86,15 +101,7 @@ namespace Simplex {
 		virtual void Update(float deltaTime);
 #pragma endregion
 #pragma region Physics
-		/*
-		USAGE: Applies logic based changes when this object collides with another object actual
-			forces and collision resolution are handled by the physics manager
-		ARGUMENTS: 
-		-	WorldObject other -> The object that has been collided with
-		OUTPUT: ---
-		*/
-		virtual void OnCollision(WorldObject other);
-
+		virtual void OnCollision(WorldObject* other) override;
 		/*
 		USAGE: Applies a force to the object updating it's acceleration
 		ARGUMENTS:
