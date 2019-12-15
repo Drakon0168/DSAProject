@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Enemy.h"
 #include "PhysicsManager.h"
+
 using namespace Simplex;
 
 Enemy::Enemy()
@@ -32,7 +33,7 @@ void Enemy::Update(float deltaTime)
 	// Move in the seek direction
 	Move(seekDirection);
 	// Call the base implementation
-	Simplex::PhysicsObject::Update(deltaTime);
+	PhysicsObject::Update(deltaTime);
 }
 
 vector3 Enemy::Seek(vector3 targetPosition)
@@ -43,7 +44,6 @@ vector3 Enemy::Seek(vector3 targetPosition)
 	glm::normalize(desiredVelocity);
 	// Return the desired velocity
 	return desiredVelocity;
-
 }
 
 void Enemy::Die()

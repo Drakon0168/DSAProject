@@ -44,7 +44,7 @@ void Simplex::Projectile::SetDirection(vector3 dir)
 	direction = dir;
 }
 
-void Simplex::Projectile::OnCollision(WorldObject other)
+void Simplex::Projectile::OnCollision(WorldObject* other)
 {
 }
 
