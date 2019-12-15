@@ -52,7 +52,7 @@ void Simplex::Weapon::Shoot(vector3 direction)
 		
 		if (!activeProjectile)
 		{
-			Projectile* newProj = new Projectile(*projectile);
+			Projectile* newProj = projectile;
 			newProj->SetPosition(position);
 			newProj->SetDirection(direction);
 			activeProjectile = newProj;

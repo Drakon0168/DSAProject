@@ -31,9 +31,12 @@ Simplex::Projectile& Simplex::Projectile::operator=(Projectile& other)
 
 void Simplex::Projectile::Update(float deltaTime, vector3 direction)
 {
-	vector3 deltaPosition = deltaTime * speed * direction;
+	vector3 deltaPosition = deltaTime * 1.0f * direction;
 	position = position + deltaPosition;
 	SetPosition(position);
+
+	std::cout << "MinMax Projectile: (" << GetGlobalMin().x << ", " << GetGlobalMin().y << ", " << GetGlobalMin().z << GetGlobalMax().x << ", " << GetGlobalMax().y << ", " << GetGlobalMax().z << std::endl;
+	std::cout << "Position" << position.x << ", " << position.y << ", " << position.z << ::endl;
 }
 
 void Simplex::Projectile::SetDirection(vector3 dir)

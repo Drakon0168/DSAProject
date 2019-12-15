@@ -256,6 +256,7 @@ Simplex::Projectile* PhysicsManager::CreateProjectile(float moveSpeed, vector3 p
 	proj->SetPosition(position);
 	proj->SetScale(scale);
 	proj->SetRotation(orientation);
+	proj->SetLayer(CollisionLayers::PlayerProjectile);
 
 	collidables[CollisionLayers::PlayerProjectile].push_back(proj);
 
