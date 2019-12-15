@@ -30,7 +30,7 @@ void PhysicsManager::Init(void)
 	}
 	
 	//TODO: Setup starting objects in the level
-	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(100, 1, 100), glm::angleAxis((float)PI * 0.1f, AXIS_Y));
+	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(250, 1, 250), glm::angleAxis((float)PI * 0.1f, AXIS_Y));
 	terrain->LoadModel("Minecraft\\Cube.fbx", "Cube");
 	terrain->SetPosition(vector3(0, -1 * terrain->GetGlobalHalfWidth().y, 0));
 
@@ -120,9 +120,6 @@ void PhysicsManager::Update(float deltaTime)
 						grounded = true;
 					}
 				}
-
-			
-				collidables[CollisionLayers::Enemy][i]->Rotate(vector3(0, 15 * deltaTime, 0));
 
 				dynamic_cast<PhysicsObject*>(collidables[CollisionLayers::Player][i])->SetGrounded(grounded);
 			}
@@ -302,7 +299,7 @@ bool PhysicsManager::CheckARBBCollision(WorldObject* a, WorldObject* b)
 	}
 
 	for (int i = 0; i < 15; i++) {
-		MeshManager::GetInstance()->AddLineToRenderList(IDENTITY_M4, vector3(0, 1, 0), axis[i] * 100, C_MAGENTA, C_MAGENTA);
+		//MeshManager::GetInstance()->AddLineToRenderList(IDENTITY_M4, vector3(0, 1, 0), axis[i] * 100, C_MAGENTA, C_MAGENTA);
 
 		vector2 aMinMax = ProjectSATAxis(axis[i], a);
 		vector2 bMinMax = ProjectSATAxis(axis[i], b);
