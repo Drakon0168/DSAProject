@@ -3,7 +3,29 @@
 #include "PhysicsManager.h"
 using namespace Simplex;
 
-void Simplex::Enemy::Update(float deltaTime)
+Enemy::Enemy()
+{
+	Init();
+}
+
+Enemy::~Enemy()
+{
+	Release();
+}
+
+void Enemy::Init()
+{
+	// Call base functionality
+	LivingEntity::Init();
+	// Set base values
+}
+
+void Enemy::Release()
+{
+	LivingEntity::Release();
+}
+
+void Enemy::Update(float deltaTime)
 {
 	// Calculate the seeking direction
 	vector3 seekDirection = Seek(PhysicsManager::GetInstance()->GetPlayer()->GetPosition());
@@ -13,7 +35,7 @@ void Simplex::Enemy::Update(float deltaTime)
 	Simplex::PhysicsObject::Update(deltaTime);
 }
 
-vector3 Simplex::Enemy::Seek(vector3 targetPosition)
+vector3 Enemy::Seek(vector3 targetPosition)
 {
 	// Calculate the desired velocity
 	vector3 desiredVelocity = targetPosition - position;
@@ -22,6 +44,16 @@ vector3 Simplex::Enemy::Seek(vector3 targetPosition)
 	// Return the desired velocity
 	return desiredVelocity;
 
+}
+
+void Enemy::Die()
+{
+	//TODO: Reset the game / take the player back to the main menu
+}
+
+void Enemy::Attack()
+{
+	//TODO: Shoot the currently equipped gun
 }
 
 
