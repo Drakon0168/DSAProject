@@ -361,11 +361,11 @@ vector2 PhysicsManager::ProjectSATAxis(vector3 axis, WorldObject* a)
 
 void PhysicsManager::DestroyObject(WorldObject* object)
 {
-	/*
-	for (int i = 0; i < collidables[object->GetLayer()].size())
+	for (int i = object->GetIndex(); i < collidables[object->GetLayer()].size(); i++)
 	{
-
+		collidables[object->GetLayer()][i]->SetIndex(i - 1);
 	}
-	collidables[object->GetLayer()]
-	*/
+
+	collidables[object->GetLayer()].erase(collidables[object->GetLayer()].begin + object->GetIndex());
+	delete object;
 }
