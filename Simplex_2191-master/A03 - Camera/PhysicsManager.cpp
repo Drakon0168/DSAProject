@@ -187,7 +187,7 @@ bool PhysicsManager::CheckCollision(WorldObject* a, WorldObject* b)
 
 	//Check for ARBB collision if there is an AABB collision and a Sphere collision
 	if (!CheckARBBCollision(a, b)) {
-		//return false;
+		return false;
 	}
 
 	//Resolve the collisions
@@ -302,7 +302,7 @@ bool PhysicsManager::CheckARBBCollision(WorldObject* a, WorldObject* b)
 	}
 
 	for (int i = 0; i < 15; i++) {
-		//MeshManager::GetInstance()->AddLineToRenderList(IDENTITY_M4, vector3(0, 1, 0), axis[i] * 100, C_MAGENTA, C_MAGENTA);
+		MeshManager::GetInstance()->AddLineToRenderList(IDENTITY_M4, vector3(0, 1, 0), axis[i] * 100, C_MAGENTA, C_MAGENTA);
 
 		vector2 aMinMax = ProjectSATAxis(axis[i], a);
 		vector2 bMinMax = ProjectSATAxis(axis[i], b);
@@ -318,17 +318,18 @@ bool PhysicsManager::CheckARBBCollision(WorldObject* a, WorldObject* b)
 vector2 PhysicsManager::ProjectSATAxis(vector3 axis, WorldObject* a)
 {
 	vector3 corners[8];
-	vector3 halfWidth = a->GetLocalHalfWidth();
+	vector3 min = a->GetLocalMin();
+	vector3 max = a->GetLocalMax();
 
 	//Find the corners of the box
-	corners[0] = a->ToWorld(vector3(halfWidth.x, halfWidth.y, halfWidth.z));
-	corners[1] = a->ToWorld(vector3(halfWidth.x, halfWidth.y, -halfWidth.z));
-	corners[2] = a->ToWorld(vector3(halfWidth.x, -halfWidth.y, halfWidth.z));
-	corners[3] = a->ToWorld(vector3(halfWidth.x, -halfWidth.y, -halfWidth.z));
-	corners[4] = a->ToWorld(vector3(-halfWidth.x, halfWidth.y, halfWidth.z));
-	corners[5] = a->ToWorld(vector3(-halfWidth.x, halfWidth.y, -halfWidth.z));
-	corners[6] = a->ToWorld(vector3(-halfWidth.x, -halfWidth.y, halfWidth.z));
-	corners[7] = a->ToWorld(vector3(-halfWidth.x, -halfWidth.y, -halfWidth.z));
+	corners[0] = a->ToWorld(vector3(min.x, min.y, min.z));
+	corners[1] = a->ToWorld(vector3(min.x, min.y, max.z));
+	corners[2] = a->ToWorld(vector3(min.x, max.y, min.z));
+	corners[3] = a->ToWorld(vector3(min.x, max.y, max.z));
+	corners[4] = a->ToWorld(vector3(max.x, min.y, min.z));
+	corners[5] = a->ToWorld(vector3(max.x, min.y, max.z));
+	corners[6] = a->ToWorld(vector3(max.x, max.y, min.z));
+	corners[7] = a->ToWorld(vector3(max.x, max.y, max.z));
 
 	//Find min and max values along the axis
 	vector2 minMax = vector2(0, 0); //Vector representing the minimum and maximum values of the projection with x as a min and y as a max
