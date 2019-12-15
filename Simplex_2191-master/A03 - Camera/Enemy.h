@@ -7,6 +7,7 @@ namespace Simplex {
 	class Enemy : public LivingEntity
 	{
 	protected:
+		int damage;
 	public:
 #pragma region Memory Management
 		/*
@@ -58,6 +59,9 @@ namespace Simplex {
 		virtual void Update(float deltaTime) override;
 #pragma endregion
 #pragma region Enemy
+		int GetDamage();
+
+		void SetDamage(int value);
 		/*
 		USAGE: Kills the entity applying any on death effects
 		ARGUMENTS: --
@@ -73,6 +77,7 @@ namespace Simplex {
 
 		virtual vector3 Seek(vector3 targetPosition);
 
+		virtual void OnCollision(WorldObject* other) override;
 #pragma endregion
 	};
 }
