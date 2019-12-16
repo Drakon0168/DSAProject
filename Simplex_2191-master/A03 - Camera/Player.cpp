@@ -158,6 +158,7 @@ void Player::Attack()
 {
 	//TODO: Shoot the currently equipped gun
 	vector3 targetDirection = camera->GetTarget() - position;
+
 	pistol->Shoot(targetDirection);
 }
 

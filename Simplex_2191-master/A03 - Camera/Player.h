@@ -8,7 +8,7 @@ namespace Simplex {
 	class Player : public LivingEntity
 	{
 	protected:
-		const int PISTOL_AMMO = 6;
+		const int PISTOL_AMMO = 60;
 		const float PISTOL_FIRE_RATE = 0.2f;
 		const float PISTOL_RELOAD_TIME = 0.5f;
 		const vector3 playerArmsOffset = vector3(0, 0.9f, 0.2f);

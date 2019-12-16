@@ -49,16 +49,19 @@ void Simplex::Weapon::Shoot(vector3 direction)
 {
 	if (shotTimer >= firerate && currentammo > 0)
 	{
+		Player* player = Simplex::PhysicsManager::GetInstance()->GetPlayer();
+		vector3 projposition = player->GetPosition();
 		
 		if (!activeProjectile)
 		{
 			Projectile* newProj = projectile;
-			newProj->SetPosition(position);
+			
+			newProj->SetPosition(projposition);
 			newProj->SetDirection(direction);
 			activeProjectile = newProj;
 		}
 		
-		activeProjectile->SetPosition(position);
+		activeProjectile->SetPosition(projposition);
 		activeProjectile->SetDirection(direction);
 
 		shotTimer = 0;

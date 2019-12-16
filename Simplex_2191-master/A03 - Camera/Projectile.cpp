@@ -3,12 +3,13 @@
 
 
 
-Simplex::Projectile::Projectile(int dam, float sped, Simplex::WorldObject* obj)
+Simplex::Projectile::Projectile(int dam, float sped)
 {
 	damage = dam;
 	speed = sped;
 	direction = vector3(0.0f, 0.0f, 0.0f);
 	position = vector3(0.0f, 0.0f, 0.0f);
+	usesGravity = false;
 }
 
 Simplex::Projectile::Projectile(Projectile& other)
@@ -17,6 +18,7 @@ Simplex::Projectile::Projectile(Projectile& other)
 	speed = other.speed;
 	direction = other.direction;
 	position = other.position;
+	usesGravity = false;
 }
 
 Simplex::Projectile& Simplex::Projectile::operator=(Projectile& other)
@@ -25,18 +27,19 @@ Simplex::Projectile& Simplex::Projectile::operator=(Projectile& other)
 	speed = other.speed;
 	direction = other.direction;
 	position = other.position;
-
+	usesGravity = false;
 	return *this;
 }
 
 void Simplex::Projectile::Update(float deltaTime, vector3 direction)
 {
-	vector3 deltaPosition = deltaTime * 1.0f * direction;
-	position = position + deltaPosition;
+	vector3 deltaPosition = deltaTime * 2.0f * direction;
+	position += deltaPosition;
 	SetPosition(position);
 
-	std::cout << "MinMax Projectile: (" << GetGlobalMin().x << ", " << GetGlobalMin().y << ", " << GetGlobalMin().z << GetGlobalMax().x << ", " << GetGlobalMax().y << ", " << GetGlobalMax().z << std::endl;
-	std::cout << "Position" << position.x << ", " << position.y << ", " << position.z << ::endl;
+	std::cout << "Direction Projectile: (" << direction.x << ", " << direction.y << ", " << direction.z << ")" << std::endl;
+	std::cout << "Position Projectile: (" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
+	//std::cout << "Position" << position.x << ", " << position.y << ", " << position.z << ::endl;
 }
 
 void Simplex::Projectile::SetDirection(vector3 dir)
@@ -60,6 +63,12 @@ void Simplex::Projectile::Release(void)
 
 Simplex::Projectile::Projectile()
 {
+
+	damage = 1.0f;
+	speed = 3.0f;
+	direction = vector3(0.0f, 0.0f, 0.0f);
+	position = vector3(0.0f, 0.0f, 0.0f);
+	usesGravity = false;
 }
 
 Simplex::Projectile::~Projectile()

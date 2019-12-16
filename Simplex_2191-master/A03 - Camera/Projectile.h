@@ -10,7 +10,6 @@ namespace Simplex {
 		int damage; //The amount of damage the projectile will deal when it collides with something
 		float speed;
 		vector3 direction;
-		vector3 position;
 	public:
 #pragma region Memory Management
 		/*
@@ -44,8 +43,9 @@ namespace Simplex {
 		ARGUMENTS: class object (to copy)
 		OUTPUT: class object
 		*/
-		Projectile(int dam, float sped, WorldObject* obj);
+		Projectile(int dam, float sped);
 
+		
 		Projectile(Projectile& other);
 		/*
 		USAGE: Copy Assignment Operator

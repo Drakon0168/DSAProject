@@ -71,7 +71,7 @@ void Enemy::OnCollision(WorldObject* other)
 		break;
 	case CollisionLayers::Player:
 		// Attack!
-		cout << "Attacked!" << endl;
+		//cout << "Attacked!" << endl;
 		Attack();
 		break;
 	default:
