@@ -59,6 +59,7 @@ namespace Simplex {
 		virtual void Update(float deltaTime) override;
 #pragma endregion
 #pragma region Enemy
+
 		int GetDamage();
 
 		void SetDamage(int value);

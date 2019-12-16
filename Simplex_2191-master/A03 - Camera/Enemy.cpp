@@ -62,8 +62,6 @@ void Enemy::Update(float deltaTime)
 
 void Enemy::OnCollision(WorldObject* other)
 {
-
-
 	switch (other->GetLayer()) {
 	case CollisionLayers::Terrain:
 		//Move on top of the terrain;
@@ -89,12 +87,12 @@ vector3 Enemy::Seek(vector3 targetPosition)
 	glm::normalize(desiredVelocity);
 	// Return the desired velocity
 	return desiredVelocity;
-
 }
 
 void Enemy::Die()
 {
 	Release();
+	PhysicsManager::GetInstance()->DestroyObject(this);
 	//TODO: Reset the game / take the player back to the main menu
 }
 

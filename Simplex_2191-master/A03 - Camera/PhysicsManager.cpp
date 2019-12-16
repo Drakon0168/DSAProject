@@ -234,6 +234,7 @@ Player* PhysicsManager::CreatePlayer(vector3 position, vector3 scale, quaternion
 	newPlayer->SetScale(scale);
 	newPlayer->SetRotation(orientation);
 	newPlayer->SetLayer(CollisionLayers::Player);
+	newPlayer->SetIndex(collidables[CollisionLayers::Enemy].size());
 	collidables[CollisionLayers::Player].push_back(newPlayer);
 	return newPlayer;
 }
@@ -248,6 +249,7 @@ Simplex::Enemy* PhysicsManager::CreateEnemy(float moveSpeed, int damage, vector3
 	enemy->SetMoveSpeed(moveSpeed);
 	enemy->SetDamage(damage);
 	enemy->SetLayer(CollisionLayers::Enemy);
+	enemy->SetIndex(collidables[CollisionLayers::Enemy].size());
 	collidables[CollisionLayers::Enemy].push_back(enemy);
 
 	return enemy;
@@ -261,7 +263,7 @@ Simplex::Projectile* PhysicsManager::CreateProjectile(float moveSpeed, vector3 p
 	proj->SetScale(scale);
 	proj->SetRotation(orientation);
 	proj->SetLayer(CollisionLayers::PlayerProjectile);
-
+	proj->SetIndex(collidables[CollisionLayers::PlayerProjectile].size());
 	collidables[CollisionLayers::PlayerProjectile].push_back(proj);
 
 	return proj;

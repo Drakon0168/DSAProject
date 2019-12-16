@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Projectile.h"
-
+#include "PhysicsManager.h"
+#include "Enemy.h"
 
 
 Simplex::Projectile::Projectile(int dam, float sped)
@@ -59,6 +60,8 @@ void Simplex::Projectile::Init(void)
 
 void Simplex::Projectile::Release(void)
 {
+	PhysicsObject::Release();
+	PhysicsManager::GetInstance()->DestroyObject(this);
 }
 
 Simplex::Projectile::Projectile()
@@ -73,4 +76,35 @@ Simplex::Projectile::Projectile()
 
 Simplex::Projectile::~Projectile()
 {
+	Release();
+}
+
+void Simplex::Projectile::OnCollision(WorldObject* other)
+{
+	switch (other->GetLayer()) 
+	{
+	case CollisionLayers::Terrain:
+		Release();
+		break;
+	case CollisionLayers::Player:
+		//cout << "Attacked!" << endl;
+		Release();
+		break;
+	case CollisionLayers::Enemy:
+		// Try to damage the enemy
+		Release();
+		break;
+	default:
+		Release();
+		break;
+	}
+	//cout << "Enemy's on collision called!" << endl;
+	WorldObject::OnCollision(other);
+}
+
+void Simplex::Projectile::DamageEnemy(WorldObject* potentialEnemy)
+{
+	Enemy* enemy = dynamic_cast<Enemy*>(potentialEnemy);
+	enemy->TakeDamage(damage);
+	Release();
 }
