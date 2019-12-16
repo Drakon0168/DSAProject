@@ -125,10 +125,12 @@ void PhysicsManager::Update(float deltaTime)
 					CheckCollision(collidables[CollisionLayers::Enemy][i], collidables[CollisionLayers::PlayerProjectile][j]);
 				}
 
-				dynamic_cast<PhysicsObject*>(collidables[CollisionLayers::Player][i])->SetGrounded(grounded);
+				dynamic_cast<PhysicsObject*>(collidables[CollisionLayers::Enemy][i])->SetGrounded(grounded);
 			}
+			break;
 		case CollisionLayers::EnemyProjectile:
 			//Enemy projectiles are checked against the player in the player case
+			break;
 		case CollisionLayers::Player:
 			//Check against enemy bullets and terrain
 			for (int i = 0; i < collidables[CollisionLayers::Player].size(); i++) {
@@ -145,10 +147,13 @@ void PhysicsManager::Update(float deltaTime)
 
 				dynamic_cast<PhysicsObject*>(collidables[CollisionLayers::Player][i])->SetGrounded(grounded);
 			}
+			break;
 		case CollisionLayers::PlayerProjectile:
 			//Player projectiles are checked against enemies in the enemy case
+			break;
 		case CollisionLayers::Terrain:
 			//Terrain is checked against enemies and the player in the player and enemy cases
+			break;
 		case CollisionLayers::NonCollidable:
 			//Don't need to check non-collidable objects
 			break;

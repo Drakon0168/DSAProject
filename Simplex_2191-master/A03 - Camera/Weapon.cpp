@@ -66,7 +66,6 @@ void Simplex::Weapon::Shoot(vector3 direction)
 
 		shotTimer = 0;
 		currentammo -= 1;
-
 	}
 
 }

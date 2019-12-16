@@ -34,12 +34,15 @@ Simplex::Projectile& Simplex::Projectile::operator=(Projectile& other)
 
 void Simplex::Projectile::Update(float deltaTime, vector3 direction)
 {
-	vector3 deltaPosition = deltaTime * 2.0f * direction;
-	position += deltaPosition;
-	SetPosition(position);
+	velocity = direction * speed;
 
-	std::cout << "Direction Projectile: (" << direction.x << ", " << direction.y << ", " << direction.z << ")" << std::endl;
-	std::cout << "Position Projectile: (" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
+	PhysicsObject::Update(deltaTime);
+	//vector3 deltaPosition = deltaTime * 2.0f * direction;
+	//position += deltaPosition;
+	//SetPosition(position);
+
+	//std::cout << "Direction Projectile: (" << direction.x << ", " << direction.y << ", " << direction.z << ")" << std::endl;
+	//std::cout << "Position Projectile: (" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
 	//std::cout << "Position" << position.x << ", " << position.y << ", " << position.z << ::endl;
 }
 

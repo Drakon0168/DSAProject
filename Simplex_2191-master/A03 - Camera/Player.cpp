@@ -20,18 +20,12 @@ void Player::Init(void)
 	currentAmmo = maxAmmo;
 	currentFireRate = PISTOL_FIRE_RATE;
 	currentReloadTime = PISTOL_RELOAD_TIME;
-
-
-
-
-
+	
 	//Setup arms
 	playerArms = new WorldObject();
 	playerArms->SetScale(vector3(0.006f));
 	playerArms->LoadModel("Sunshine\\FPS_Arms\\source\\arms@throwing.fbx", "PlayerArms");
 	playerArms->SetRenderCollider(false);
-
-	
 }
 
 void Player::Release(void)
@@ -94,6 +88,10 @@ void Player::Update(float deltaTime)
 	//Match arms to player
 	playerArms->SetPosition(position + playerArmsOffset);
 	playerArms->SetRotation(orientation);
+
+	if (position.y < -5) {
+		Die();
+	}
 }
 
 //Sets the players arms
@@ -152,12 +150,17 @@ vector3 Player::GetPlayerArmsOffset()
 void Player::Die()
 {
 	//TODO: Reset the game / take the player back to the main menu
+	std::cout << "Player Died" << std::endl;
+	SetPosition(vector3(0, 10, 0));
+	velocity = vector3(0);
+	acceleration = vector3(0);
+	health = maxHealth;
 }
 
 void Player::Attack()
 {
 	//TODO: Shoot the currently equipped gun
-	vector3 targetDirection = camera->GetTarget() - position;
+	vector3 targetDirection = camera->GetTarget() - camera->GetPosition();
 
 	pistol->Shoot(targetDirection);
 }
