@@ -20,18 +20,12 @@ void Player::Init(void)
 	currentAmmo = maxAmmo;
 	currentFireRate = PISTOL_FIRE_RATE;
 	currentReloadTime = PISTOL_RELOAD_TIME;
-
-
-
-
-
+	
 	//Setup arms
 	playerArms = new WorldObject();
 	playerArms->SetScale(vector3(0.006f));
 	playerArms->LoadModel("Sunshine\\FPS_Arms\\source\\arms@throwing.fbx", "PlayerArms");
 	playerArms->SetRenderCollider(false);
-
-	
 }
 
 void Player::Release(void)
