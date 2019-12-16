@@ -57,8 +57,6 @@ PhysicsManager::PhysicsManager()
 {
 	if(instance == nullptr)
 	Init();
-
-
 }
 
 PhysicsManager::~PhysicsManager()
@@ -117,19 +115,22 @@ void PhysicsManager::Update(float deltaTime)
 				for (int k = 0; k < collidables[CollisionLayers::Player].size(); k++)
 				{
 					bool collided = CheckCollision(collidables[CollisionLayers::Enemy][i], collidables[CollisionLayers::Player][k]);
-				}
+				}// Check enemies against terrain
 				for (int j = 0; j < collidables[CollisionLayers::Terrain].size(); j++) {
 					if (CheckCollision(collidables[CollisionLayers::Enemy][i], collidables[CollisionLayers::Terrain][j])) {
 						grounded = true;
 					}
+				}//Check enemies against player projectiles
+				for (int j = 0; j < collidables[CollisionLayers::PlayerProjectile].size(); j++) {
+					CheckCollision(collidables[CollisionLayers::Enemy][i], collidables[CollisionLayers::PlayerProjectile][j]);
 				}
 
 				dynamic_cast<PhysicsObject*>(collidables[CollisionLayers::Player][i])->SetGrounded(grounded);
 			}
 		case CollisionLayers::EnemyProjectile:
-			//Check enemy projectiles against the player
+			//Enemy projectiles are checked against the player in the player case
 		case CollisionLayers::Player:
-			//Check against enemies and terrain
+			//Check against enemy bullets and terrain
 			for (int i = 0; i < collidables[CollisionLayers::Player].size(); i++) {
 				bool grounded = false;
 
@@ -137,14 +138,17 @@ void PhysicsManager::Update(float deltaTime)
 					if (CheckCollision(collidables[CollisionLayers::Player][i], collidables[CollisionLayers::Terrain][j])) {
 						grounded = true;
 					}
+				}//Check player against enemy projectiles
+				for (int j = 0; j < collidables[CollisionLayers::EnemyProjectile].size(); j++) {
+					CheckCollision(collidables[CollisionLayers::Player][i], collidables[CollisionLayers::EnemyProjectile][j]);
 				}
 
 				dynamic_cast<PhysicsObject*>(collidables[CollisionLayers::Player][i])->SetGrounded(grounded);
 			}
 		case CollisionLayers::PlayerProjectile:
-			//Check player projectiles against the enemies
+			//Player projectiles are checked against enemies in the enemy case
 		case CollisionLayers::Terrain:
-			break;
+			//Terrain is checked against enemies and the player in the player and enemy cases
 		case CollisionLayers::NonCollidable:
 			//Don't need to check non-collidable objects
 			break;
