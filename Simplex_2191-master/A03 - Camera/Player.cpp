@@ -88,6 +88,10 @@ void Player::Update(float deltaTime)
 	//Match arms to player
 	playerArms->SetPosition(position + playerArmsOffset);
 	playerArms->SetRotation(orientation);
+
+	if (position.y < -5) {
+		Die();
+	}
 }
 
 //Sets the players arms
@@ -146,6 +150,11 @@ vector3 Player::GetPlayerArmsOffset()
 void Player::Die()
 {
 	//TODO: Reset the game / take the player back to the main menu
+	std::cout << "Player Died" << std::endl;
+	SetPosition(vector3(0, 10, 0));
+	velocity = vector3(0);
+	acceleration = vector3(0);
+	health = maxHealth;
 }
 
 void Player::Attack()
