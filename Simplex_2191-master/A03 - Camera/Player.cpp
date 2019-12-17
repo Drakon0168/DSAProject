@@ -110,6 +110,11 @@ void Simplex::Player::SetCamera(MyCamera* value)
 	camera = value;
 }
 
+MyCamera* Player::GetCamera()
+{
+	return camera;
+}
+
 void Player::Render(matrix4 projection, matrix4 view)
 {
 	playerArms->Render(projection, view);

@@ -72,6 +72,9 @@ void Enemy::OnCollision(WorldObject* other)
 		//cout << "Attacked!" << endl;
 		Attack();
 		break;
+	case CollisionLayers::PlayerProjectile:
+		Die();
+		break;
 	default:
 		//Move half of the distance away from the collision
 		break;

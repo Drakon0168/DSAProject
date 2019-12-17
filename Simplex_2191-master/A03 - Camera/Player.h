@@ -73,6 +73,7 @@ namespace Simplex {
 		vector3 GetPlayerArmsOffset();
 		WorldObject* GetPlayerArms();
 		void SetCamera(MyCamera* value);
+		MyCamera* GetCamera();
 #pragma endregion
 #pragma region Render
 		void Render(matrix4 projection, matrix4 view) override;

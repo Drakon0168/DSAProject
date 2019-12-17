@@ -16,7 +16,7 @@ Simplex::Weapon::Weapon(int am, float firer, float reload, float projSpeed, Proj
 
 Simplex::Weapon::~Weapon()
 {
-
+	delete projectile;
 }
 
 Simplex::Weapon::Weapon(Weapon& other)
@@ -50,7 +50,7 @@ void Simplex::Weapon::Shoot(vector3 direction)
 	if (shotTimer >= firerate && currentammo > 0)
 	{
 		Player* player = Simplex::PhysicsManager::GetInstance()->GetPlayer();
-		vector3 projposition = player->GetPosition();
+		vector3 projposition = player->GetCamera()->GetTarget();
 		
 		if (!activeProjectile)
 		{
