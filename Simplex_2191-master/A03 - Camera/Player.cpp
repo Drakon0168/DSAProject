@@ -160,6 +160,8 @@ void Player::Die()
 	velocity = vector3(0);
 	acceleration = vector3(0);
 	health = maxHealth;
+
+	PhysicsManager::GetInstance()->ResetLevel();
 }
 
 void Player::Attack()

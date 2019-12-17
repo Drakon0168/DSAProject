@@ -433,6 +433,14 @@ vector2 PhysicsManager::ProjectSATAxis(vector3 axis, WorldObject* a)
 	return minMax;
 }
 
+void PhysicsManager::ResetLevel()
+{
+	//Clear all enemies
+	for (int i = 0; i < collidables[CollisionLayers::Enemy].size(); i++) {
+		dynamic_cast<Enemy*>(collidables[CollisionLayers::Enemy][i])->Die();
+	}
+}
+
 void PhysicsManager::DestroyObject(WorldObject* object)
 {
 	for (int i = object->GetIndex() + 1; i < collidables[object->GetLayer()].size(); i++)

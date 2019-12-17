@@ -206,6 +206,8 @@ namespace Simplex {
 		*/
 		vector2 ProjectSATAxis(vector3 axis, WorldObject* a);
 
+		void ResetLevel();
+
 		vector3 GetRandomBoundsPosition();
 
 		int RandomInt(int min, int max);
