@@ -404,26 +404,17 @@ vector2 PhysicsManager::ProjectSATAxis(vector3 axis, WorldObject* a)
 	minMax.x = glm::dot(axis, corners[0]);
 	minMax.y = minMax.x;
 
-	//TODO: Get rid of min and max vectors they are only for debug purposes
-	//vector3 min;
-	//vector3 max;
-
 	for (int i = 1; i < 8; i++) {
 		float projectionDistance = glm::dot(axis, corners[i]);
 
 		if (projectionDistance < minMax.x) {
 			minMax.x = projectionDistance;
-			//min = corners[i];
 		}
 
 		if (projectionDistance > minMax.y) {
 			minMax.y = projectionDistance;
-			//max = corners[i];
 		}
 	}
-
-	//MeshManager::GetInstance()->AddLineToRenderList(IDENTITY_M4, min, axis * minMax.x, C_WHITE, C_WHITE);
-	//MeshManager::GetInstance()->AddLineToRenderList(IDENTITY_M4, max, axis * minMax.y, C_WHITE, C_WHITE);
 
 	return minMax;
 }

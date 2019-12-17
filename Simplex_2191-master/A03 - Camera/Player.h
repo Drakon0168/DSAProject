@@ -25,10 +25,6 @@ namespace Simplex {
 		WorldObject* playerArms;
 
 		MyCamera* camera;
-
-		
-
-
 	public:
 		Projectile* pistolBullet;
 		Weapon* pistol;
