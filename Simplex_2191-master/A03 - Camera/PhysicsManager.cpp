@@ -206,7 +206,7 @@ void PhysicsManager::Update(float deltaTime)
 		enemySpawnCounter += deltaTime;
 		if (enemySpawnCounter > enemySpawnDelay)
 		{
-			Enemy* teddy = CreateEnemy(1.1f, 10, GetRandomBoundsPosition(), vector3(1.5, 1.5, 1.5));
+			Enemy* teddy = CreateEnemy(1.1f, 50, GetRandomBoundsPosition(), vector3(1.5, 1.5, 1.5));
 			teddy->LoadModel("Sunshine\\TeddyBear.fbx", "TeddyBear");
 			teddy->SetUsesGravity(false);
 
