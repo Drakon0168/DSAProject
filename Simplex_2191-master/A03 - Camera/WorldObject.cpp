@@ -19,7 +19,6 @@ void WorldObject::Release(void)
 {
 	if (model != nullptr)
 	{
-		//delete model;
 		model = nullptr;
 	}
 }

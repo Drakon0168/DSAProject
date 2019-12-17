@@ -7,6 +7,7 @@ namespace Simplex {
 	{
 	private:
 		const static int LAYER_COUNT = 6;
+		const static int GRID_SIZE = 25;
 		int frameCount = 0;
 		static PhysicsManager* instance;
 		WorldObject* terrain;

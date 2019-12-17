@@ -221,6 +221,17 @@ void PhysicsManager::Update(float deltaTime)
 
 bool PhysicsManager::CheckCollision(WorldObject* a, WorldObject* b)
 {
+	//Spatial Optimization Grid
+	vector2 gridSegmentAMin = vector2(glm::floor(a->GetGlobalMin().x / GRID_SIZE), glm::floor(a->GetGlobalMin().z / GRID_SIZE));
+	vector2 gridSegmentAMax = vector2(glm::floor(a->GetGlobalMax().x / GRID_SIZE), glm::floor(a->GetGlobalMax().z / GRID_SIZE));
+	vector2 gridSegmentBMin = vector2(glm::floor(b->GetGlobalMin().x / GRID_SIZE), glm::floor(b->GetGlobalMin().z / GRID_SIZE));
+	vector2 gridSegmentBMax = vector2(glm::floor(b->GetGlobalMax().x / GRID_SIZE), glm::floor(b->GetGlobalMax().z / GRID_SIZE));
+
+	//Check for overlap in grid segments that contain the objects
+	if (gridSegmentAMin.x > gridSegmentBMax.x || gridSegmentAMin.y > gridSegmentBMax.y || gridSegmentBMin.x > gridSegmentAMax.x || gridSegmentBMin.y > gridSegmentAMax.y) {
+		return false;
+	}
+
 	//Check for Sphere collision
 	if (!CheckSphereCollision(a, b)) {
 		return false;
