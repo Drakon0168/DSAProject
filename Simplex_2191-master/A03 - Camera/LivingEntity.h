@@ -116,6 +116,12 @@ namespace Simplex {
 		OUTPUT: ---
 		*/
 		void SetMaxHealth(float value);
+		/*
+		USAGE: Returns whether or not the enemy is alive
+		ARGUMENTS: ---
+		OUTPUT: Whether or not the enemy is alive
+		*/
+		bool GetAlive();
 #pragma endregion
 #pragma region Entity
 		/*

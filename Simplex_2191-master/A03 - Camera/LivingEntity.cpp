@@ -84,6 +84,11 @@ void LivingEntity::SetMaxHealth(float value)
 	}
 }
 
+bool LivingEntity::GetAlive()
+{
+	return isAlive;
+}
+
 void LivingEntity::TakeDamage(int damage)
 {
 	health -= damage;

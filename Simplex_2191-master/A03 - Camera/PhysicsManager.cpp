@@ -113,21 +113,38 @@ void PhysicsManager::Update(float deltaTime)
 			for (int i = 0; i < collidables[CollisionLayers::Enemy].size(); i++) {
 				bool grounded = false;
 
+				Enemy* enemy = dynamic_cast<Enemy*>(collidables[CollisionLayers::Enemy][i]);
+
 				// Check enemies against player
 				for (int k = 0; k < collidables[CollisionLayers::Player].size(); k++)
 				{
-					bool collided = CheckCollision(collidables[CollisionLayers::Enemy][i], collidables[CollisionLayers::Player][k]);
-				}// Check enemies against terrain
-				for (int j = 0; j < collidables[CollisionLayers::Terrain].size(); j++) {
-					if (CheckCollision(collidables[CollisionLayers::Enemy][i], collidables[CollisionLayers::Terrain][j])) {
-						grounded = true;
+					if (enemy->GetAlive()) {
+						CheckCollision(enemy, collidables[CollisionLayers::Player][k]);
 					}
-				}//Check enemies against player projectiles
-				for (int j = 0; j < collidables[CollisionLayers::PlayerProjectile].size(); j++) {
-					CheckCollision(collidables[CollisionLayers::Enemy][i], collidables[CollisionLayers::PlayerProjectile][j]);
 				}
 
-				dynamic_cast<PhysicsObject*>(collidables[CollisionLayers::Enemy][i])->SetGrounded(grounded);
+				//Check enemies against player projectiles
+				if (enemy->GetAlive()) {
+					for (int j = 0; j < collidables[CollisionLayers::PlayerProjectile].size(); j++) {
+						CheckCollision(enemy, collidables[CollisionLayers::PlayerProjectile][j]);
+					}
+				}
+
+				// Check enemies against terrain
+				if (enemy->GetAlive()) {
+					for (int j = 0; j < collidables[CollisionLayers::Terrain].size(); j++) {
+						if (CheckCollision(enemy, collidables[CollisionLayers::Terrain][j])) {
+							grounded = true;
+						}
+					}
+
+					enemy->SetGrounded(grounded);
+				}
+
+				//Delete the enemy if it died
+				if (!enemy->GetAlive()) {
+					DestroyObject(enemy);
+				}
 			}
 			break;
 		case CollisionLayers::EnemyProjectile:
@@ -413,7 +430,7 @@ vector2 PhysicsManager::ProjectSATAxis(vector3 axis, WorldObject* a)
 
 void PhysicsManager::DestroyObject(WorldObject* object)
 {
-	for (int i = object->GetIndex(); i < collidables[object->GetLayer()].size(); i++)
+	for (int i = object->GetIndex() + 1; i < collidables[object->GetLayer()].size(); i++)
 	{
 		collidables[object->GetLayer()][i]->SetIndex(i - 1);
 	}

@@ -91,14 +91,7 @@ vector3 Enemy::Seek(vector3 targetPosition)
 
 void Enemy::Die()
 {
-	if (isAlive)
-	{
-		isAlive = false;
-		Release();
-		PhysicsManager::GetInstance()->DestroyObject(this);
-	}
-
-	//TODO: Reset the game / take the player back to the main menu
+	isAlive = false;
 }
 
 void Enemy::Attack()
