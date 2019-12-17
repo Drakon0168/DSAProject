@@ -167,7 +167,7 @@ namespace Simplex {
 		-	Quaternion orientation -> The rotation of the projectile
 		OUTPUT : --
 		*/
-		Projectile* CreateProjectile(float maxSpeed, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
+		Projectile* CreateProjectile(int damage, float maxSpeed, vector3 position = vector3(0), vector3 scale = vector3(0.25f), quaternion orientation = quaternion());
 		/*
 		USAGE : Pushes a world object to the colliables list
 		ARGUMENTS :

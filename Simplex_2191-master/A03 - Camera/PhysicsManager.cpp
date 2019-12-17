@@ -309,16 +309,19 @@ Simplex::Enemy* PhysicsManager::CreateEnemy(float moveSpeed, int damage, vector3
 	return enemy;
 }
 
-Simplex::Projectile* PhysicsManager::CreateProjectile(float moveSpeed, vector3 position, vector3 scale, quaternion orientation)
+Simplex::Projectile* PhysicsManager::CreateProjectile(int damage, float flightSpeed, vector3 position, vector3 scale, quaternion orientation)
 {
-	Projectile* proj = new Projectile();
+	Projectile* proj = new Projectile(damage, flightSpeed);
+	proj->LoadModel("\\Minecraft\\Cube.fbx", "Cube");
 
 	proj->SetPosition(position);
 	proj->SetScale(scale);
 	proj->SetRotation(orientation);
 	proj->SetLayer(CollisionLayers::PlayerProjectile);
+
 	collidables[CollisionLayers::PlayerProjectile].push_back(proj);
 	proj->SetIndex(collidables[CollisionLayers::PlayerProjectile].size() - 1);
+
 	return proj;
 }
 

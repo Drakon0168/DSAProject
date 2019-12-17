@@ -60,9 +60,9 @@ void Player::Update(float deltaTime)
 	}
 	else
 	{
-		pistolBullet = PhysicsManager::GetInstance()->CreateProjectile(CollisionLayers::PlayerProjectile, vector3(0.0f), vector3(1.0f), glm::angleAxis((float)PI * 0.1f, AXIS_Y));
+		pistolBullet = new Projectile(5, 15);
 		pistolBullet->LoadModel("\\Minecraft\\Cube.fbx", "Cube");
-		pistol = new Weapon(maxAmmo, currentFireRate, currentReloadTime, 1.0f, pistolBullet);
+		pistol = new Weapon(maxAmmo, currentFireRate, currentReloadTime, 5, 15.0f, pistolBullet);
 	}
 
 	PhysicsObject::Update(deltaTime);
