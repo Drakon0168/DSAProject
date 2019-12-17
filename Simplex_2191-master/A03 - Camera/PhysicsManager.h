@@ -9,7 +9,16 @@ namespace Simplex {
 		const static int LAYER_COUNT = 6;
 		int frameCount = 0;
 		static PhysicsManager* instance;
+		WorldObject* terrain;
+		vector3 terrainMin;
+		vector3 terrainMax;
 		MyCamera* camera;
+
+		// Enemy Spawning Related Shenanigans
+		int maxEnemies = 10;
+		float enemySpawnDelay = 5.0f;
+		float enemySpawnCounter = 0.0f;
+
 		
 		std::vector<WorldObject*> collidables[LAYER_COUNT]; //All objects that can be collided with separated into layers
 	public:
@@ -61,6 +70,8 @@ namespace Simplex {
 		OUTPUT: Player* player -> The current player
 		*/
 		Player* GetPlayer();
+
+		int GetEnemyCount();
 #pragma endregion
 #pragma region Rule Of Three
 		/*
@@ -145,6 +156,7 @@ namespace Simplex {
 		OUTPUT : --
 		*/
 		Enemy* CreateEnemy(float maxSpeed, int damage, vector3 position = vector3(0), vector3 scale = vector3(1), quaternion orientation = quaternion());
+
 		/*
 		USAGE : Creates a new Projectile
 		ARGUMENTS :
@@ -192,6 +204,10 @@ namespace Simplex {
 		OUTPUT : Vector2 projection -> x = the minimum of the object along the axis, y = the maximum of the object along the axis
 		*/
 		vector2 ProjectSATAxis(vector3 axis, WorldObject* a);
+
+		vector3 GetRandomBoundsPosition();
+
+		int RandomInt(int min, int max);
 #pragma endregion
 	};
 

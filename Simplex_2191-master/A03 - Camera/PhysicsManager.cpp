@@ -30,9 +30,11 @@ void PhysicsManager::Init(void)
 	}
 	
 	//TODO: Setup starting objects in the level
-	WorldObject* terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(250, 1, 250), glm::angleAxis((float)PI * 0.1f, AXIS_Y));
+	terrain = CreateWorldObject(CollisionLayers::Terrain, vector3(0, -1, 0), vector3(250, 1, 250), glm::angleAxis((float)PI * 0.1f, AXIS_Y));
 	terrain->LoadModel("Minecraft\\Cube.fbx", "Cube");
 	terrain->SetPosition(vector3(0, -1 * terrain->GetGlobalHalfWidth().y, 0));
+	terrainMin = terrain->GetGlobalMin();
+	terrainMax = terrain->GetGlobalMax();
 
 	Player* player = CreatePlayer(vector3(0, 5, 0), vector3(1.8, 1.8, 1.8));
 	player->LoadModel("Minecraft\\Steve.fbx", "Steve");
@@ -78,7 +80,7 @@ Player* Simplex::PhysicsManager::GetPlayer()
 void PhysicsManager::Update(float deltaTime)
 {
 	float count = 0;
-
+	
 	//Update Physics
 	for (int i = 0; i < LAYER_COUNT; i++) {
 		switch (i) {
@@ -180,6 +182,24 @@ void PhysicsManager::Update(float deltaTime)
 			break;
 		}
 	}
+
+	// Update enemy spawn timer
+	if (GetEnemyCount() < maxEnemies)
+	{
+		enemySpawnCounter += deltaTime;
+		if (enemySpawnCounter > enemySpawnDelay)
+		{
+			Enemy* teddy = CreateEnemy(1.1f, 10, GetRandomBoundsPosition(), vector3(1.5, 1.5, 1.5));
+			teddy->LoadModel("Sunshine\\TeddyBear.fbx", "TeddyBear");
+			teddy->SetUsesGravity(false);
+
+			enemySpawnCounter = 0.0f;
+		}
+	}
+	else
+	{
+		if (enemySpawnCounter != 0.0f) enemySpawnCounter = 0.0f;
+	}
 }
 
 bool PhysicsManager::CheckCollision(WorldObject* a, WorldObject* b)
@@ -239,8 +259,8 @@ Player* PhysicsManager::CreatePlayer(vector3 position, vector3 scale, quaternion
 	newPlayer->SetScale(scale);
 	newPlayer->SetRotation(orientation);
 	newPlayer->SetLayer(CollisionLayers::Player);
-	newPlayer->SetIndex(collidables[CollisionLayers::Enemy].size());
 	collidables[CollisionLayers::Player].push_back(newPlayer);
+	newPlayer->SetIndex(collidables[CollisionLayers::Player].size() - 1);
 	return newPlayer;
 }
 
@@ -254,8 +274,9 @@ Simplex::Enemy* PhysicsManager::CreateEnemy(float moveSpeed, int damage, vector3
 	enemy->SetMoveSpeed(moveSpeed);
 	enemy->SetDamage(damage);
 	enemy->SetLayer(CollisionLayers::Enemy);
-	enemy->SetIndex(collidables[CollisionLayers::Enemy].size());
+
 	collidables[CollisionLayers::Enemy].push_back(enemy);
+	enemy->SetIndex(collidables[CollisionLayers::Enemy].size()-1);
 
 	return enemy;
 }
@@ -268,9 +289,8 @@ Simplex::Projectile* PhysicsManager::CreateProjectile(float moveSpeed, vector3 p
 	proj->SetScale(scale);
 	proj->SetRotation(orientation);
 	proj->SetLayer(CollisionLayers::PlayerProjectile);
-	proj->SetIndex(collidables[CollisionLayers::PlayerProjectile].size());
 	collidables[CollisionLayers::PlayerProjectile].push_back(proj);
-
+	proj->SetIndex(collidables[CollisionLayers::PlayerProjectile].size() - 1);
 	return proj;
 }
 
@@ -400,4 +420,52 @@ void PhysicsManager::DestroyObject(WorldObject* object)
 
 	collidables[object->GetLayer()].erase(collidables[object->GetLayer()].begin() + object->GetIndex());
 	delete object;
+}
+
+int PhysicsManager::GetEnemyCount()
+{
+	return collidables[CollisionLayers::Enemy].size();
+}
+
+vector3 PhysicsManager::GetRandomBoundsPosition()
+{
+	// Get the min and max values of the terrain for easy access
+
+	// Generate a random integer to choose which side of the terrain bounds to get a position from
+	int randomSide = RandomInt(0, 3);
+	// Create an integer for the random value on the selected side
+	int randAxisPoint;
+	// Now, go through and check each side case
+	switch (randomSide)
+	{
+		// Left
+		case 0:
+			// Get a random Z value for the spawn position
+			randAxisPoint = RandomInt(terrainMin.z, terrainMax.z);
+			return vector3(terrainMin.x, 0, randAxisPoint);
+		// Right
+		case 1:
+			// Get a random Z value for the spawn position
+			randAxisPoint = RandomInt(terrainMin.z, terrainMax.z);
+			return vector3(terrainMax.x, 0, randAxisPoint);
+			break;
+		// Top
+		case 2:
+			// Get a random X value for the spawn position
+			randAxisPoint = RandomInt(terrainMin.x, terrainMax.x);
+			return vector3(randAxisPoint, 0, terrainMax.z);
+			break;
+		// Bottom
+		case 3: 
+			// Get a random X value for the spawn position
+			randAxisPoint = RandomInt(terrainMin.x, terrainMax.x);
+			return vector3(randAxisPoint, 0, terrainMin.z);
+			break;
+	}
+	return vector3(0, 0, 0);
+}
+
+int PhysicsManager::RandomInt(int min, int max)
+{
+	return rand() % (max - min + 1) + min;
 }

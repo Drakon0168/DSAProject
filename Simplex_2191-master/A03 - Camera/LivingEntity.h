@@ -12,7 +12,7 @@ namespace Simplex {
 		float moveForce; //The amount of force to apply for movement
 		float health; //The current health of the entity
 		float maxHealth; //The maximum health of the entity
-
+		bool isAlive = true;
 		bool sprinting = false;
 	public:
 #pragma region Memory Management
