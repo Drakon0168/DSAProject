@@ -45,16 +45,12 @@ void Enemy::Update(float deltaTime)
 	vector3 seekDirection = Seek(playerPosition);
 	// Move in the seek direction
 	Move(seekDirection);
-	// Handle rotation
-	/*
-	glm::mat4 RotationMatrix = glm::transpose(glm::lookAt(position, playerPosition, glm::vec3(0.0f, 1.0f, 0.0f)));
-	*/
-	//	Set rotation
 	float angle = (-1 * glm::atan(seekDirection.z / seekDirection.x)) + (PI / 2);
 
 	if (seekDirection.x < 0) {
 		angle += PI;
 	}
+	SetRotation(glm::angleAxis(angle, AXIS_Y));
 
 	// Call the base implementation
 	Simplex::PhysicsObject::Update(deltaTime);
