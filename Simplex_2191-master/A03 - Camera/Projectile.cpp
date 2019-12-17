@@ -32,7 +32,7 @@ Simplex::Projectile& Simplex::Projectile::operator=(Projectile& other)
 	return *this;
 }
 
-void Simplex::Projectile::Update(float deltaTime, vector3 direction)
+void Simplex::Projectile::Update(float deltaTime)
 {
 	velocity = direction * speed;
 

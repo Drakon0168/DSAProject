@@ -61,7 +61,7 @@ namespace Simplex {
 		-	float deltaTime -> The amount of time that has passed since the last update
 		OUTPUT: ---
 		*/
-		void Update(float deltaTime, vector3 direction);
+		void Update(float deltaTime);
 
 		void SetDirection(vector3 dir);
 		vector3 GetDirection();

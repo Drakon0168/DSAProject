@@ -9,6 +9,7 @@ namespace Simplex {
 		int currentammo;
 		float firerate;
 		float reloadTime;
+		int damage;
 		float shotTimer;
 		float reloadTimer;
 		float projectileSpeed;
@@ -17,7 +18,7 @@ namespace Simplex {
 		vector3 position;
 
 	public:
-		Weapon(int am, float firer, float reload, float projSpeed, Projectile* proj);
+		Weapon(int am, float firer, float reload, int damage, float projSpeed, Projectile* proj);
 		~Weapon();
 		Weapon(Weapon& other);
 		Weapon& operator=(Weapon& other);

@@ -2,16 +2,17 @@
 #include "Weapon.h"
 #include "PhysicsManager.h"
 
-Simplex::Weapon::Weapon(int am, float firer, float reload, float projSpeed, Projectile* proj)
+Simplex::Weapon::Weapon(int am, float firer, float reload, int damage, float projSpeed, Projectile* proj)
 {
-	ammo = am;
-	currentammo = ammo;
-	firerate = firer;
-	reloadTime = reload;
-	projectileSpeed = projSpeed;
-	projectile = proj;
-	shotTimer = 0.0f;
-	reloadTimer = 0.0f;
+	this->ammo = am;
+	this->currentammo = ammo;
+	this->firerate = firer;
+	this->reloadTime = reload;
+	this->damage = damage;
+	this->projectileSpeed = projSpeed;
+	this->projectile = proj;
+	this->shotTimer = 0.0f;
+	this->reloadTimer = 0.0f;
 }
 
 Simplex::Weapon::~Weapon()
@@ -25,6 +26,7 @@ Simplex::Weapon::Weapon(Weapon& other)
 	currentammo = other.currentammo;
 	firerate = other.firerate;
 	reloadTime = other.reloadTime;
+	damage = other.damage;
 	projectileSpeed = other.projectileSpeed;
 	projectile = other.projectile;
 	shotTimer = other.shotTimer;
@@ -37,6 +39,7 @@ Simplex::Weapon& Simplex::Weapon::operator=(Weapon& other)
 	currentammo = other.currentammo;
 	firerate = other.firerate;
 	reloadTime = other.reloadTime;
+	damage = other.damage;
 	projectileSpeed = other.projectileSpeed;
 	projectile = other.projectile;
 	shotTimer = other.shotTimer;
@@ -47,27 +50,16 @@ Simplex::Weapon& Simplex::Weapon::operator=(Weapon& other)
 
 void Simplex::Weapon::Shoot(vector3 direction)
 {
-	if (shotTimer >= firerate && currentammo > 0)
+	if (shotTimer >= firerate)
 	{
 		Player* player = Simplex::PhysicsManager::GetInstance()->GetPlayer();
 		vector3 projposition = player->GetCamera()->GetTarget();
 		
-		if (!activeProjectile)
-		{
-			Projectile* newProj = projectile;
-			
-			newProj->SetPosition(projposition);
-			newProj->SetDirection(direction);
-			activeProjectile = newProj;
-		}
-		
-		activeProjectile->SetPosition(projposition);
-		activeProjectile->SetDirection(direction);
+		Projectile* projectile = PhysicsManager::GetInstance()->CreateProjectile(damage, projectileSpeed, projposition);
+		projectile->SetDirection(glm::normalize(player->GetCamera()->GetTarget() - player->GetCamera()->GetPosition()));
 
 		shotTimer = 0;
-		currentammo -= 1;
 	}
-
 }
 
 void Simplex::Weapon::Reload()
@@ -86,8 +78,4 @@ void Simplex::Weapon::Update(float dt)
 	shotTimer += dt;
 	Player* player = Simplex::PhysicsManager::GetInstance()->GetPlayer();
 	position = player->GetPosition();
-	if (activeProjectile)
-	{
-		activeProjectile->Update(dt, activeProjectile->GetDirection());
-	}
 }
