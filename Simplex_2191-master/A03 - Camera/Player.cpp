@@ -62,7 +62,7 @@ void Player::Update(float deltaTime)
 	{
 		pistolBullet = new Projectile(5, 15);
 		pistolBullet->LoadModel("\\Minecraft\\Cube.fbx", "Cube");
-		pistol = new Weapon(maxAmmo, currentFireRate, currentReloadTime, 5, 15.0f, pistolBullet);
+		pistol = new Weapon(maxAmmo, currentFireRate, currentReloadTime, 5, 30.0f, pistolBullet);
 	}
 
 	PhysicsObject::Update(deltaTime);

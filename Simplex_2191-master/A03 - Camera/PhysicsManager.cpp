@@ -439,6 +439,13 @@ void PhysicsManager::ResetLevel()
 	for (int i = 0; i < collidables[CollisionLayers::Enemy].size(); i++) {
 		dynamic_cast<Enemy*>(collidables[CollisionLayers::Enemy][i])->Die();
 	}
+
+	//Clear all projectiles on death
+	for (int i = 0; i < collidables[CollisionLayers::PlayerProjectile].size(); i++) {
+		delete collidables[CollisionLayers::PlayerProjectile][i];
+	}
+
+	collidables[CollisionLayers::PlayerProjectile].clear();
 }
 
 void PhysicsManager::DestroyObject(WorldObject* object)
