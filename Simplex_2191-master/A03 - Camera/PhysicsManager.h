@@ -16,8 +16,8 @@ namespace Simplex {
 		MyCamera* camera;
 
 		// Enemy Spawning Related Shenanigans
-		int maxEnemies = 10;
-		float enemySpawnDelay = 5.0f;
+		int maxEnemies = 40;
+		float enemySpawnDelay = 1.0f;
 		float enemySpawnCounter = 0.0f;
 
 		

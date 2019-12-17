@@ -95,7 +95,7 @@ void Simplex::Projectile::OnCollision(WorldObject* other)
 		break;
 	case CollisionLayers::Enemy:
 		// Try to damage the enemy
-		Release();
+		DamageEnemy(other);
 		break;
 	default:
 		Release();
