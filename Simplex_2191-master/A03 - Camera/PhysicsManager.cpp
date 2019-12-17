@@ -39,7 +39,7 @@ void PhysicsManager::Init(void)
 	Player* player = CreatePlayer(vector3(0, 5, 0), vector3(1.8, 1.8, 1.8));
 	player->LoadModel("Minecraft\\Steve.fbx", "Steve");
 
-	Enemy* teddy = CreateEnemy(1.1f, 10, vector3(10, 0, 10), vector3(1.5, 1.5, 1.5));
+	Enemy* teddy = CreateEnemy(1.1f, 50, vector3(10, 0, 10), vector3(1.5, 1.5, 1.5));
 	teddy->LoadModel("Sunshine\\TeddyBear.fbx", "TeddyBear");
 	teddy->SetUsesGravity(false);
 }
